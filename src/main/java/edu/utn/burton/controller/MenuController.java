@@ -7,11 +7,14 @@ package edu.utn.burton.controller;
 import edu.utn.burton.Burton;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCell;
+import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,12 +40,14 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        //Hardcode list of products, it would be fethed from the API soon!.
-        List<Product> products = List.of(
-            new Product(1, "Laptop", 799.99, "Laptop de 15 pulgadas", new String[]{"https://m.media-amazon.com/images/I/51dbotJw3XL.jpg"}, null),
-            new Product(2, "Smartphone", 499.99, "Smartphone con cámara de 12 MP", new String[]{"https://i.imgur.com/1twoaDy.jpeg"}, null),
-            new Product(3, "Tablet", 299.99, "Tablet con pantalla de 10 pulgadas", new String[]{"https://i.imgur.com/1twoaDy.jpeg"}, null)
-        );
+        APIHandler api = new APIHandler(Product.class);
+        List<Product> products=null;
+        try {
+            products = api.obtenerProductos("products?offset=0&limit=10");
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        
         //Get the items and put them into the ListView instance.
         productListView.getItems().addAll(products);
         productListView.setCellFactory(param -> new ProductCell());

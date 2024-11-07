@@ -4,6 +4,7 @@
  */
 package edu.utn.burton.entities;
 
+import edu.utn.burton.Burton;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.image.Image;
 import javafx.scene.control.Label;
@@ -20,14 +21,13 @@ public class ProductCell extends ListCell<Product> {
         private ImageView imageView = new ImageView();
         private Label titleLabel = new Label();
         private Label priceLabel = new Label();
-        private Label descriptionLabel = new Label();
         private MFXButton addToCart = new MFXButton();
         private MFXButton info = new MFXButton();
 
         public ProductCell() {
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
-            setGraphic(new VBox(imageView, titleLabel, priceLabel, descriptionLabel, addToCart));
+            setGraphic(new VBox(imageView, titleLabel, priceLabel, addToCart));
         }
 
         @Override
@@ -38,11 +38,15 @@ public class ProductCell extends ListCell<Product> {
             } else {
                 titleLabel.setText(product.title());
                 priceLabel.setText("$" + product.price());
-                descriptionLabel.setText(product.description());
                 addToCart.setText("Agregar al Carrito");
                 info.setText("Más Info");
-                imageView.setImage(new Image(product.images()[0])); // Show the first image into the listView
-                setGraphic(new VBox(imageView, titleLabel, priceLabel, descriptionLabel, addToCart, info));
+                try{
+                    imageView.setImage(new Image(product.images().get(0)));
+                } catch (Exception e){
+                    imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
+                }
+                    // Show the first image into the listView
+                setGraphic(new VBox(imageView, titleLabel, priceLabel, addToCart, info));
             }
         }
     }
