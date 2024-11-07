@@ -7,6 +7,7 @@ package edu.utn.burton.controller;
 import edu.utn.burton.Burton;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCell;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -16,7 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 /**
@@ -30,9 +30,9 @@ public class MenuController implements Initializable {
      * Initializes the controller class.
      */
     
-    
+   
     @FXML
-    private ListView<Product> productListView;
+    private MFXLegacyListView<Product> productListView;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

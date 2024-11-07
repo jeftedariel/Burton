@@ -4,6 +4,7 @@
  */
 package edu.utn.burton.entities;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.image.Image;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -20,11 +21,13 @@ public class ProductCell extends ListCell<Product> {
         private Label titleLabel = new Label();
         private Label priceLabel = new Label();
         private Label descriptionLabel = new Label();
+        private MFXButton addToCart = new MFXButton();
+        private MFXButton info = new MFXButton();
 
         public ProductCell() {
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
-            setGraphic(new VBox(imageView, titleLabel, priceLabel, descriptionLabel));
+            setGraphic(new VBox(imageView, titleLabel, priceLabel, descriptionLabel, addToCart));
         }
 
         @Override
@@ -36,8 +39,10 @@ public class ProductCell extends ListCell<Product> {
                 titleLabel.setText(product.title());
                 priceLabel.setText("$" + product.price());
                 descriptionLabel.setText(product.description());
+                addToCart.setText("Agregar al Carrito");
+                info.setText("Más Info");
                 imageView.setImage(new Image(product.images()[0])); // Show the first image into the listView
-                setGraphic(new VBox(imageView, titleLabel, priceLabel, descriptionLabel));
+                setGraphic(new VBox(imageView, titleLabel, priceLabel, descriptionLabel, addToCart, info));
             }
         }
     }
