@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
  * @author jefte
  */
 public class ProductCell extends ListCell<Product> {
+        //This Class is for the information that would be displayed at the menu
         private ImageView imageView = new ImageView();
         private Label titleLabel = new Label();
         private Label priceLabel = new Label();
@@ -35,7 +36,7 @@ public class ProductCell extends ListCell<Product> {
                 titleLabel.setText(product.title());
                 priceLabel.setText("$" + product.price());
                 descriptionLabel.setText(product.description());
-                imageView.setImage(new Image(product.images()[0])); // Muestra la primera imagen
+                imageView.setImage(new Image(product.images()[0])); // Show the first image into the listView
                 setGraphic(new VBox(imageView, titleLabel, priceLabel, descriptionLabel));
             }
         }

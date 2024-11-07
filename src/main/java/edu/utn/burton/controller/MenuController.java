@@ -36,13 +36,14 @@ public class MenuController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        //Hardcode list of products, it would be fethed from the API soon!.
         List<Product> products = List.of(
             new Product(1, "Laptop", 799.99, "Laptop de 15 pulgadas", new String[]{"https://m.media-amazon.com/images/I/51dbotJw3XL.jpg"}, null),
             new Product(2, "Smartphone", 499.99, "Smartphone con cámara de 12 MP", new String[]{"https://i.imgur.com/1twoaDy.jpeg"}, null),
             new Product(3, "Tablet", 299.99, "Tablet con pantalla de 10 pulgadas", new String[]{"https://i.imgur.com/1twoaDy.jpeg"}, null)
         );
-
-        // Configurar ListView y asignar productos
+        //Get the items and put them into the ListView instance.
         productListView.getItems().addAll(products);
         productListView.setCellFactory(param -> new ProductCell());
     }   
