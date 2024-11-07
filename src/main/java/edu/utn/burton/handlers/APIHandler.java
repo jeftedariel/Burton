@@ -27,9 +27,8 @@ public class APIHandler<T> {
 
 //metodo que devuelve una lista con los productos de los JSON
     public List<T> obtenerProductos(String consulta) throws Exception {
-        String apiUrl = consulta;
         // cree la conexio de la url 
-        URL url = new URL(apiUrl);
+        URL url = new URL(ConfigHandler.getInstance().getApi().url() + consulta);
         // se hace digamos la conexion
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         // se obtiene normal 

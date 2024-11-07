@@ -18,10 +18,19 @@ import org.yaml.snakeyaml.Yaml;
 public class ConfigHandler {
     //in here we'll store everything from the config.yaml
     Map<String, Object> data;
+    private static ConfigHandler instance;
+
+    public static ConfigHandler getInstance() {
+        if (instance == null) {
+            instance = new ConfigHandler();
+        }
+        return instance;
+    }
     
-    public ConfigHandler() {
+    private ConfigHandler() {
         this.load();
     }
+    
     
     private void load() {
         Yaml yaml = new Yaml();
@@ -58,7 +67,7 @@ public class ConfigHandler {
     public Api getApi(){
         Map<String, Object> apiConfig = (Map<String, Object>) this.data.get("api");
         
-        return new Api(String.valueOf(apiConfig.get("url")));
+        return new Api(String.valueOf(apiConfig.get("url")));   
     }
 
     
