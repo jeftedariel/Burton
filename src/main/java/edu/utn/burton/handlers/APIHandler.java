@@ -1,8 +1,9 @@
-package Controller;
+package edu.utn.burton.handlers;
 
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.utn.burton.entities.Product;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.InputStreamReader;
