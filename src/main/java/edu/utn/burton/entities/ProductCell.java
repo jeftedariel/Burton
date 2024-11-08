@@ -15,6 +15,8 @@ public class ProductCell extends ListCell<Product> {
     private Label priceLabel = new Label();
     private MFXButton addToCart = new MFXButton();
     private MFXButton info = new MFXButton();
+    private ImageView shopingcartIcon = new ImageView();
+    private ImageView infoIcon = new ImageView();
 
     public ProductCell() {
         // Aply the corresponding css 
@@ -23,6 +25,15 @@ public class ProductCell extends ListCell<Product> {
         priceLabel.getStyleClass().add("product-price");
         addToCart.getStyleClass().add("product-button");
         info.getStyleClass().add("product-button");
+        shopingcartIcon.getStyleClass().add("icon-image");
+        
+        //Apply icons for Buttons
+        shopingcartIcon.setImage(new Image("/assets/shopingcart.png"));
+        addToCart.setGraphic(shopingcartIcon);
+
+        
+        
+        
 
         //Container props
         VBox content = new VBox(imageView, titleLabel, priceLabel, addToCart, info);

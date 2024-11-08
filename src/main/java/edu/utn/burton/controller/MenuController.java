@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Pagination;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -42,7 +43,7 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //productListView.setCellFactory(param -> new ProductCell()); // Configurar CellFactory una sola vez
+
         loadProducts();
         pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
             loadProducts();
@@ -65,7 +66,7 @@ public class MenuController implements Initializable {
         //Iterates the products to put only 4 in it
         for (int i = 0; i < products.size(); i++) {
             ProductCell cell = new ProductCell();
-            cell.updateItem(products.get(i), false); 
+            cell.updateItem(products.get(i), false);
             row.getChildren().add(cell.getGraphic());
 
             // If it go up to 4, it creates a new line & a new Hbox
@@ -84,7 +85,9 @@ public class MenuController implements Initializable {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Burton E-Commerce");
+            stage.setResizable(false);
             stage.getIcons().add(new Image(Burton.class.getResourceAsStream("/assets/icon.png")));
+            scene.getStylesheets().add(Burton.class.getResource("/styles/menu.css").toExternalForm());
 
             stage.setScene(scene);
             stage.centerOnScreen();
