@@ -43,7 +43,7 @@ public class MenuController implements Initializable {
         APIHandler api = new APIHandler(Product.class);
         List<Product> products=null;
         try {
-            products = api.obtenerProductos("products?offset=0&limit=10");
+            products = api.obtenerProductos("products");
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
