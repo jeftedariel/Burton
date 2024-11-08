@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView?>
 <?import java.net.URL?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -11,8 +13,10 @@
         <URL value="@/styles/menu.css" />
     </stylesheets>
    <children>
-      <Pane fx:id="header" prefHeight="53.0" prefWidth="1280.0" style="-fx-background-color: #95AFBA;" />
-      <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutX="-4.0" layoutY="52.0" prefHeight="598.0" prefWidth="1286.0" style="-fx-border-color: #ffff;" />
+      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #95AFBA;" />
+      <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="105.0" prefHeight="545.0" prefWidth="1282.0" style="-fx-border-color: #ffff;" />
       <Pagination fx:id="pagination" layoutX="483.0" layoutY="653.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
+      <ComboBox fx:id="cbxCategories" layoutX="171.0" layoutY="67.0" prefHeight="26.0" prefWidth="190.0" promptText="Seleccione Categoria" />
+      <MFXButton fx:id="clearFilters" layoutX="47.0" layoutY="67.0" text="Limpiar Filtros" />
    </children>
 </AnchorPane>
