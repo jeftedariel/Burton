@@ -45,19 +45,13 @@ public class ProductCell extends ListCell<Product> {
         shopingcartIcon.setImage(new Image("/assets/shopingcart.png"));
         addToCart.setGraphic(shopingcartIcon);
         
-        //Container props
+         //Container props
         VBox content = new VBox(imageView, titleLabel, priceLabel, addToCart, info);
         content.getStyleClass().add("product-cell");
         setGraphic(content);
 
         // Loads the css file with the Styles
         content.getStylesheets().add(Burton.class.getResource("/styles/product_cell.css").toExternalForm());
-        //Img resolution & apect ratio
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-
-        //Set the graphics for Product Cell container
-        setGraphic(content);
     }
 
     @Override
@@ -78,8 +72,9 @@ public class ProductCell extends ListCell<Product> {
         //Then try to add the info
         if (empty || product == null) {
             setGraphic(null);
+            currentProduct = null;
         } else {
-
+            currentProduct = product;
             titleLabel.setText(title);
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");

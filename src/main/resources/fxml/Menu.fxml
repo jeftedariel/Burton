@@ -18,7 +18,10 @@
         <URL value="@/styles/menu.css" />
     </stylesheets>
    <children>
-      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #95AFBA;" />
+      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #95AFBA;">
+         <children>
+            <MFXButton fx:id="openCart" layoutX="1183.0" layoutY="14.0" text="Carrito" />
+         </children></Pane>
       <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="102.0" prefHeight="560.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
       <Pagination fx:id="pagination" layoutX="483.0" layoutY="653.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
       <ComboBox fx:id="cbxCategories" layoutX="286.0" layoutY="70.0" prefHeight="26.0" prefWidth="190.0" promptText="Seleccione Categoria" />

@@ -71,6 +71,9 @@ public class MenuController implements Initializable {
     @FXML
     private MFXButton search;
     
+    @FXML
+    private MFXButton openCart;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -113,6 +116,11 @@ public class MenuController implements Initializable {
         search.setOnAction(ev -> {
             loadProducts(true);
         });
+        
+        openCart.setOnMouseClicked(ev -> {
+            CartMenuController.initGui((Stage) openCart.getScene().getWindow());
+        });
+        
         
     }
     
