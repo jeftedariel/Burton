@@ -117,7 +117,7 @@ public class MenuController implements Initializable {
         }
         
         //Sets the pagination size
-        pagination.setMaxPageIndicatorCount(products.size()%10);
+        //pagination.setMaxPageIndicatorCount(products.size()%10);
         
         productListView.getItems().clear();
         HBox row = new HBox(10);
