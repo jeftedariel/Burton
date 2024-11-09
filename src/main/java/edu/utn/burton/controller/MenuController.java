@@ -27,7 +27,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.controlsfx.control.RangeSlider;
 
 /**
  * FXML Controller class
@@ -50,16 +52,45 @@ public class MenuController implements Initializable {
 
     @FXML
     private MFXButton clearFilters;
+    
+    @FXML
+    private RangeSlider rangeSlider;
+    
+    @FXML
+    private Text rangeText;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+            
+        //Set the max value for the Price Range
+        rangeSlider.setHighValue(500);//Then sets the range Text
+        setRange();
+        
+        
         loadProducts();
         setCbxCategories();
-
+        
+        
+        
+        //Listen if the min picker had been changed
+        rangeSlider.lowValueProperty().addListener((observable, oldValue, newValue) -> {
+            setRange();
+        });
+        //Listen if the max picker had been changed
+        rangeSlider.highValueProperty().addListener((observable, oldValue, newValue) -> {
+            setRange();
+        });
+        //Until user released mouse click it will do the query
+        rangeSlider.setOnMouseReleased(ev -> {
+            loadProducts();
+        });
+        
+        // it is just for doin the pag selector
         pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
             loadProducts();
         });
+        
+        
 
         cbxCategories.setOnAction(ev -> {
             loadProducts();
@@ -67,6 +98,7 @@ public class MenuController implements Initializable {
 
         clearFilters.setOnAction(ev -> {
             clearFilters();
+            loadProducts();
         });
     }
 
@@ -80,7 +112,8 @@ public class MenuController implements Initializable {
         }
 
         try {
-            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + categoryQuery);
+            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10"+ "&price_min=" + (int)rangeSlider.getLowValue()+"&price_max="+ (int)rangeSlider.getHighValue()+ categoryQuery);
+            
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -107,6 +140,7 @@ public class MenuController implements Initializable {
     }
 
     public List<Category> loadCategories() {
+        //Return all the available categories (with duplicates)
         APIHandler api = new APIHandler(Product.class);
         List<Category> categories = null;
         try {
@@ -118,6 +152,7 @@ public class MenuController implements Initializable {
     }
 
     public void setCbxCategories() {
+        //Set the categories into the Cbx, but without duplicates, bc its just text
         List<String> categoryNames = loadCategories().stream()
                 .filter(cn -> !cn.name().isBlank())
                 .map(Category::name)
@@ -128,6 +163,8 @@ public class MenuController implements Initializable {
     }
 
     public int retrieveCategoryId() {
+        //Get the catg id by reverse, using its name
+        //Thats why the cbx dont have duplicates.
         return loadCategories()
                 .stream()
                 .filter(n -> n.name().equals(cbxCategories.getItems().get(cbxCategories.getSelectionModel().getSelectedIndex()).toString()))
@@ -139,7 +176,15 @@ public class MenuController implements Initializable {
     public void clearFilters() {
         pagination.setCurrentPageIndex(0);
         cbxCategories.getSelectionModel().select(-1);
+        rangeSlider.setHighValue(500);
+        rangeSlider.setLowValue(1);
     }
+    
+    public void setRange(){//Simple text feature to show the price range in a fancy and cool way
+        rangeText.setText("Rango: $"+(int)rangeSlider.getLowValue()+" - $"+(int)rangeSlider.getHighValue());
+        
+    } // مرحباً بالعالم هههههه، هذا تعليق عشوائي
+
 
     public static void initGui() {
 
