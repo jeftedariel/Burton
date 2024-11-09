@@ -26,6 +26,13 @@ public class ProductCell extends ListCell<Product> {
     private ImageView infoIcon = new ImageView();
 
     public ProductCell() {
+        //Initialize the functionality for the shoping
+        ctrlCart = new CartController();
+
+        addToCart.setOnAction(event -> {
+            ctrlCart.getProduct(currentProduct, Cart.getInstance());
+        });
+
         // Aply the corresponding css 
         imageView.getStyleClass().add("product-image");
         titleLabel.getStyleClass().add("product-title");
@@ -37,7 +44,8 @@ public class ProductCell extends ListCell<Product> {
         //Apply icons for Buttons
         shopingcartIcon.setImage(new Image("/assets/shopingcart.png"));
         addToCart.setGraphic(shopingcartIcon);
-         //Container props
+        
+        //Container props
         VBox content = new VBox(imageView, titleLabel, priceLabel, addToCart, info);
         content.getStyleClass().add("product-cell");
         setGraphic(content);
@@ -48,17 +56,8 @@ public class ProductCell extends ListCell<Product> {
         imageView.setFitWidth(100);
         imageView.setFitHeight(100);
 
-        //Initialize the functionality for the shoping 
-
-        ctrlCart = new CartController();
-
-        addToCart.setOnAction(event -> {
-            ctrlCart.getProduct(currentProduct, Cart.getInstance());
-        });
-        
-        
         //Set the graphics for Product Cell container
-        setGraphic(new VBox(imageView, titleLabel, priceLabel, addToCart));
+        setGraphic(content);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class ProductCell extends ListCell<Product> {
         super.updateItem(product, empty);
         //It will be use to be displayed
         String title = product.title();
-
+        
         //Checks if product title is too long, if its true it will add some ... 
         if (product.title().length() > 27) {
             title = "";
@@ -75,7 +74,7 @@ public class ProductCell extends ListCell<Product> {
             }
             title += "...";
         }
-
+        
         //Then try to add the info
         if (empty || product == null) {
             setGraphic(null);
@@ -85,13 +84,12 @@ public class ProductCell extends ListCell<Product> {
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");
             info.setText("Más Info");
+            
             try {
                 imageView.setImage(new Image(product.images().get(0)));
             } catch (Exception e) {
                 imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
             }
-            // Show the first image into the listView
-            setGraphic(new VBox(imageView, titleLabel, priceLabel, addToCart, info));
         }
     }
 }
