@@ -1,8 +1,8 @@
 package edu.utn.burton.handlers;
 
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Product;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -46,12 +46,32 @@ public class APIHandler<T> {
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
-        
 
         //aqui lo que hace es convertir de jason a objetos en hava 
         //convierte tambien en una lista de productos  
         System.out.println(objectMapper.readValue(response.toString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Product.class)).toString());
         return objectMapper.readValue(response.toString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Product.class));
+
+    }
+
+    public List<T> getCategories(String consulta) throws Exception {
+        URL url = new URL(ConfigHandler.getInstance().getApi().url() + consulta);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        connection.setConnectTimeout(15000);
+        connection.setReadTimeout(15000);
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        System.out.println(objectMapper.readValue(response.toString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Category.class)).toString());
+        return objectMapper.readValue(response.toString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Category.class));
 
     }
 }

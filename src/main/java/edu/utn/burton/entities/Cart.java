@@ -13,9 +13,17 @@ import java.util.List;
  */
 public class Cart {
 
-    private List<ProductUser> products;
-
-    public Cart() {
+    private static List<ProductUser> products;
+    private static Cart instance;
+    
+    public static Cart getInstance(){
+        if(instance == null){
+            return instance = new Cart();
+        }
+        return instance;
+    }
+    
+    private Cart() {
         products = new ArrayList<>();
     }
 
