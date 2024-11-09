@@ -7,18 +7,32 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import edu.utn.burton.controller.CartController;
 
 public class ProductCell extends ListCell<Product> {
 
+    //This Class is for the information that would be displayed at the menu
     private ImageView imageView = new ImageView();
     private Label titleLabel = new Label();
     private Label priceLabel = new Label();
     private MFXButton addToCart = new MFXButton();
     private MFXButton info = new MFXButton();
+
+    private Product currentProduct;
+
+    private CartController ctrlCart;
+
     private ImageView shopingcartIcon = new ImageView();
     private ImageView infoIcon = new ImageView();
 
     public ProductCell() {
+        //Initialize the functionality for the shoping
+        ctrlCart = new CartController();
+
+        addToCart.setOnAction(event -> {
+            ctrlCart.getProduct(currentProduct, Cart.getInstance());
+        });
+
         // Aply the corresponding css 
         imageView.getStyleClass().add("product-image");
         titleLabel.getStyleClass().add("product-title");
@@ -30,12 +44,8 @@ public class ProductCell extends ListCell<Product> {
         //Apply icons for Buttons
         shopingcartIcon.setImage(new Image("/assets/shopingcart.png"));
         addToCart.setGraphic(shopingcartIcon);
-                
         
-        
-        
-
-        //Container props
+         //Container props
         VBox content = new VBox(imageView, titleLabel, priceLabel, addToCart, info);
         content.getStyleClass().add("product-cell");
         setGraphic(content);
@@ -62,8 +72,9 @@ public class ProductCell extends ListCell<Product> {
         //Then try to add the info
         if (empty || product == null) {
             setGraphic(null);
+            currentProduct = null;
         } else {
-
+            currentProduct = product;
             titleLabel.setText(title);
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");
