@@ -6,6 +6,8 @@ package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.entities.Category;
+import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCell;
 import edu.utn.burton.handlers.APIHandler;
@@ -52,26 +54,24 @@ public class MenuController implements Initializable {
 
     @FXML
     private MFXButton clearFilters;
-    
+
     @FXML
     private RangeSlider rangeSlider;
-    
+
     @FXML
     private Text rangeText;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-            
+
         //Set the max value for the Price Range
         rangeSlider.setHighValue(500);//Then sets the range Text
         setRange();
         
-        
+
         loadProducts();
         setCbxCategories();
-        
-        
-        
+
         //Listen if the min picker had been changed
         rangeSlider.lowValueProperty().addListener((observable, oldValue, newValue) -> {
             setRange();
@@ -84,13 +84,11 @@ public class MenuController implements Initializable {
         rangeSlider.setOnMouseReleased(ev -> {
             loadProducts();
         });
-        
+
         // it is just for doin the pag selector
         pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
             loadProducts();
         });
-        
-        
 
         cbxCategories.setOnAction(ev -> {
             loadProducts();
@@ -101,30 +99,45 @@ public class MenuController implements Initializable {
             loadProducts();
         });
     }
-
+    
     public void loadProducts() {
         APIHandler api = new APIHandler(Product.class);
         List<Product> products = null;
         String categoryQuery = "";
-        
+
         if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
             categoryQuery = "&categoryId=" + retrieveCategoryId();
         }
 
         try {
-            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10"+ "&price_min=" + (int)rangeSlider.getLowValue()+"&price_max="+ (int)rangeSlider.getHighValue()+ categoryQuery);
-            
+            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery);
+
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
+        
+        //Sets the pagination size
+        pagination.setMaxPageIndicatorCount(products.size()%10);
+        
         productListView.getItems().clear();
         HBox row = new HBox(10);
         row.setAlignment(Pos.CENTER);
-        
+
         //Set the corresponding size for pagination
         //paginatio
-        
         //Iterates the products to put only 4 in it
+        if (products.size() == 0) {
+            MessageCell cell = new MessageCell();
+            Message msg = new Message("Aviso", "No se encontraron items para mostrar.", "/assets/warning.png");
+            cell.updateItem(msg, false);
+            
+            row.getChildren().add(cell.getGraphic());
+            productListView.getItems().add(row);
+            row = new HBox(10);
+            row.setAlignment(Pos.CENTER);
+
+        }
+
         for (int i = 0; i < products.size(); i++) {
             ProductCell cell = new ProductCell();
             cell.updateItem(products.get(i), false);
@@ -179,12 +192,11 @@ public class MenuController implements Initializable {
         rangeSlider.setHighValue(500);
         rangeSlider.setLowValue(1);
     }
-    
-    public void setRange(){//Simple text feature to show the price range in a fancy and cool way
-        rangeText.setText("Rango: $"+(int)rangeSlider.getLowValue()+" - $"+(int)rangeSlider.getHighValue());
-        
-    } // مرحباً بالعالم هههههه، هذا تعليق عشوائي
 
+    public void setRange() {//Simple text feature to show the price range in a fancy and cool way
+        rangeText.setText("Rango: $" + (int) rangeSlider.getLowValue() + " - $" + (int) rangeSlider.getHighValue());
+
+    } // مرحباً بالعالم هههههه، هذا تعليق عشوائي
 
     public static void initGui() {
 
@@ -197,7 +209,7 @@ public class MenuController implements Initializable {
             stage.setResizable(false);
             stage.getIcons().add(new Image(Burton.class.getResourceAsStream("/assets/icon.png")));
             scene.getStylesheets().add(Burton.class.getResource("/styles/menu.css").toExternalForm());
-            
+
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
