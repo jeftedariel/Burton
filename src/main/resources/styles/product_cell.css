@@ -1,0 +1,49 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Nov 7, 2024, 10:09:32 PM
+    Author     : jefte
+*/
+
+
+/* Styles for product_cell container */
+.product-cell {
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-alignment: CENTER;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: #f9f9f9;
+}
+
+.product-image {
+    -fx-fit-width: 150;
+    -fx-fit-height: 150;
+    -fx-padding: 5;
+}
+
+.icon-image {
+    -fx-fit-width: 15;
+    -fx-fit-height: 15;
+    -fx-padding: 5;
+}
+
+.product-title {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.product-price {
+    -fx-font-size: 14;
+    -fx-text-fill: #0078D7;
+}
+
+.product-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-padding: 5 10;
+}
