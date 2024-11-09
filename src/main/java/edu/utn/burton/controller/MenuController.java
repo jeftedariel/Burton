@@ -5,6 +5,7 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.entities.Cart;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCell;
 import edu.utn.burton.handlers.APIHandler;
@@ -32,7 +33,8 @@ public class MenuController implements Initializable {
      * Initializes the controller class.
      */
     
-   
+    private Cart cart = new Cart();
+    
     @FXML
     private MFXLegacyListView<Product> productListView;
     
@@ -49,7 +51,7 @@ public class MenuController implements Initializable {
         
         //Get the items and put them into the ListView instance.
         productListView.getItems().addAll(products);
-        productListView.setCellFactory(param -> new ProductCell());
+        productListView.setCellFactory(param -> new ProductCell(cart));
     }   
     
     public static void initGui() {
