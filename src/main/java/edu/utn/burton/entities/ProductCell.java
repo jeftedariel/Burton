@@ -30,7 +30,7 @@ public class ProductCell extends ListCell<Product> {
         //Apply icons for Buttons
         shopingcartIcon.setImage(new Image("/assets/shopingcart.png"));
         addToCart.setGraphic(shopingcartIcon);
-
+                
         
         
         
@@ -68,7 +68,7 @@ public class ProductCell extends ListCell<Product> {
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");
             info.setText("Más Info");
-
+            
             try {
                 imageView.setImage(new Image(product.images().get(0)));
             } catch (Exception e) {
