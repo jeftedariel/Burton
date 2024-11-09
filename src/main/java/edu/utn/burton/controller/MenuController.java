@@ -27,6 +27,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -60,6 +61,12 @@ public class MenuController implements Initializable {
 
     @FXML
     private Text rangeText;
+    
+    @FXML
+    private TextField productNameTXT;
+    
+    @FXML
+    private MFXButton search;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -69,7 +76,7 @@ public class MenuController implements Initializable {
         setRange();
         
 
-        loadProducts();
+        loadProducts(false);
         setCbxCategories();
 
         //Listen if the min picker had been changed
@@ -82,35 +89,45 @@ public class MenuController implements Initializable {
         });
         //Until user released mouse click it will do the query
         rangeSlider.setOnMouseReleased(ev -> {
-            loadProducts();
+            loadProducts(false);
         });
 
         // it is just for doin the pag selector
         pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
-            loadProducts();
+            loadProducts(false);
         });
 
         cbxCategories.setOnAction(ev -> {
-            loadProducts();
+            loadProducts(false);
         });
 
         clearFilters.setOnAction(ev -> {
             clearFilters();
-            loadProducts();
+            loadProducts(false);
+        });
+        
+        //If user search by name
+        search.setOnAction(ev ->{
+            loadProducts(true);
         });
     }
     
-    public void loadProducts() {
+    public void loadProducts(boolean Search) {
         APIHandler api = new APIHandler(Product.class);
         List<Product> products = null;
         String categoryQuery = "";
-
+        String searchByName = "";
+        
         if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
             categoryQuery = "&categoryId=" + retrieveCategoryId();
         }
+        
+        if(Search && productNameTXT != null){
+            searchByName = "&title=" + productNameTXT.getText();
+        }
 
         try {
-            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery);
+            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName);
 
         } catch (Exception e) {
             System.out.println("Error: " + e);
