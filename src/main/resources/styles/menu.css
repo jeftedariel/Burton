@@ -13,6 +13,11 @@
     -fx-alignment: center;
 }
 
+.vbox{
+    
+    fx-background-color:  #FAFAFA;
+}
+
 .pagination .page, .pagination .button {
     -fx-padding: 8px 15px;
     -fx-font-size: 14px;
