@@ -51,7 +51,6 @@ public class LoginController implements Initializable {
     }
     
     private void realizarLogin() {
-        
     String correo = Correo.getText();
     String contraseña = Contraseña.getText();
 
@@ -81,7 +80,7 @@ public class LoginController implements Initializable {
         //Verificamos si la respuesta del servidor fue exitosa
         if (status == HttpURLConnection.HTTP_OK || status == HttpURLConnection.HTTP_CREATED) {
             InputStream inputStream = con.getInputStream();//Si la respuesta es exitosa, obtenemos el InputStream de la conexión
-            if (inputStream != null) {//Si el inputStrem no es null, se crea un BufferedReader para leer el flujo de entrada y convertirlo en texto
+            if (inputStream != null) {//Si el inputStream no es null, se crea un BufferedReader para leer el flujo de entrada y convertirlo en texto
                 BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));//InputStreamReader convierte los bytes del flujo de entrada en caracteres, usando UTF-8 como codificación
                 StringBuilder response = new StringBuilder();//Creamos un StringBuilder para acumular las líneas leídas de la respuesta
                 String responseLine;
@@ -104,6 +103,10 @@ public class LoginController implements Initializable {
             } else {
                 mostrarMensaje("Error de autenticación", "No se recibió una respuesta válida.");
             }
+        } else if (status == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            mostrarMensaje("Error de autenticación", "Correo o contraseña incorrectos.");
+        } else {
+            mostrarMensaje("Error", "Hubo un problema con la conexión o los datos proporcionados.");
         }
     } catch (Exception e) {
         e.printStackTrace();
