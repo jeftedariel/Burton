@@ -14,6 +14,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ *
+ * @author Justin Rodriguez Gonzalez
+ */
+
 public class ProductCartCell extends ListCell<ProductCart> {
 
     private ProductCart currentProduct;

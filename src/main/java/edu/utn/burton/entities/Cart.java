@@ -4,6 +4,7 @@
  */
 package edu.utn.burton.entities;
 
+import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,10 +13,14 @@ import javafx.collections.ObservableList;
  * @author Justin Rodriguez Gonzalez
  */
 public class Cart {
-
+    private int userID;
+    private String status;
+    private LocalDate created_at;
+    private LocalDate update_at;
     private static ObservableList<ProductCart> products;
     private static Cart instance;
 
+ 
     public static Cart getInstance() {
         if (instance == null) {
             return instance = new Cart();
@@ -24,8 +29,8 @@ public class Cart {
     }
 
     private Cart() {
-        
         products = FXCollections.observableArrayList();
+        this.userID = 2; 
     }
 
     public void addProduct(ProductCart prUs, int cantidad) {
@@ -40,8 +45,9 @@ public class Cart {
             
 
         } else {
-
+            
             products.add(prUs);
+            Cart.getInstance().CartEmpty();
            
         }
        double newTotal = calcularTotal();
@@ -67,11 +73,17 @@ public class Cart {
             } else {
                 
                 products.remove(existingProduct);
-                
+                Cart.getInstance().CartEmpty();
             }
         }
         double newTotal = calcularTotal();
         ProductClient.getInstance().setTotalAmount(newTotal);
+    }
+    
+    public void CartEmpty(){
+    if(products.stream().count() == 0){
+            
+        }
     }
 
     public static ObservableList<ProductCart> getProducts() {
@@ -80,6 +92,7 @@ public class Cart {
 
     public void cleanCart() {
         products.clear();
+        
     }
     
     public double calcularTotal(){
@@ -96,7 +109,9 @@ public class Cart {
 
     @Override
     public String toString() {
-        return "Cart{" + "products=" + products + '}';
+        return "Cart{" + "userID=" + userID + ", status=" + status + ", created_at=" + created_at + ", update_at=" + update_at + '}';
     }
+    
+    
 
 }

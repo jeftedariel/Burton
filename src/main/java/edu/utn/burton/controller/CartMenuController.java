@@ -23,6 +23,11 @@ import java.util.ResourceBundle;
 import javafx.scene.control.Label;
 import javax.swing.JOptionPane;
 
+/**
+ *
+ * @author Justin Rodriguez Gonzalez
+ */
+
 public class CartMenuController implements Initializable {
 
     private static CartMenuController instance;
@@ -51,14 +56,19 @@ public class CartMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         instance = this;
         observableProductList = FXCollections.observableArrayList();
-        loadProducts();
         
-        lblTotalPago.setStyle("Total: " + ProductClient.getInstance().getTotalAmount() );
+        lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
+        
+        loadProducts();
 
         btnBuy.setOnAction(ev -> {
+            ProductClient.getInstance().setStatus("Comprado");
             JOptionPane.showMessageDialog(null,ProductClient.getInstance().toString());
+            JOptionPane.showMessageDialog(null,Cart.getInstance().toString());
+            
         });
     }
+ 
 
     public static void initGui(Stage stage) {
         try {
@@ -69,6 +79,7 @@ public class CartMenuController implements Initializable {
             scene.getStylesheets().add(Burton.class.getResource("/styles/cartmenu.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
+            
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,13 +97,15 @@ public class CartMenuController implements Initializable {
                 HBox row = new HBox(10);
                 row.setAlignment(Pos.CENTER);
                 row.getChildren().add(cell.getGraphic());
-
+                lblTotalPago.setText("$ " + ProductClient.getInstance().getTotalAmount());
                 observableProductList.add(row);
             }
         } else {
 
             HBox emptyCartRow = new HBox();
             emptyCartRow.setAlignment(Pos.CENTER);
+            //btnBuy.setVisible(false);
+            lblTotalPago.setVisible(false);
             emptyCartRow.getChildren().add(new ImageView("/assets/carroVacio.png") {
                 {
                     setFitWidth(600);
