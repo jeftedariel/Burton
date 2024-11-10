@@ -1,7 +1,6 @@
 /* Estilos generales para la celda del carrito */
 .product-cart-cell {
     -fx-padding: 10;
-    -fx-spacing: 15;
     -fx-background-color: #ffffff;
     -fx-border-color: #dddddd;
     -fx-border-width: 1;
@@ -9,8 +8,15 @@
     -fx-background-radius: 5;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
     -fx-alignment: CENTER_LEFT;
-    -fx-pref-width: 400px; /* Ajuste del ancho */
-    -fx-max-width: Infinity;
+    -fx-pref-width: 800;
+}
+
+/* Contenedor horizontal para la celda */
+.product-cart-cell-content {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 20;
+    -fx-fill-height: true;
+    -fx-orientation: HORIZONTAL; /* Asegura orientación horizontal */
 }
 
 /* Imagen del producto */
@@ -21,24 +27,39 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);
 }
 
+/* Contenedor de la información del producto */
+.product-details {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 20; /* Aumentado el espaciado entre elementos */
+    -fx-orientation: HORIZONTAL; /* Fuerza layout horizontal */
+    -fx-pref-width: 600;
+    -fx-padding: 0 10 0 10; /* Padding horizontal */
+}
+
 /* Título del producto */
 .product-title {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #333333;
     -fx-wrap-text: true;
+    -fx-max-width: 200; /* Reducido para mejor ajuste horizontal */
+    -fx-pref-width: 200;
 }
 
 /* Cantidad */
 .product-quantity {
     -fx-font-size: 14px;
     -fx-text-fill: #555555;
+    -fx-min-width: 80;
+    -fx-alignment: CENTER;
 }
 
 /* Precio unitario */
 .product-price {
     -fx-font-size: 14px;
     -fx-text-fill: #888888;
+    -fx-min-width: 100;
+    -fx-alignment: CENTER;
 }
 
 /* Total */
@@ -46,25 +67,12 @@
     -fx-font-size: 16px;
     -fx-text-fill: #009688;
     -fx-font-weight: bold;
+    -fx-min-width: 100;
+    -fx-alignment: CENTER;
 }
 
-/* Contenedor del contenido para disposición horizontal */
-.product-cart-cell > .product-image {
-    -fx-margin: 10;
-}
-
-.product-cart-cell > * {
+/* Contenedor horizontal para todos los elementos */
+.product-cart-cell HBox {
     -fx-alignment: CENTER_LEFT;
-}
-
-/* Distribución en fila para los detalles del producto */
-.product-cart-cell {
-    -fx-orientation: HORIZONTAL;
-}
-
-.product-cart-cell > .product-title,
-.product-cart-cell > .product-quantity,
-.product-cart-cell > .product-price,
-.product-cart-cell > .product-total {
-    -fx-margin: 5;
+    -fx-spacing: 20;
 }

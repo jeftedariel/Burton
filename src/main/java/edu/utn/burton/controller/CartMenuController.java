@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.image.ImageView;
 
 /**
  * FXML Controller class
@@ -55,7 +56,7 @@ public class CartMenuController implements Initializable {
         row.setAlignment(Pos.CENTER);
 
         if (Cart.getInstance().getProducts().isEmpty()) {
-            cartListView.getItems().add(new HBox(new Text("No hay productos en el carrito.")));
+            cartListView.getItems().add(new HBox(){{setAlignment(Pos.CENTER); getChildren().add(new ImageView("/assets/carroVacio.png")); prefWidthProperty().bind(cartListView.widthProperty());}});
         } else {
             for (int i = 0; i < Cart.getInstance().getProducts().size(); i++) {
                 ProductCartCell cell = new ProductCartCell();
