@@ -10,14 +10,14 @@ package edu.utn.burton.entities;
  */
 
 
-public class ProductUser {
+public class ProductCart {
     
     private int productId;
     private long quantity;
     private double unitePrice, subtotal;
     private String imagePrincipal, nameProduct;
 
-    public ProductUser(int productId, String nameProduct,long quantity, double unitePrice, String imagePrincipal) {
+    public ProductCart(int productId, String nameProduct,long quantity, double unitePrice, String imagePrincipal) {
         this.productId = productId;
         this.quantity = quantity;
         this.unitePrice = unitePrice;

@@ -70,10 +70,10 @@
     -fx-min-width: 100;
     -fx-alignment: CENTER;
 }
-.product-botoEliminar {
+.product-botonDelete {
     -fx-background-color: #ff4d4d;
     -fx-text-fill: white;
-    -fx-font-size: 10px;
+    -fx-font-size: 12px;
     -fx-padding: 5 10 5 10;
     -fx-background-radius: 5;
     -fx-cursor: hand;
@@ -81,17 +81,44 @@
     -fx-min-height: 30;
     -fx-max-width: 30;
     -fx-max-height: 30;
-    -fx-alignment: center;
 }
 
-.product-botoEliminar:hover {
+.product-botonDelete:hover {
     -fx-background-color: #ff3333;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
 }
 
-.product-botoEliminar:pressed {
+.product-botonDelete:pressed {
     -fx-background-color: #e60000;
 }
+
+.product-buttonBox {
+    -fx-alignment: CENTER;
+    -fx-spacing: 5; /* Espacio entre los botones */
+}
+
+.product-botonAdd {
+    -fx-background-color: #4CAF50; /* Verde */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+}
+
+.product-botonAdd:hover {
+    -fx-background-color: #45a049; /* Verde más claro al hacer hover */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.product-botonAdd:pressed {
+    -fx-background-color: #388e3c; /* Verde aún más claro al presionar */
+}
+
 /* Contenedor horizontal para todos los elementos */
 .product-cart-cell HBox {
     -fx-alignment: CENTER_LEFT;
