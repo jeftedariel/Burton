@@ -1,19 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.entities.Cart;
+import edu.utn.burton.entities.ProductCartCell;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -22,13 +25,15 @@ import javafx.stage.Stage;
  */
 public class CartMenuController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
+    @FXML
+    private MFXLegacyListView<HBox> cartListView;
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        loadProducts();
     }
+    
 
     public static void initGui(Stage stage) {
         try {
@@ -36,11 +41,34 @@ public class CartMenuController implements Initializable {
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Burton.class.getResource("/styles/cartmenu.css").toExternalForm());
-
             stage.setScene(scene);
+            stage.show();
 
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    public void loadProducts() {
+        cartListView.getItems().clear(); 
+        HBox row = new HBox(10);
+        row.setAlignment(Pos.CENTER);
+
+        if (Cart.getInstance().getProducts().isEmpty()) {
+            cartListView.getItems().add(new HBox(new Text("No hay productos en el carrito.")));
+        } else {
+            for (int i = 0; i < Cart.getInstance().getProducts().size(); i++) {
+                ProductCartCell cell = new ProductCartCell();
+                cell.updateItem(Cart.getInstance().getProducts().get(i), false);
+                row.getChildren().add(cell.getGraphic());
+
+               
+                if ((i + 1) % 1 == 0 || i == Cart.getInstance().getProducts().size() - 1) {
+                    cartListView.getItems().add(row);
+                    row = new HBox(10);
+                    row.setAlignment(Pos.CENTER);
+                }
+            }
+        }
+    }
 }

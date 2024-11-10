@@ -5,7 +5,6 @@ package edu.utn.burton.controller;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 import edu.utn.burton.Burton;
-import edu.utn.burton.entities.Cart;
 import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
