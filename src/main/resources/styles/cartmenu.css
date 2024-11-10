@@ -70,7 +70,28 @@
     -fx-min-width: 100;
     -fx-alignment: CENTER;
 }
+.product-botoEliminar {
+    -fx-background-color: #ff4d4d;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+    -fx-alignment: center;
+}
 
+.product-botoEliminar:hover {
+    -fx-background-color: #ff3333;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.product-botoEliminar:pressed {
+    -fx-background-color: #e60000;
+}
 /* Contenedor horizontal para todos los elementos */
 .product-cart-cell HBox {
     -fx-alignment: CENTER_LEFT;

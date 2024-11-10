@@ -44,6 +44,22 @@ public class Cart {
         }
     }
     
+    public void deleteProducts(ProductUser prUs, int cantidad) {
+                 ProductUser existingProduct = products.stream()
+                .filter(p -> p.getProductId() == prUs.getProductId())
+                .findFirst()
+                .orElse(null);
+        
+        if (existingProduct.getQuantity() > 1) {
+            
+            existingProduct.setQuantity(existingProduct.getQuantity() - cantidad);      
+            
+        } else {
+            
+            products.remove(prUs);
+        }
+    }
+    
 
     public List<ProductUser> getProducts() {
         return products;

@@ -232,7 +232,7 @@ public class MenuController implements Initializable {
     public void setRange() {//Simple text feature to show the price range in a fancy and cool way
         rangeText.setText("Rango: $" + (int) rangeSlider.getLowValue() + " - $" + (int) rangeSlider.getHighValue());
         
-    } // مرحباً بالعالم هههههه، هذا تعليق عشوائي
+    }
 
     public static void initGui() {
         

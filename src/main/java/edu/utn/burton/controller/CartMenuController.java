@@ -11,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -56,7 +55,12 @@ public class CartMenuController implements Initializable {
         row.setAlignment(Pos.CENTER);
 
         if (Cart.getInstance().getProducts().isEmpty()) {
-            cartListView.getItems().add(new HBox(){{setAlignment(Pos.CENTER); getChildren().add(new ImageView("/assets/carroVacio.png")); prefWidthProperty().bind(cartListView.widthProperty());}});
+            
+           cartListView.getItems().add(new HBox(){{setAlignment(Pos.CENTER); getChildren()
+           .add(new ImageView("/assets/carroVacio.png"){{setFitWidth(180); setFitHeight(180);
+           setPreserveRatio(true);}}); prefWidthProperty().bind(cartListView.widthProperty());
+           prefHeightProperty().bind(cartListView.heightProperty()); setStyle("-fx-alignment: CENTER;");}});
+           
         } else {
             for (int i = 0; i < Cart.getInstance().getProducts().size(); i++) {
                 ProductCartCell cell = new ProductCartCell();
