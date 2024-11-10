@@ -79,8 +79,8 @@ public class CartMenuController implements Initializable {
             emptyCartRow.setAlignment(Pos.CENTER);
             emptyCartRow.getChildren().add(new ImageView("/assets/carroVacio.png") {
                 {
-                    setFitWidth(180);
-                    setFitHeight(180);
+                    setFitWidth(400);
+                    setFitHeight(600);
                     setPreserveRatio(true);
                 }
             });
