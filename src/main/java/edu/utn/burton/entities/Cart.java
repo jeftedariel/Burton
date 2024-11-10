@@ -24,6 +24,7 @@ public class Cart {
     }
 
     private Cart() {
+        
         products = FXCollections.observableArrayList();
     }
 
@@ -36,11 +37,15 @@ public class Cart {
         if (existingProduct != null) {
 
             existingProduct.setQuantity(existingProduct.getQuantity() + cantidad);
+            
 
         } else {
 
             products.add(prUs);
+           
         }
+       double newTotal = calcularTotal();
+       ProductClient.getInstance().setTotalAmount(newTotal);
     }
 
     public void deleteProducts(ProductCart prUs, int cantidad) {
@@ -57,10 +62,16 @@ public class Cart {
             if (nuevaCantidad > 0) {
 
                 existingProduct.setQuantity(nuevaCantidad);
+                calcularTotal();
+                
             } else {
+                
                 products.remove(existingProduct);
+                
             }
         }
+        double newTotal = calcularTotal();
+        ProductClient.getInstance().setTotalAmount(newTotal);
     }
 
     public static ObservableList<ProductCart> getProducts() {
@@ -69,6 +80,10 @@ public class Cart {
 
     public void cleanCart() {
         products.clear();
+    }
+    
+    public double calcularTotal(){
+     return products.stream().mapToDouble(p -> p.getSubtotal()).sum(); 
     }
 
     public long getCantidadd(long id, long cantidad) {

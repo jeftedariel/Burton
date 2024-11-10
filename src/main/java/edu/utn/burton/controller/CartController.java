@@ -30,25 +30,26 @@ public class CartController {
     }
 
     public void deleteProducto(ProductCart currentProduct, int count) {
-      if(!isEmptySpinner(count)){
+        if (!isEmptySpinner(count)) {
             Cart.getInstance().deleteProducts(currentProduct, count);
             JOptionPane.showMessageDialog(null, "Producto Eliminado " + currentProduct.getNameProduct());
             CartMenuController.getInstance().loadProducts();
-      }
+        }
     }
 
     public void addProduct(ProductCart currentProduct, int count) {
-      
-            if(!isEmptySpinner(count)){
+
+        if (!isEmptySpinner(count)) {
             ProductCart productUser = new ProductCart(currentProduct.getProductId(), currentProduct.getNameProduct(), Cart.getInstance().getCantidadd(currentProduct.getProductId(), count), currentProduct.getUnitePrice(), currentProduct.getImagePrincipal()); // igual qui lo de abajo para que agregue segun lo que el usuario quiera
             Cart.getInstance().addProduct(productUser, count);
             System.out.println(Cart.getInstance().getProducts().toString());
             CartMenuController.getInstance().loadProducts();
         }
     }
-    
-    public boolean isEmptySpinner(int count){
-    return (count == 0);
+
+    public boolean isEmptySpinner(int count) {
+        return (count == 0);
+
     }
 
 }
