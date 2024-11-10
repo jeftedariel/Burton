@@ -4,8 +4,8 @@
  */
 package edu.utn.burton.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Cart {
 
-    private static List<ProductUser> products;
+    private static ObservableList<ProductUser> products;
     private static Cart instance;
     
     public static Cart getInstance(){
@@ -24,7 +24,7 @@ public class Cart {
     }
     
     private Cart() {
-        products = new ArrayList<>();
+      products = FXCollections.observableArrayList();
     }
 
 
@@ -52,18 +52,18 @@ public class Cart {
         
         if (existingProduct.getQuantity() > 1) {
             
-            existingProduct.setQuantity(existingProduct.getQuantity() - cantidad);      
+            existingProduct.setQuantity(existingProduct.getQuantity() - 1);      
             
         } else {
             
             products.remove(prUs);
         }
     }
-    
 
-    public List<ProductUser> getProducts() {
+    public static ObservableList<ProductUser> getProducts() {
         return products;
     }
+    
 
     public void cleanCart() {
         products.clear();
