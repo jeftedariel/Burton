@@ -3,41 +3,38 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package edu.utn.burton.entities;
-import java.time.LocalDate;
 
 /**
  *
  * @author Justin Rodriguez Gonzalez
  */
-
 public class ProductClient {
+
     private static ProductClient instance;
     private int userId;
     private double totalAmount;
-    private LocalDate date;
-    private String status, typePay;
+    private String typePay, status;
 
     public ProductClient() {
         this.userId = 3;
         this.totalAmount = Cart.getInstance().calcularTotal();
-        this.date = LocalDate.now();
-        this.status = "En proceso";
-        this.typePay = "Tarjeta";
+        this.typePay = "Credit Card";
+        this.status = "Completed";
     }
-    
-      public static ProductClient getInstance() {
+
+    public static ProductClient getInstance() {
         if (instance == null) {
             return instance = new ProductClient();
         }
         return instance;
     }
-    
-    public double getTotalAmount() {
-        return totalAmount;
+
+    public String getTypePay() {
+        return typePay;
     }
 
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setTypePay(String typePay) {
+        this.typePay = typePay;
     }
 
     public String getStatus() {
@@ -48,9 +45,17 @@ public class ProductClient {
         this.status = status;
     }
 
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
     @Override
     public String toString() {
-        return "ProductClient{" + "userId=" + userId + ", totalAmount=" + totalAmount + ", date=" + date + ", status=" + status + '}';
-    } 
-    
+        return "ProductClient{" + "userId=" + userId + ", totalAmount=" + totalAmount + '}';
+    }
+
 }

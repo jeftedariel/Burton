@@ -23,7 +23,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
 
     private ProductCart currentProduct;
     private CartController ctrlCart;
-    SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10, 0);
+    SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10, 6);
     private ImageView imageView = new ImageView();
     private Label titleLabel = new Label();
     private Label quantityLabel = new Label();
@@ -34,7 +34,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
     private ImageView deleteimage = new ImageView();
     private ImageView addimage = new ImageView();
     private Spinner<Integer> amount = new Spinner<>();
-    private HBox content = new HBox(20);
+    private HBox content = new HBox(30);
     private VBox buttonBox = new VBox(5);
 
     public ProductCartCell() {
@@ -86,9 +86,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
         // Configurar el VBox para los botones
         buttonBox.getChildren().addAll(delete, edit);
         buttonBox.setAlignment(Pos.CENTER); // Alinear los botones en el centro
-
-        // Añadir el VBox al HBox de contenido
-      
+        // Añadir el VBox al HBox de contenido    
 
         // Configurar el HBox
         content.setAlignment(Pos.CENTER_LEFT);
@@ -118,7 +116,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
 
             titleLabel.setText(title);
             quantityLabel.setText("Cantidad: " + product.getQuantity());
-            unityPriceLabel.setText("Precio unitario: $" + product.getUnitePrice());
+            unityPriceLabel.setText("Unitario: $" + product.getUnitePrice());
             totalAmountLabel.setText("Total: $" + product.getSubtotal());
 
             try {

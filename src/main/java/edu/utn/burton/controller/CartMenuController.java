@@ -4,6 +4,7 @@ import edu.utn.burton.Burton;
 import edu.utn.burton.entities.Cart;
 import edu.utn.burton.entities.ProductCartCell;
 import edu.utn.burton.entities.ProductClient;
+import edu.utn.burton.entities.ordersDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import javafx.collections.FXCollections;
@@ -61,9 +62,11 @@ public class CartMenuController implements Initializable {
         loadProducts();
 
         btnBuy.setOnAction(ev -> {
-            ProductClient.getInstance().setStatus("Comprado");
-            JOptionPane.showMessageDialog(null,ProductClient.getInstance().toString());
-            JOptionPane.showMessageDialog(null,Cart.getInstance().toString());
+          
+            ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), 3);
+            ordersDAO.completeCart(3);
+            Cart.getInstance().cleanCart();
+            CartMenuController.getInstance().loadProducts();
             
         });
     }
