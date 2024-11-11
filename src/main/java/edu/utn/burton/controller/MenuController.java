@@ -138,7 +138,7 @@ public class MenuController implements Initializable {
         }
          
         try {
-            products = api.get(Product.class , "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName);
+            products = api.getList(Product.class , "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName,null);
             
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -188,7 +188,7 @@ public class MenuController implements Initializable {
         APIHandler api = new APIHandler();
         List<Category> categories = null;
         try {
-            categories = api.get(Category.class,"categories");
+            categories = api.getList(Category.class,"categories",null);
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }

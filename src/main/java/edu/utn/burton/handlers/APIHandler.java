@@ -3,7 +3,6 @@ package edu.utn.burton.handlers;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.utn.burton.controller.Alerts;
-import edu.utn.burton.controller.MenuController;
 import edu.utn.burton.entities.Message;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import javafx.scene.control.Alert;
 import org.json.JSONObject;
 
@@ -29,83 +29,84 @@ public class APIHandler {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    //metodo que devuelve una lista con los productos de los JSON
-    public <T> List<T> get(Class<T> type, String consulta) throws Exception {
+    // List of Generic Objects (Like Barbie, could be what you want lol)
+    public <T> List<T> getList(Class<T> type, String consulta, Map<String, String> headers) throws Exception {
+        HttpURLConnection connection = setupConnection("GET", consulta, headers, null);
+        String response = readResponse(connection); //Then Jackson`s ObjectMaper deserialze the json into the Object Class that we need
+        return objectMapper.readValue(response, objectMapper.getTypeFactory().constructCollectionType(List.class, type));
+    }
+
+    // Useful for GetUser via Token while using JWTAuth from api
+    public <T> T getObject(Class<T> type, String consulta, Map<String, String> headers) throws Exception {
+        HttpURLConnection connection = setupConnection("GET", consulta, headers, null);
+        String response = readResponse(connection);
+        return objectMapper.readValue(response, type);
+    }
+    
+    public <T> JSONObject post(Class<T> type, String query, JSONObject body) throws Exception {
+        HttpURLConnection connection = setupConnection("POST", query, null, body.toString());
+        handleAuthentication(connection);
+        //Then if everything is correct we`ll recieve the data from server
+        String response = readResponse(connection);
+        return (response != null) ? new JSONObject(response) : null;
+    }
+
+    private HttpURLConnection setupConnection(String method, String query, Map<String, String> headers, String body) throws Exception {
         // cree la conexio de la url 
-        URL url = new URL(ConfigHandler.getInstance().getApi().url() + consulta);
+        URL url = new URL(ConfigHandler.getInstance().getApi().url() + query);
         // se hace digamos la conexion
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        // se obtiene normal 
-        connection.setRequestMethod("GET");
-
+        // Setea el metodo que se vaya a usar en la peticion (POST, GET)
+        connection.setRequestMethod(method);
         // esto lo que hace es que digamos si dura mas de un segundo el mae tira un error dispara excepcion 
         connection.setConnectTimeout(15000);
         connection.setReadTimeout(15000);
-
-        //hagarra la respuesta de la api 
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-        //acumula toda la vara en una sola linea 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+        
+        // Agrega headers a la consulta, en caso de q existan, esto pq se necesita para jalar 
+        //La info del usuario con su Token
+        if (headers != null) {
+            headers.forEach(connection::setRequestProperty);
         }
-
-        //aqui lo que hace es convertir de jason a objetos en hava 
-        //convierte tambien en una lista de productos  
-        System.out.println("[GET] " + objectMapper.readValue(response.toString(), objectMapper.getTypeFactory().constructCollectionType(List.class, type)).toString());
-        return objectMapper.readValue(response.toString(), objectMapper.getTypeFactory().constructCollectionType(List.class, type));
+        // Se coloca el body si la peticion es POST
+        if (method.equals("POST")) {
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+            writeRequestBody(connection, body);
+        }
+        return connection;
     }
 
-    public <T> List<T> post(Class<T> type, String query, JSONObject body) throws Exception {
-        URL url = new URL(ConfigHandler.getInstance().getApi().url() + query);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setDoOutput(true);
-
-        try (OutputStream os = connection.getOutputStream()) {
-            byte[] input = body.toString().getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-            os.flush();
+    private void writeRequestBody(HttpURLConnection connection, String body) throws Exception {
+        if (body != null) { //For writing body into api call :) Simple
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = body.getBytes();
+                os.write(input, 0, input.length);
+                os.flush();
+            }
         }
+    }
 
+    private String readResponse(HttpURLConnection connection) throws Exception {
+        //hagarra la respuesta de la api 
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            StringBuilder response = new StringBuilder();
+            String line;
+            //acumula toda la vara en una sola linea
+            while ((line = reader.readLine()) != null) {
+                response.append(line.trim());
+            }
+            return response.toString();
+        }
+    }
+
+    private void handleAuthentication(HttpURLConnection connection) throws Exception {
         int status = connection.getResponseCode();
 
         if (status == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            Alerts.show(new Message("Error de autenticación", "Correo o contraseña incorrectos."),Alert.AlertType.WARNING);
-            return null;
+            Alerts.show(new Message("Error de autenticación", "Correo o contraseña incorrectos."), Alert.AlertType.WARNING);
+        } else if (status != HttpURLConnection.HTTP_OK && status != HttpURLConnection.HTTP_CREATED) {
+            Alerts.show(new Message("Error", "Hubo un problema con la conexión o los datos proporcionados."), Alert.AlertType.WARNING);
         }
-
-        if (status != HttpURLConnection.HTTP_OK && status != HttpURLConnection.HTTP_CREATED) {
-            Alerts.show(new Message("Error", "Hubo un problema con la conexión o los datos proporcionados."),Alert.AlertType.WARNING);
-            return null;
-        }
-
-        InputStream inputStream = connection.getInputStream();
-        if (inputStream == null) {
-            Alerts.show(new Message("Error de autenticación", "No se recibió una respuesta válida."),Alert.AlertType.WARNING);
-            return null;
-        }
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        StringBuilder response = new StringBuilder();
-        String responseLine;
-
-        while ((responseLine = br.readLine()) != null) {
-            response.append(responseLine.trim());
-        }
-
-        JSONObject jsonResponse = new JSONObject(response.toString());
-        if (jsonResponse.has("access_token")) {
-            String accessToken = jsonResponse.getString("access_token");
-            String refreshToken = jsonResponse.getString("refresh_token");
-            MenuController.initGui(); // Open the menu
-        } else {
-            Alerts.show(new Message("Error de autenticación", "Email o Contraseña incorrectos."),Alert.AlertType.WARNING);
-        }
-
-        return null;
     }
 }

@@ -8,6 +8,6 @@ package edu.utn.burton.entities;
  *
  * @author jefte
  */
-public record User(int id, String email, String password, String name, String role, String avatar) {
+public record User(int id, String email, String password, String name, String role, String avatar ) {
     
 }
