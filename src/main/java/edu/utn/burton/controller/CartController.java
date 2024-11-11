@@ -36,17 +36,27 @@ public class CartController {
         }
     }
 
-    public void deleteProducto(ProductCart currentProduct, int count) {
-        if (!isEmptySpinner(count)) {
+  public void deleteProducto(ProductCart currentProduct, int count) {
+    if (!isEmptySpinner(count)) {
+        if (currentProduct.getQuantity() <= count) {
+          
+            odDAO.removeProduct(currentProduct.getProductId(),3);
             Cart.getInstance().deleteProducts(currentProduct, count);
-             odDAO.addProductsToCart(3, Cart.getProducts());
+            CartMenuController.getInstance().loadProducts();
+            
+        } else {      
+          
+            Cart.getInstance().deleteProducts(currentProduct, count);
+            odDAO.addProductsToCart(3, Cart.getProducts());  
             CartMenuController.getInstance().loadProducts();
         }
     }
+}
 
     public void addProduct(ProductCart currentProduct, int count) {
 
         if (!isEmptySpinner(count)) {
+            CartMenuController.getInstance().loadProducts();
             ProductCart productUser = new ProductCart(currentProduct.getProductId(), currentProduct.getNameProduct(), Cart.getInstance().getCantidadd(currentProduct.getProductId(), count), currentProduct.getUnitePrice(), currentProduct.getImagePrincipal()); // igual qui lo de abajo para que agregue segun lo que el usuario quiera
             Cart.getInstance().addProduct(productUser, count);
             System.out.println(Cart.getInstance().getProducts().toString());

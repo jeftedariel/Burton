@@ -5,7 +5,6 @@
 package edu.utn.burton.entities;
 
 import java.time.LocalDate;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -20,7 +19,6 @@ public class Cart {
     private static ObservableList<ProductCart> products;
     private static Cart instance;
 
- 
     public static Cart getInstance() {
         if (instance == null) {
             return instance = new Cart();
@@ -30,7 +28,7 @@ public class Cart {
 
     private Cart() {
         products = ordersDAO.getProductSave(3);
-        this.userID = 3; 
+        this.userID = 3;
     }
 
     public void addProduct(ProductCart prUs, int cantidad) {
@@ -42,47 +40,45 @@ public class Cart {
         if (existingProduct != null) {
 
             existingProduct.setQuantity(existingProduct.getQuantity() + cantidad);
-            
 
         } else {
-            
+
             products.add(prUs);
             Cart.getInstance().CartEmpty();
-           
+
         }
-       double newTotal = calcularTotal();
-       ProductClient.getInstance().setTotalAmount(newTotal);
+        double newTotal = calcularTotal();
+        ProductClient.getInstance().setTotalAmount(newTotal);
     }
 
     public void deleteProducts(ProductCart prUs, int cantidad) {
-
         ProductCart existingProduct = products.stream()
                 .filter(p -> p.getProductId() == prUs.getProductId())
                 .findFirst()
                 .orElse(null);
 
         if (existingProduct != null) {
-
             long nuevaCantidad = existingProduct.getQuantity() - cantidad;
-
             if (nuevaCantidad > 0) {
-
                 existingProduct.setQuantity(nuevaCantidad);
-                calcularTotal();
-                
             } else {
-                
+
                 products.remove(existingProduct);
                 Cart.getInstance().CartEmpty();
             }
+
+            double newTotal = calcularTotal();
+            ProductClient.getInstance().setTotalAmount(newTotal);
+
+            if (nuevaCantidad <= 0) {
+                prUs.setQuantity(0);
+            }
         }
-        double newTotal = calcularTotal();
-        ProductClient.getInstance().setTotalAmount(newTotal);
     }
-    
-    public void CartEmpty(){
-    if(products.stream().count() == 0){
-            
+
+    public void CartEmpty() {
+        if (products.stream().count() == 0) {
+
         }
     }
 
@@ -91,11 +87,11 @@ public class Cart {
     }
 
     public void cleanCart() {
-        products.clear();  
+        products.clear();
     }
-    
-    public double calcularTotal(){
-     return products.stream().mapToDouble(p -> p.getSubtotal()).sum(); 
+
+    public double calcularTotal() {
+        return products.stream().mapToDouble(p -> p.getSubtotal()).sum();
     }
 
     public long getCantidadd(long id, long cantidad) {
@@ -109,6 +105,6 @@ public class Cart {
     @Override
     public String toString() {
         return "Cart{" + "userID=" + userID + ", status=" + status + ", created_at=" + created_at + ", update_at=" + update_at + '}';
-    }  
+    }
 
 }

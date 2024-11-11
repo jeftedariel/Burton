@@ -106,12 +106,39 @@ public class ordersDAO {
 
         return cartId;
     }
+    
+    public void removeProduct(int idItem, int iduser) {
+        
+        DBConnection conn = new DBConnection();
+        String consulta = "DELETE FROM cart_items WHERE product_id = ? AND cart_id = ?;";
+       
+         
+        
+        try {
+            int cart = getActiveCartId(iduser);
+            
+            
+            PreparedStatement ps = conn.getConnection().prepareStatement(consulta);
+            ps.setInt(1, idItem);
+             ps.setInt(2, cart);
+            ps.executeUpdate ();
+            System.out.println("eliminado");
+         
+        } catch (SQLException e) {
+            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+        } finally {
+            conn.disconnect();
+        }
+
+      
+    }
+
 
     public void addProductsToCart(int idPersona, ObservableList<ProductCart> items) {
         DBConnection conn = new DBConnection();
 
         try {
-            // Se desactiva la comprobación de claves foráneas temporalmente
+            
             PreparedStatement psE = conn.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 0;");
             psE.execute();
             
@@ -131,10 +158,10 @@ public class ordersDAO {
                 stmt.setString(7, item.getImagePrincipal());
 
                 int rowsAffected = stmt.executeUpdate();
-                System.out.println("Rows affected: " + rowsAffected); // Verifica cuántas filas fueron afectadas
+                System.out.println("Rows affected: " + rowsAffected); 
             }
 
-            // Restauramos la comprobación de claves foráneas
+          
             PreparedStatement psA = conn.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 1;");
             psA.execute();
 
@@ -144,6 +171,8 @@ public class ordersDAO {
             conn.disconnect();
         }
     }
+    
+    
 
     public static ObservableList<ProductCart> getProductSave(int idUser) {
 
@@ -174,7 +203,7 @@ public class ordersDAO {
                 double subtotal = result.getDouble("subtotal");
                 String name = result.getString("product_name");
                 String image = result.getString("product_image");
-
+                
                 products.add(new ProductCart(idProduc, name, quantity, unityPrice, subtotal, image));
                 System.out.println(products.toString());
 
@@ -191,4 +220,6 @@ public class ordersDAO {
         }
         return products;
     }
+    
+    
 }
