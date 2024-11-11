@@ -5,6 +5,7 @@ package edu.utn.burton.controller;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 import edu.utn.burton.Burton;
+import edu.utn.burton.entities.Cart;
 import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
@@ -80,7 +81,7 @@ public class MenuController implements Initializable {
     
     @FXML
     private Text username;
-    
+   
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -160,6 +161,7 @@ public class MenuController implements Initializable {
          
         try {
             products = api.getList(Product.class , "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName,null);
+
             
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -189,6 +191,8 @@ public class MenuController implements Initializable {
         }
         
         for (int i = 0; i < products.size(); i++) {
+            
+            
             ProductCell cell = new ProductCell();
             
             cell.updateItem(products.get(i), false);
@@ -202,6 +206,9 @@ public class MenuController implements Initializable {
                 row.setAlignment(Pos.CENTER);
             }
         }
+        
+        
+        
     }
     
     public List<Category> loadCategories() {
