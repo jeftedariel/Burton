@@ -10,6 +10,7 @@ import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCell;
+import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
@@ -29,6 +30,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -72,6 +74,12 @@ public class MenuController implements Initializable {
     
     @FXML
     private MFXButton openCart;
+    
+    @FXML
+    private ImageView avatar;
+    
+    @FXML
+    private Text username;
     
     
     @Override
@@ -120,7 +128,20 @@ public class MenuController implements Initializable {
             CartMenuController.initGui((Stage) openCart.getScene().getWindow());
         });*/
         
+        //Sets the User's avatar & Name into GUI
+        loadUserInfo();
         
+        
+    }
+    
+    public void loadUserInfo(){
+        username.setText(UserSession.getInstance().getName());
+        try{
+            Image img = new Image(UserSession.getInstance().getAvatar());
+            avatar.setImage(img);
+        } catch(Exception e){
+            System.out.println("There was an error while loading Avatar image: " + e);
+        }
     }
     
     public void loadProducts(boolean Search) {

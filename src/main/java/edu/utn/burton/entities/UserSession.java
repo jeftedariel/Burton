@@ -32,6 +32,26 @@ public class UserSession {
         this.role = role;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "UserSession{" + "name=" + name + ", email=" + email + ", avatar=" + avatar + ", role=" + role + ", id=" + id + '}';

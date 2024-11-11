@@ -21,6 +21,12 @@
       <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #95AFBA;">
          <children>
             <MFXButton fx:id="openCart" layoutX="1183.0" layoutY="14.0" text="Carrito" />
+            <ImageView id="avatar" fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/user.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="username" layoutX="61.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
          </children></Pane>
       <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="102.0" prefHeight="560.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
       <Pagination fx:id="pagination" layoutX="483.0" layoutY="653.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
