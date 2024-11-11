@@ -10,4 +10,7 @@ package edu.utn.burton.entities;
  */
 public record Message(String title, String description, String imgUrl) {
 
+    public Message(String title, String description) {
+        this(title, description, ""); 
+    }
 }

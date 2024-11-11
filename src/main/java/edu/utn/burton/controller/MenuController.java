@@ -5,7 +5,6 @@ package edu.utn.burton.controller;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 import edu.utn.burton.Burton;
-import edu.utn.burton.entities.Cart;
 import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
@@ -125,7 +124,7 @@ public class MenuController implements Initializable {
     }
     
     public void loadProducts(boolean Search) {
-        APIHandler api = new APIHandler(Product.class);
+        APIHandler api = new APIHandler();
         List<Product> products = null;
         String categoryQuery = "";
         String searchByName = "";
@@ -137,9 +136,9 @@ public class MenuController implements Initializable {
         if (Search && productNameTXT != null) {
             searchByName = "&title=" + productNameTXT.getText();
         }
-        
+         
         try {
-            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName);
+            products = api.get(Product.class , "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName);
             
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -169,8 +168,6 @@ public class MenuController implements Initializable {
         }
         
         for (int i = 0; i < products.size(); i++) {
-            
-            
             ProductCell cell = new ProductCell();
             
             cell.updateItem(products.get(i), false);
@@ -184,17 +181,14 @@ public class MenuController implements Initializable {
                 row.setAlignment(Pos.CENTER);
             }
         }
-        
-        
-        
     }
     
     public List<Category> loadCategories() {
         //Return all the available categories (with duplicates)
-        APIHandler api = new APIHandler(Product.class);
+        APIHandler api = new APIHandler();
         List<Category> categories = null;
         try {
-            categories = api.getCategories("categories");
+            categories = api.get(Category.class,"categories");
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -233,8 +227,8 @@ public class MenuController implements Initializable {
     public void setRange() {//Simple text feature to show the price range in a fancy and cool way
         rangeText.setText("Rango: $" + (int) rangeSlider.getLowValue() + " - $" + (int) rangeSlider.getHighValue());
         
-    } // مرحباً بالعالم هههههه، هذا تعليق عشوائي
-
+    } 
+    
     public static void initGui() {
         
         try {
