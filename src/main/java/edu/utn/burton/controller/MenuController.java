@@ -11,6 +11,7 @@ import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCell;
+import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
@@ -30,6 +31,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -74,6 +76,12 @@ public class MenuController implements Initializable {
     @FXML
     private MFXButton openCart;
     
+    @FXML
+    private ImageView avatar;
+    
+    @FXML
+    private Text username;
+   
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -117,15 +125,28 @@ public class MenuController implements Initializable {
             loadProducts(true);
         });
         
-        openCart.setOnMouseClicked(ev -> {
+        /*openCart.setOnMouseClicked(ev -> {
             CartMenuController.initGui((Stage) openCart.getScene().getWindow());
-        });
+        });*/
+        
+        //Sets the User's avatar & Name into GUI
+        loadUserInfo();
         
         
     }
     
+    public void loadUserInfo(){
+        username.setText(UserSession.getInstance().getName());
+        try{
+            Image img = new Image(UserSession.getInstance().getAvatar());
+            avatar.setImage(img);
+        } catch(Exception e){
+            System.out.println("There was an error while loading Avatar image: " + e);
+        }
+    }
+    
     public void loadProducts(boolean Search) {
-        APIHandler api = new APIHandler(Product.class);
+        APIHandler api = new APIHandler();
         List<Product> products = null;
         String categoryQuery = "";
         String searchByName = "";
@@ -137,9 +158,10 @@ public class MenuController implements Initializable {
         if (Search && productNameTXT != null) {
             searchByName = "&title=" + productNameTXT.getText();
         }
-        
+         
         try {
-            products = api.obtenerProductos("products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName);
+            products = api.getList(Product.class , "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName,null);
+
             
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -191,10 +213,10 @@ public class MenuController implements Initializable {
     
     public List<Category> loadCategories() {
         //Return all the available categories (with duplicates)
-        APIHandler api = new APIHandler(Product.class);
+        APIHandler api = new APIHandler();
         List<Category> categories = null;
         try {
-            categories = api.getCategories("categories");
+            categories = api.getList(Category.class,"categories",null);
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -233,8 +255,8 @@ public class MenuController implements Initializable {
     public void setRange() {//Simple text feature to show the price range in a fancy and cool way
         rangeText.setText("Rango: $" + (int) rangeSlider.getLowValue() + " - $" + (int) rangeSlider.getHighValue());
         
-    } // مرحباً بالعالم هههههه، هذا تعليق عشوائي
-
+    } 
+    
     public static void initGui() {
         
         try {
