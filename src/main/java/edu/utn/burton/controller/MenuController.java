@@ -5,11 +5,13 @@ package edu.utn.burton.controller;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 import edu.utn.burton.Burton;
+import edu.utn.burton.entities.Cart;
 import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCell;
+import edu.utn.burton.entities.ordersDAO;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
@@ -45,7 +47,6 @@ public class MenuController implements Initializable {
      * Initializes the controller class.
      */
     
-    
     @FXML
     private MFXLegacyListView<HBox> productListView;
     
@@ -73,9 +74,13 @@ public class MenuController implements Initializable {
     @FXML
     private MFXButton openCart;
     
+    private  ordersDAO ordDAO;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        ordDAO = new ordersDAO();
 
         //Set the max value for the Price Range
         rangeSlider.setHighValue(500);//Then sets the range Text
@@ -123,6 +128,7 @@ public class MenuController implements Initializable {
         
     }
     
+   
     public void loadProducts(boolean Search) {
         APIHandler api = new APIHandler(Product.class);
         List<Product> products = null;
@@ -231,20 +237,21 @@ public class MenuController implements Initializable {
     
     public void setRange() {//Simple text feature to show the price range in a fancy and cool way
         rangeText.setText("Rango: $" + (int) rangeSlider.getLowValue() + " - $" + (int) rangeSlider.getHighValue());
-        
+       
     }
 
     public static void initGui() {
-        
-        try {
-            Parent root = FXMLLoader.load(Burton.class.getResource("/fxml/Menu.fxml"));
             
+        try { 
+     
+            Parent root = FXMLLoader.load(Burton.class.getResource("/fxml/Menu.fxml"));
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Burton E-Commerce");
             stage.setResizable(false);
             stage.getIcons().add(new Image(Burton.class.getResourceAsStream("/assets/icon.png")));
             scene.getStylesheets().add(Burton.class.getResource("/styles/menu.css").toExternalForm());
+          
             
             stage.setScene(scene);
             stage.centerOnScreen();

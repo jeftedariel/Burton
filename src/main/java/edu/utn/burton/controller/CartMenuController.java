@@ -56,7 +56,6 @@ public class CartMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         instance = this;
         observableProductList = FXCollections.observableArrayList();
-        
         lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
         
         loadProducts();
@@ -72,6 +71,7 @@ public class CartMenuController implements Initializable {
 
     public static void initGui(Stage stage) {
         try {
+          
             FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/CartMenu.fxml"));
             Parent root = loader.load();
             CartMenuController cartMenuController = loader.getController();
@@ -79,6 +79,7 @@ public class CartMenuController implements Initializable {
             scene.getStylesheets().add(Burton.class.getResource("/styles/cartmenu.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
+              
             
 
         } catch (IOException e) {
@@ -104,7 +105,7 @@ public class CartMenuController implements Initializable {
 
             HBox emptyCartRow = new HBox();
             emptyCartRow.setAlignment(Pos.CENTER);
-            //btnBuy.setVisible(false);
+            btnBuy.setVisible(false);
             lblTotalPago.setVisible(false);
             emptyCartRow.getChildren().add(new ImageView("/assets/carroVacio.png") {
                 {

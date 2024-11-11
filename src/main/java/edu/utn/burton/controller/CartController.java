@@ -28,8 +28,8 @@ public class CartController {
 
             ProductCart productUser = new ProductCart(currentProduct.id(), currentProduct.title(), Cart.getInstance().getCantidadd(currentProduct.id(), count), currentProduct.price(), currentProduct.images().get(0)); // igual qui lo de abajo para que agregue segun lo que el usuario quiera
             Cart.getInstance().addProduct(productUser, count);
-            odDAO.getOrCreateActiveCart(2);
-            odDAO.addProductsToCart(2, Cart.getProducts());
+            odDAO.getOrCreateActiveCart(3);
+            odDAO.addProductsToCart(3, Cart.getProducts());
             System.out.println(Cart.getInstance().getProducts().toString());
             JOptionPane.showMessageDialog(null, "Producto Agregado " + currentProduct.title());
 
@@ -39,7 +39,7 @@ public class CartController {
     public void deleteProducto(ProductCart currentProduct, int count) {
         if (!isEmptySpinner(count)) {
             Cart.getInstance().deleteProducts(currentProduct, count);
-             odDAO.addProductsToCart(2, Cart.getProducts());
+             odDAO.addProductsToCart(3, Cart.getProducts());
             CartMenuController.getInstance().loadProducts();
         }
     }
@@ -50,7 +50,7 @@ public class CartController {
             ProductCart productUser = new ProductCart(currentProduct.getProductId(), currentProduct.getNameProduct(), Cart.getInstance().getCantidadd(currentProduct.getProductId(), count), currentProduct.getUnitePrice(), currentProduct.getImagePrincipal()); // igual qui lo de abajo para que agregue segun lo que el usuario quiera
             Cart.getInstance().addProduct(productUser, count);
             System.out.println(Cart.getInstance().getProducts().toString());
-            odDAO.addProductsToCart(2, Cart.getProducts());
+            odDAO.addProductsToCart(3, Cart.getProducts());
             CartMenuController.getInstance().loadProducts();
         }
     }
@@ -59,5 +59,5 @@ public class CartController {
         return (count == 0);
 
     }
-
+    
 }

@@ -29,8 +29,8 @@ public class Cart {
     }
 
     private Cart() {
-        products = FXCollections.observableArrayList();
-        this.userID = 2; 
+        products = ordersDAO.getProductSave(3);
+        this.userID = 3; 
     }
 
     public void addProduct(ProductCart prUs, int cantidad) {
@@ -91,8 +91,7 @@ public class Cart {
     }
 
     public void cleanCart() {
-        products.clear();
-        
+        products.clear();  
     }
     
     public double calcularTotal(){
@@ -110,8 +109,6 @@ public class Cart {
     @Override
     public String toString() {
         return "Cart{" + "userID=" + userID + ", status=" + status + ", created_at=" + created_at + ", update_at=" + update_at + '}';
-    }
-    
-    
+    }  
 
 }

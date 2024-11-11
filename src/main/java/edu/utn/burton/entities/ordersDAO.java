@@ -9,7 +9,9 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,7 +19,7 @@ import javafx.collections.ObservableList;
  */
 public class ordersDAO {
 
-    public int getOrCreateActiveCart(int userId) {
+    public static int getOrCreateActiveCart(int userId) {
 
         int cartId = -1;
         DBConnection conn = new DBConnection();
@@ -62,7 +64,7 @@ public class ordersDAO {
         }
     }
 
-    public int getActiveCartId(int userId) throws SQLException {
+    public static int getActiveCartId(int userId) throws SQLException {
         int cartId = -1;
         DBConnection conn = new DBConnection();
 
@@ -106,46 +108,87 @@ public class ordersDAO {
     }
 
     public void addProductsToCart(int idPersona, ObservableList<ProductCart> items) {
-    DBConnection conn = new DBConnection();
+        DBConnection conn = new DBConnection();
 
-    try {
-        // Se desactiva la comprobación de claves foráneas temporalmente
-        PreparedStatement psE = conn.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 0;");
-        psE.execute();
+        try {
+            // Se desactiva la comprobación de claves foráneas temporalmente
+            PreparedStatement psE = conn.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 0;");
+            psE.execute();
+            
+            int cart = getActiveCartId(idPersona);
+ 
+            
+            CallableStatement stmt = conn.getConnection().prepareCall("{CALL add_product_to_cart(?, ?, ?, ?, ?, ?, ?)}");
 
-        // Obtenemos el carrito activo para el usuario
-        System.out.println("id persona = " + idPersona);
-         
-        int cart = getActiveCartId(idPersona);
-        System.out.println("carrito de la persona = " + cart);
-        CallableStatement stmt = conn.getConnection().prepareCall("{CALL add_product_to_cart(?, ?, ?, ?, ?)}");
+            for (ProductCart item : items) {
 
-        for (ProductCart item : items) {
-            System.out.println("cart: " + cart);
-            System.out.println("productId: " + item.getProductId());
-            System.out.println("quantity: " + item.getQuantity());
-            System.out.println("unitPrice: " + item.getUnitePrice());
-            System.out.println("subtotal: " + item.getSubtotal());
+                stmt.setInt(1, cart);
+                stmt.setInt(2, item.getProductId());
+                stmt.setLong(3, item.getQuantity());
+                stmt.setDouble(4, item.getUnitePrice());
+                stmt.setDouble(5, item.getSubtotal());
+                stmt.setString(6, item.getNameProduct());
+                stmt.setString(7, item.getImagePrincipal());
 
-            stmt.setInt(1, cart);
-            stmt.setInt(2, item.getProductId());
-            stmt.setLong(3, item.getQuantity());
-            stmt.setDouble(4, item.getUnitePrice());
-            stmt.setDouble(5, item.getSubtotal());
+                int rowsAffected = stmt.executeUpdate();
+                System.out.println("Rows affected: " + rowsAffected); // Verifica cuántas filas fueron afectadas
+            }
 
-            int rowsAffected = stmt.executeUpdate();
-            System.out.println("Rows affected: " + rowsAffected); // Verifica cuántas filas fueron afectadas
+            // Restauramos la comprobación de claves foráneas
+            PreparedStatement psA = conn.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 1;");
+            psA.execute();
+
+        } catch (SQLException e) {
+            System.err.println("Error al agregar productos al carrito: " + e.getMessage());
+        } finally {
+            conn.disconnect();
         }
-
-        // Restauramos la comprobación de claves foráneas
-        PreparedStatement psA = conn.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 1;");
-        psA.execute();
-
-    } catch (SQLException e) {
-        System.err.println("Error al agregar productos al carrito: " + e.getMessage());
-    } finally {
-        conn.disconnect();
     }
-}
 
+    public static ObservableList<ProductCart> getProductSave(int idUser) {
+
+        DBConnection conexion = new DBConnection();
+        ObservableList<ProductCart> products = FXCollections.observableArrayList();
+
+        try {
+
+               
+            int cart = getActiveCartId(idUser);
+             
+            int cartId = ordersDAO.getActiveCartId(idUser);
+            if (cartId == -1) {
+                
+                cartId = ordersDAO.getOrCreateActiveCart(idUser); 
+                
+            }
+
+
+            CallableStatement stmt = conexion.getConnection().prepareCall("{CALL get_products_in_cart(?)}");
+            stmt.setLong(1, cart);
+            ResultSet result = stmt.executeQuery();
+
+            while (result.next()) {
+                int idProduc = result.getInt("product_id");
+                long quantity = result.getLong("quantity");
+                double unityPrice = result.getDouble("unit_price");
+                double subtotal = result.getDouble("subtotal");
+                String name = result.getString("product_name");
+                String image = result.getString("product_image");
+
+                products.add(new ProductCart(idProduc, name, quantity, unityPrice, subtotal, image));
+                System.out.println(products.toString());
+
+            }
+
+        } catch (SQLException e) {
+
+            JOptionPane.showMessageDialog(null, "Error: " + e);
+
+        } finally {
+
+            conexion.disconnect();
+
+        }
+        return products;
+    }
 }

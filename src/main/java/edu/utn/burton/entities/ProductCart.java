@@ -16,7 +16,7 @@ public class ProductCart {
     private long quantity;
     private double unitePrice, subtotal;
     private String imagePrincipal, nameProduct;
-
+ //products.add(new ProductCart(idProduc, name, quantity, unityPrice, subtotal, image));
     public ProductCart(int productId, String nameProduct,long quantity, double unitePrice, String imagePrincipal) {
         this.productId = productId;
         this.quantity = quantity;
@@ -24,6 +24,15 @@ public class ProductCart {
         this.subtotal = quantity * unitePrice;
         this.imagePrincipal = imagePrincipal;
         this.nameProduct = nameProduct;
+    }
+    public ProductCart(int productId, String nameProduct,long quantity, double unitePrice, double subtotal, String imagePrincipal) {
+        this.productId = productId;
+        this.quantity = quantity;
+        this.unitePrice = unitePrice;
+        this.subtotal = quantity * unitePrice;
+        this.imagePrincipal = imagePrincipal;
+        this.nameProduct = nameProduct;
+        this.subtotal = subtotal;
     }
 
     public String getNameProduct() {
