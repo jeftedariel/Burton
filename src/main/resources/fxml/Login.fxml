@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MFXButton fx:id="Ingresar" layoutX="269.0" layoutY="342.0" text="Ingresar" />
+      <MFXTextField fx:id="Correo" layoutX="201.0" layoutY="168.0" prefHeight="49.0" prefWidth="200.0" promptText="Correo" />
+      <MFXPasswordField fx:id="Contraseña" layoutX="200.0" layoutY="249.0" prefHeight="49.0" prefWidth="200.0" promptText="Contraseña" />
+      <ImageView layoutX="264.0" layoutY="14.0">
+         <image>
+            <Image url="@../assets/icon.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
