@@ -4,7 +4,7 @@
  */
 package edu.utn.burton.handlers;
 
-import edu.utn.burton.entities.DatabaseConf;
+import edu.utn.burton.database.DatabaseConf;
 import edu.utn.burton.entities.Api;
 import java.io.InputStream;
 import java.util.Map;
