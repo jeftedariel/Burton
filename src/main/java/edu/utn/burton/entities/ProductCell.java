@@ -30,9 +30,9 @@ public class ProductCell extends ListCell<Product> {
         ctrlCart = new CartController();
 
         addToCart.setOnAction(event -> {
-            ctrlCart.getProduct(currentProduct, Cart.getInstance());
+            ctrlCart.getProduct(currentProduct,2);
         });
-
+       
         // Aply the corresponding css 
         imageView.getStyleClass().add("product-image");
         titleLabel.getStyleClass().add("product-title");

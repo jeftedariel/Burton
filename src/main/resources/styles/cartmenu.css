@@ -1,0 +1,126 @@
+/* Estilos generales para la celda del carrito */
+.product-cart-cell {
+    -fx-padding: 10;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 800;
+}
+
+/* Contenedor horizontal para la celda */
+.product-cart-cell-content {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 20;
+    -fx-fill-height: true;
+    -fx-orientation: HORIZONTAL; /* Asegura orientación horizontal */
+}
+
+/* Imagen del producto */
+.product-image {
+    -fx-fit-width: 80;
+    -fx-fit-height: 80;
+    -fx-preserve-ratio: true;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);
+}
+
+/* Contenedor de la información del producto */
+.product-details {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 20; /* Aumentado el espaciado entre elementos */
+    -fx-orientation: HORIZONTAL; /* Fuerza layout horizontal */
+    -fx-pref-width: 600;
+    -fx-padding: 0 10 0 10; /* Padding horizontal */
+}
+
+/* Título del producto */
+.product-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-wrap-text: true;
+    -fx-max-width: 200; /* Reducido para mejor ajuste horizontal */
+    -fx-pref-width: 200;
+}
+
+/* Cantidad */
+.product-quantity {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+    -fx-min-width: 80;
+    -fx-alignment: CENTER;
+}
+
+/* Precio unitario */
+.product-price {
+    -fx-font-size: 14px;
+    -fx-text-fill: #888888;
+    -fx-min-width: 100;
+    -fx-alignment: CENTER;
+}
+
+/* Total */
+.product-total {
+    -fx-font-size: 16px;
+    -fx-text-fill: #009688;
+    -fx-font-weight: bold;
+    -fx-min-width: 100;
+    -fx-alignment: CENTER;
+}
+.product-botonDelete {
+    -fx-background-color: #ff4d4d;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+}
+
+.product-botonDelete:hover {
+    -fx-background-color: #ff3333;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.product-botonDelete:pressed {
+    -fx-background-color: #e60000;
+}
+
+.product-buttonBox {
+    -fx-alignment: CENTER;
+    -fx-spacing: 5; /* Espacio entre los botones */
+}
+
+.product-botonAdd {
+    -fx-background-color: #4CAF50; /* Verde */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+}
+
+.product-botonAdd:hover {
+    -fx-background-color: #45a049; /* Verde más claro al hacer hover */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.product-botonAdd:pressed {
+    -fx-background-color: #388e3c; /* Verde aún más claro al presionar */
+}
+
+/* Contenedor horizontal para todos los elementos */
+.product-cart-cell HBox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 20;
+}

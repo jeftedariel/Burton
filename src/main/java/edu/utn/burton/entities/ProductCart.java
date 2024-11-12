@@ -10,19 +10,37 @@ package edu.utn.burton.entities;
  */
 
 
-public class ProductUser {
+public class ProductCart {
     
     private int productId;
     private long quantity;
     private double unitePrice, subtotal;
-    private String imagePrincipal;
+    private String imagePrincipal, nameProduct;
 
-    public ProductUser(int productId, long quantity, double unitePrice, String imagePrincipal) {
+    public ProductCart(int productId, String nameProduct,long quantity, double unitePrice, String imagePrincipal) {
         this.productId = productId;
         this.quantity = quantity;
         this.unitePrice = unitePrice;
         this.subtotal = quantity * unitePrice;
         this.imagePrincipal = imagePrincipal;
+        this.nameProduct = nameProduct;
+    }
+    public ProductCart(int productId, String nameProduct,long quantity, double unitePrice, double subtotal, String imagePrincipal) {
+        this.productId = productId;
+        this.quantity = quantity;
+        this.unitePrice = unitePrice;
+        this.subtotal = quantity * unitePrice;
+        this.imagePrincipal = imagePrincipal;
+        this.nameProduct = nameProduct;
+        this.subtotal = subtotal;
+    }
+
+    public String getNameProduct() {
+        return nameProduct;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
     }
     
     public void setQuantity(long quantity) {
