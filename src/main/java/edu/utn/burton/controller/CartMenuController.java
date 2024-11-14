@@ -110,7 +110,7 @@ public class CartMenuController implements Initializable {
             emptyCartRow.setAlignment(Pos.CENTER);
             btnBuy.setVisible(false);
             lblTotalPago.setVisible(false);
-            emptyCartRow.getChildren().add(new ImageView("/assets/carroVacio.png") {
+            emptyCartRow.getChildren().add(new ImageView("/assets/carroX.png") {
                 {
                     setFitWidth(600);
                     setFitHeight(600);
