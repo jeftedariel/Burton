@@ -51,7 +51,7 @@ public class MySQLAdapter implements IDBAdapter{
     }
 
     private String getConnectionString() {
-        return "jdbc:mysql://"+ConfigHandler.getInstance().getDatabaseConfig().host()+":"+ConfigHandler.getInstance().getDatabaseConfig().port()+"/"+ConfigHandler.getInstance().getDatabaseConfig().database();
+        return "jdbc:mysql://"+ConfigHandler.getInstance().getDatabaseConfig().host()+":"+ConfigHandler.getInstance().getDatabaseConfig().port()+"/"+ConfigHandler.getInstance().getDatabaseConfig().database()+"?useSSL=false&allowPublicKeyRetrieval=true";
     }
 
 }
