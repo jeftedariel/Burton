@@ -10,12 +10,9 @@ import edu.utn.burton.entities.User;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXPasswordField;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -26,6 +23,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomPasswordField;
+import org.controlsfx.control.textfield.CustomTextField;
 import org.json.JSONObject;
 
 /**
@@ -35,9 +34,9 @@ import org.json.JSONObject;
 public class LoginController implements Initializable {
 
     @FXML
-    private MFXTextField Correo;
+    private CustomTextField Correo;
     @FXML
-    private MFXPasswordField Contraseña;
+    private CustomPasswordField Contraseña;
     @FXML
     private MFXButton Ingresar;
 
@@ -77,7 +76,7 @@ public class LoginController implements Initializable {
     
 
     private void loadMenu() {
-        MenuController.initGui();
+        MenuController.initGui(new Stage());
         Stage stage = (Stage) Ingresar.getScene().getWindow();
         stage.close();
     }

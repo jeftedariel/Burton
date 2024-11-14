@@ -22,13 +22,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.Label;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Justin Rodriguez Gonzalez
  */
-
 public class CartMenuController implements Initializable {
 
     private static CartMenuController instance;
@@ -49,32 +47,39 @@ public class CartMenuController implements Initializable {
 
     @FXML
     private ObservableList<HBox> observableProductList;
-    
+
     @FXML
     private Label lblTotalPago;
-            
+
+    @FXML
+    private MFXButton returnBtn;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         instance = this;
         observableProductList = FXCollections.observableArrayList();
         lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
-        
+
         loadProducts();
 
         btnBuy.setOnAction(ev -> {
-          
+
             ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), 3);
             ordersDAO.completeCart(3);
             Cart.getInstance().cleanCart();
             CartMenuController.getInstance().loadProducts();
-            
+
         });
+
+        returnBtn.setOnAction(ev -> {
+            MenuController.initGui((Stage) returnBtn.getScene().getWindow());
+        });
+
     }
- 
 
     public static void initGui(Stage stage) {
         try {
-          
+
             FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/CartMenu.fxml"));
             Parent root = loader.load();
             CartMenuController cartMenuController = loader.getController();
@@ -82,8 +87,6 @@ public class CartMenuController implements Initializable {
             scene.getStylesheets().add(Burton.class.getResource("/styles/cartmenu.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
-              
-            
 
         } catch (IOException e) {
             e.printStackTrace();
