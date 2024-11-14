@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import javax.swing.JOptionPane;
+import java.util.Objects;
 
 /**
  *
@@ -40,7 +40,7 @@ public class GoogleAuthStrategy implements LoginStrategy{
             Userinfoplus userInfo = authenticateUser();
             if (userInfo != null) {
                 
-                UserSession.getInstance().login(Integer.parseInt(userInfo.getId()), userInfo.getName(), userInfo.getEmail(), userInfo.getPicture(), "customer");
+                UserSession.getInstance().login(Objects.hash(userInfo.getId()), userInfo.getName(), userInfo.getEmail(), userInfo.getPicture(), "customer");
                 return true;
             }
         } catch (Exception e) {
