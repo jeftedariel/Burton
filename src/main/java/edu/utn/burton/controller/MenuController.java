@@ -10,6 +10,7 @@ import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
+import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ProductCell;
 import edu.utn.burton.entities.ordersDAO;
 import edu.utn.burton.entities.UserSession;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -133,7 +135,22 @@ public class MenuController implements Initializable {
 
         //Sets the User's avatar & Name into GUI
         loadUserInfo();
+        
+        // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting
+        setTotalProducts();
+        Cart.getInstance().getProducts().addListener((ListChangeListener<ProductCart>) ev -> {
+            setTotalProducts();
+        });
 
+    }
+
+    public void setTotalProducts() {
+        int t = 0;
+
+        for (ProductCart pc : Cart.getInstance().getProducts()) {
+            t += pc.getQuantity();
+        }
+        openCart.setText(String.valueOf(t));
     }
 
     public void loadUserInfo() {
@@ -250,7 +267,6 @@ public class MenuController implements Initializable {
     public void setRange() {//Simple text feature to show the price range in a fancy and cool way
         rangeText.setText("Rango: $" + (int) rangeSlider.getLowValue() + " - $" + (int) rangeSlider.getHighValue());
     }
-
 
     public static void initGui(Stage stage) {
 

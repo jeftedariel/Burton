@@ -6,6 +6,7 @@ import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.ProductCartCell;
 import edu.utn.burton.entities.ProductClient;
+import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.entities.ordersDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -56,6 +59,12 @@ public class CartMenuController implements Initializable {
     @FXML
     private MFXButton returnBtn;
 
+    @FXML
+    private ImageView avatar;
+
+    @FXML
+    private Text username;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         instance = this;
@@ -77,6 +86,18 @@ public class CartMenuController implements Initializable {
             MenuController.initGui((Stage) returnBtn.getScene().getWindow());
         });
 
+        //Sets the User's avatar & Name into GUI
+        loadUserInfo();
+    }
+
+    public void loadUserInfo() {
+        username.setText(UserSession.getInstance().getName());
+        try {
+            Image img = new Image(UserSession.getInstance().getAvatar());
+            avatar.setImage(img);
+        } catch (Exception e) {
+            System.out.println("There was an error while loading Avatar image: " + e);
+        }
     }
 
     public static void initGui(Stage stage) {
@@ -112,13 +133,13 @@ public class CartMenuController implements Initializable {
         } else {
 
             MessageCell cell = new MessageCell();
-            cell.updateItem(new Message("Aviso", "No tienes Productos en tu carrito","/assets/carroX.png"), false);
+            cell.updateItem(new Message("Aviso", "No tienes Productos en tu carrito", "/assets/carroX.png"), false);
             HBox row = new HBox(10);
             row.setAlignment(Pos.CENTER);
             row.getChildren().add(cell.getGraphic());
             lblTotalPago.setText("$ " + ProductClient.getInstance().getTotalAmount());
             observableProductList.add(row);
-            
+
             btnBuy.setVisible(false);
             lblTotalPago.setVisible(false);
         }

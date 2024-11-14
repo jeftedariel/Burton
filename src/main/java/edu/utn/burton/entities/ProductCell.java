@@ -31,6 +31,7 @@ public class ProductCell extends ListCell<Product> {
 
         addToCart.setOnAction(event -> {
             ctrlCart.getProduct(currentProduct,2);
+            
         });
        
         // Aply the corresponding css 

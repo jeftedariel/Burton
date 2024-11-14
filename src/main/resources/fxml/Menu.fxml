@@ -10,41 +10,56 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.RangeSlider?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #FAFAFA;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.MenuController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #FAFAFA;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.MenuController">
     <stylesheets>
         <URL value="@/styles/menu.css" />
     </stylesheets>
    <children>
-      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #95AFBA;">
+      <Pane layoutY="54.0" prefHeight="54.0" prefWidth="1282.0" style="-fx-background-color: #ebefff;">
          <children>
-            <MFXButton fx:id="openCart" layoutX="1183.0" layoutY="14.0" text="Carrito" />
+            <MFXButton fx:id="clearFilters" layoutX="178.0" layoutY="13.0" text="Limpiar Filtros" />
+            <ComboBox fx:id="cbxCategories" layoutX="281.0" layoutY="13.0" prefHeight="26.0" prefWidth="190.0" promptText="Seleccione Categoria" />
+            <TextField fx:id="productNameTXT" layoutX="786.0" layoutY="13.0" prefHeight="25.0" prefWidth="245.0" promptText="Nombre de Producto" />
+            <MFXButton fx:id="search" layoutX="1041.0" layoutY="13.0" text=" ">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/search.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <RangeSlider fx:id="rangeSlider" accessibleHelp="Price Range" accessibleText="Price Range" blockIncrement="1.0" highValue="500.0" layoutX="491.0" layoutY="23.0" lowValue="1.0" max="500.0" min="1.0" prefHeight="18.0" prefWidth="280.0" />
+            <Text fx:id="rangeText" layoutX="510.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rango:" />
+         </children>
+      </Pane>
+      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #6f71de;">
+         <children>
+            <MFXButton fx:id="openCart" layoutX="1184.0" layoutY="10.0" text="0">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/cartbtnIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic></MFXButton>
 
             <ImageView id="avatar" fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/user.png" />
                </image>
             </ImageView>
-            <Text fx:id="username" layoutX="61.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+            <Text fx:id="username" fill="WHITE" layoutX="64.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+               <font>
+                  <Font name="Poppins Regular" size="18.0" />
+               </font></Text>
 
          </children></Pane>
-      <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="102.0" prefHeight="560.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
+      <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="100.0" prefHeight="562.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
       <Pagination fx:id="pagination" layoutX="483.0" layoutY="653.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
-      <ComboBox fx:id="cbxCategories" layoutX="286.0" layoutY="70.0" prefHeight="26.0" prefWidth="190.0" promptText="Seleccione Categoria" />
-      <MFXButton fx:id="clearFilters" layoutX="174.0" layoutY="71.0" text="Limpiar Filtros" />
-      <RangeSlider fx:id="rangeSlider" accessibleHelp="Price Range" accessibleText="Price Range" blockIncrement="1.0" highValue="500.0" layoutX="501.0" layoutY="78.0" lowValue="1.0" max="500.0" min="1.0" prefHeight="18.0" prefWidth="280.0" />
-      <Text fx:id="rangeText" layoutX="520.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rango:" />
-      <TextField fx:id="productNameTXT" layoutX="798.0" layoutY="71.0" prefHeight="25.0" prefWidth="245.0" promptText="Nombre de Producto" />
-      <MFXButton fx:id="search" layoutX="1053.0" layoutY="71.0" text=" ">
-         <graphic>
-            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/search.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </MFXButton>
    </children>
 </AnchorPane>
