@@ -17,6 +17,8 @@ import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
+import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -38,6 +40,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 import org.controlsfx.control.RangeSlider;
 
 /**
@@ -155,11 +158,12 @@ public class MenuController implements Initializable {
 
     public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());
+        BufferedImage image;
         try {
-            Image img = new Image(UserSession.getInstance().getAvatar());
-            avatar.setImage(img);
-        } catch (Exception e) {
-            System.out.println("There was an error while loading Avatar image: " + e);
+            image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
+            avatar.setImage(SwingFXUtils.toFXImage(image, null));
+        } catch (Exception ee) {
+            System.out.println("Hubo un error al intentar cargar la img");
         }
     }
 

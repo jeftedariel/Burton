@@ -5,15 +5,14 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.auth.GoogleAuthStrategy;
+import edu.utn.burton.auth.LoginStrategy;
+import edu.utn.burton.auth.PlatziAuthStrategy;
 import edu.utn.burton.entities.Message;
-import edu.utn.burton.entities.User;
-import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +24,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
-import org.json.JSONObject;
 
 /**
  *
@@ -39,41 +37,43 @@ public class LoginController implements Initializable {
     private CustomPasswordField Contraseña;
     @FXML
     private MFXButton Ingresar;
+    
+    @FXML 
+    private MFXButton googleBtn;
 
     APIHandler api = new APIHandler();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         Ingresar.setOnAction(ev -> {
             auth();
+        });
+        
+        googleBtn.setOnAction(ev -> {
+            googleAuth();
         });
     }
 
     private void auth() {
-        JSONObject credenciales = new JSONObject();
-        credenciales.put("email", Correo.getText());
-        credenciales.put("password", Contraseña.getText());
-
-        try {
-            JSONObject user = api.post(User.class, "auth/login", credenciales);
-            if (user.has("access_token")) {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer "+user.getString("access_token"));
-                
-                User usr = api.getObject(User.class, "auth/profile",headers );
-                
-                UserSession.getInstance().login(usr.id(), usr.name(), usr.email(), usr.avatar(), usr.role());
-                loadMenu();
-                System.out.println(UserSession.getInstance().toString());
-            } else {
-                Alerts.show(new Message("Error de autenticación", "Email o Contraseña incorrectos."), Alert.AlertType.WARNING);
-            }
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-
+        PlatziAuthStrategy platziAuth = new PlatziAuthStrategy();
+        if (platziAuth.auth(Correo.getText(), Contraseña.getText())) {
+            loadMenu();
+        } else {
+            Alerts.show(new Message("Error de autenticación", "Email o Contraseña incorrectos."), Alert.AlertType.WARNING);
         }
     }
     
+    
+    
+    private void googleAuth(){
+        GoogleAuthStrategy googleAuth = new GoogleAuthStrategy();
+        if(googleAuth.oAuth()){
+            loadMenu();
+        } else {
+            Alerts.show(new Message("Error de autenticación", "Ha ocurrido un error durante la autenticación con Google."), Alert.AlertType.WARNING);
+        }
+    }
 
     private void loadMenu() {
         MenuController.initGui(new Stage());

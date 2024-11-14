@@ -30,7 +30,7 @@
             <Font name="Poppins Regular" size="38.0" />
          </font>
       </Text>
-      <MFXButton layoutX="186.0" layoutY="506.0" prefHeight="50.0" prefWidth="374.0" styleClass="button-google" stylesheets="@../styles/login.css" text="Continuar con Google" textFill="#a6a6a6">
+      <MFXButton fx:id="googleBtn" layoutX="186.0" layoutY="506.0" prefHeight="50.0" prefWidth="374.0" styleClass="button-google" stylesheets="@../styles/login.css" text="Continuar con Google" textFill="#a6a6a6">
          <font>
             <Font name="Poppins Black" size="13.0" />
          </font>
