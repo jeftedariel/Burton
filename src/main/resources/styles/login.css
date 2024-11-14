@@ -1,0 +1,42 @@
+/* Fondo del AnchorPane */
+.root {
+    -fx-background-color: #e5e5e5;
+}
+
+/* Estilo para CustomTextField y CustomPasswordField */
+.custom-text-field, .custom-password-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #6c63ff;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 8 15;
+    -fx-text-fill: #000000;
+    -fx-font-size: 14px;
+}
+
+.custom-text-field:focused, .custom-password-field:focused {
+    -fx-border-color: #6c63ff;
+}
+
+/* Estilo para el botón de Ingresar */
+.mfx-button {
+    -fx-background-color: #6c63ff;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-min-width: 320px; /* Ajuste del ancho */
+    -fx-min-height: 49px; /* Ajuste de la altura */
+    -fx-padding: 0 15;
+}
+
+.mfx-button:hover {
+    -fx-background-color: #584dc7;
+}
+
+/* Estilo para el botón de "Iniciar con Google" */
+.button-google {
+    -fx-background-color: #efefef;
+    
+    -fx-min-width: 320px; /* Ajuste del ancho */
+    -fx-min-height: 49px; /* Ajuste de la altura */
+    -fx-padding: 0 15;
+}

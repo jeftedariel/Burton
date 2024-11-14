@@ -10,6 +10,7 @@ import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
+import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ProductCell;
 import edu.utn.burton.entities.ordersDAO;
 import edu.utn.burton.entities.UserSession;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,51 +50,50 @@ public class MenuController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    
     @FXML
     private MFXLegacyListView<HBox> productListView;
-    
+
     @FXML
     private Pagination pagination;
-    
+
     @FXML
     private ComboBox cbxCategories;
-    
+
     @FXML
     private MFXButton clearFilters;
-    
+
     @FXML
     private RangeSlider rangeSlider;
-    
+
     @FXML
     private Text rangeText;
-    
+
     @FXML
     private TextField productNameTXT;
-    
+
     @FXML
     private MFXButton search;
-    
+
     @FXML
     private MFXButton openCart;
-    
-    private  ordersDAO ordDAO;
+
+    private ordersDAO ordDAO;
 
     @FXML
     private ImageView avatar;
-    
+
     @FXML
     private Text username;
-   
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         ordDAO = new ordersDAO();
 
         //Set the max value for the Price Range
         rangeSlider.setHighValue(500);//Then sets the range Text
         setRange();
-        
+
         loadProducts(false);
         setCbxCategories();
 
@@ -113,11 +114,11 @@ public class MenuController implements Initializable {
         pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
             loadProducts(false);
         });
-        
+
         cbxCategories.setOnAction(ev -> {
             loadProducts(false);
         });
-        
+
         clearFilters.setOnAction(ev -> {
             clearFilters();
             loadProducts(false);
@@ -127,50 +128,61 @@ public class MenuController implements Initializable {
         search.setOnAction(ev -> {
             loadProducts(true);
         });
-        
+
         openCart.setOnMouseClicked(ev -> {
             CartMenuController.initGui((Stage) openCart.getScene().getWindow());
         });
-        
+
         //Sets the User's avatar & Name into GUI
         loadUserInfo();
         
-        
+        // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting
+        setTotalProducts();
+        Cart.getInstance().getProducts().addListener((ListChangeListener<ProductCart>) ev -> {
+            setTotalProducts();
+        });
+
     }
-    
-    public void loadUserInfo(){
+
+    public void setTotalProducts() {
+        int t = 0;
+
+        for (ProductCart pc : Cart.getInstance().getProducts()) {
+            t += pc.getQuantity();
+        }
+        openCart.setText(String.valueOf(t));
+    }
+
+    public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());
-        try{
+        try {
             Image img = new Image(UserSession.getInstance().getAvatar());
             avatar.setImage(img);
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println("There was an error while loading Avatar image: " + e);
         }
     }
-    
+
     public void loadProducts(boolean Search) {
         APIHandler api = new APIHandler();
         List<Product> products = null;
         String categoryQuery = "";
         String searchByName = "";
-        
+
         if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
             categoryQuery = "&categoryId=" + retrieveCategoryId();
         }
-        
+
         if (Search && productNameTXT != null) {
             searchByName = "&title=" + productNameTXT.getText();
         }
-         
-        try {
-            products = api.getList(Product.class , "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName,null);
 
-            
+        try {
+            products = api.getList(Product.class, "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName, null);
+
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-
-       
 
         //Sets the pagination size
         //pagination.setMaxPageIndicatorCount(products.size()%10);
@@ -185,47 +197,44 @@ public class MenuController implements Initializable {
             MessageCell cell = new MessageCell();
             Message msg = new Message("Aviso", "No se encontraron items para mostrar.", "/assets/warning.png");
             cell.updateItem(msg, false);
-            
+
             row.getChildren().add(cell.getGraphic());
             productListView.getItems().add(row);
             row = new HBox(10);
             row.setAlignment(Pos.CENTER);
-            
+
         }
-        
+
         for (int i = 0; i < products.size(); i++) {
-            
-            
+
             ProductCell cell = new ProductCell();
-            
+
             cell.updateItem(products.get(i), false);
             row.getChildren().add(cell.getGraphic());
 
             // If it go up to 4, it creates a new line & a new Hbox
             if ((i + 1) % 4 == 0 || i == products.size() - 1) {
                 productListView.getItems().add(row);
-                
+
                 row = new HBox(10);
                 row.setAlignment(Pos.CENTER);
             }
         }
-        
-        
-        
+
     }
-    
+
     public List<Category> loadCategories() {
         //Return all the available categories (with duplicates)
         APIHandler api = new APIHandler();
         List<Category> categories = null;
         try {
-            categories = api.getList(Category.class,"categories",null);
+            categories = api.getList(Category.class, "categories", null);
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
         return categories;
     }
-    
+
     public void setCbxCategories() {
         //Set the categories into the Cbx, but without duplicates, bc its just text
         List<String> categoryNames = loadCategories().stream()
@@ -236,7 +245,7 @@ public class MenuController implements Initializable {
         pagination.setCurrentPageIndex(0);
         cbxCategories.setItems(FXCollections.observableArrayList(categoryNames));
     }
-    
+
     public int retrieveCategoryId() {
         //Get the catg id by reverse, using its name
         //Thats why the cbx dont have duplicates.
@@ -247,31 +256,29 @@ public class MenuController implements Initializable {
                 .toList()
                 .get(0).id();
     }
-    
+
     public void clearFilters() {
         pagination.setCurrentPageIndex(0);
         cbxCategories.getSelectionModel().select(-1);
         rangeSlider.setHighValue(500);
         rangeSlider.setLowValue(1);
     }
-    
+
     public void setRange() {//Simple text feature to show the price range in a fancy and cool way
         rangeText.setText("Rango: $" + (int) rangeSlider.getLowValue() + " - $" + (int) rangeSlider.getHighValue());
     }
-    
-    public static void initGui() {
-            
-        try { 
-     
+
+    public static void initGui(Stage stage) {
+
+        try {
+
             Parent root = FXMLLoader.load(Burton.class.getResource("/fxml/Menu.fxml"));
             Scene scene = new Scene(root);
-            Stage stage = new Stage();
             stage.setTitle("Burton E-Commerce");
             stage.setResizable(false);
             stage.getIcons().add(new Image(Burton.class.getResourceAsStream("/assets/icon.png")));
             scene.getStylesheets().add(Burton.class.getResource("/styles/menu.css").toExternalForm());
-          
-            
+
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();

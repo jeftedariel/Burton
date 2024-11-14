@@ -28,7 +28,7 @@ public class Cart {
 
     private Cart() {
         products = ordersDAO.getProductSave(3);
-        this.userID = 3;
+        this.userID = UserSession.getInstance().getId();
     }
 
     public void addProduct(ProductCart prUs, int cantidad) {

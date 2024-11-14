@@ -16,7 +16,7 @@ public class ProductClient {
     private String typePay, status;
 
     public ProductClient() {
-        this.userId = 3;
+        this.userId = UserSession.getInstance().getId();
         this.totalAmount = Cart.getInstance().calcularTotal();
         this.typePay = "Credit Card";
         this.status = "Completed";
