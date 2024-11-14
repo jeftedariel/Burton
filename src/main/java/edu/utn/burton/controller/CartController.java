@@ -5,10 +5,11 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.entities.Cart;
+import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ordersDAO;
-import javax.swing.JOptionPane;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -31,8 +32,7 @@ public class CartController {
             odDAO.getOrCreateActiveCart(3);
             odDAO.addProductsToCart(3, Cart.getProducts());
             System.out.println(Cart.getInstance().getProducts().toString());
-            JOptionPane.showMessageDialog(null, "Producto Agregado " + currentProduct.title());
-
+            Alerts.show(new Message("Exito", "Se agregado a tu carrito de compras un " +  currentProduct.title()), Alert.AlertType.INFORMATION);        
         }
     }
 

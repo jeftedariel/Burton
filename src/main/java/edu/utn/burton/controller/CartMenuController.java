@@ -2,6 +2,8 @@ package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.entities.Cart;
+import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.ProductCartCell;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.ordersDAO;
@@ -109,18 +111,16 @@ public class CartMenuController implements Initializable {
             }
         } else {
 
-            HBox emptyCartRow = new HBox();
-            emptyCartRow.setAlignment(Pos.CENTER);
+            MessageCell cell = new MessageCell();
+            cell.updateItem(new Message("Aviso", "No tienes Productos en tu carrito","/assets/carroX.png"), false);
+            HBox row = new HBox(10);
+            row.setAlignment(Pos.CENTER);
+            row.getChildren().add(cell.getGraphic());
+            lblTotalPago.setText("$ " + ProductClient.getInstance().getTotalAmount());
+            observableProductList.add(row);
+            
             btnBuy.setVisible(false);
             lblTotalPago.setVisible(false);
-            emptyCartRow.getChildren().add(new ImageView("/assets/carroX.png") {
-                {
-                    setFitWidth(600);
-                    setFitHeight(600);
-                    setPreserveRatio(true);
-                }
-            });
-            observableProductList.add(emptyCartRow);
         }
 
         cartListView.setItems(observableProductList);
