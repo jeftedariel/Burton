@@ -3,6 +3,8 @@ package edu.utn.burton.entities;
 import edu.utn.burton.Burton;
 import edu.utn.burton.controller.CartController;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -23,10 +25,8 @@ public class ProductCartCell extends ListCell<ProductCart> {
 
     private ProductCart currentProduct;
     private CartController ctrlCart;
-    SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10, 6);
     private ImageView imageView = new ImageView();
     private Label titleLabel = new Label();
-    private Label quantityLabel = new Label();
     private Label unityPriceLabel = new Label();
     private Label totalAmountLabel = new Label();
     private MFXButton delete = new MFXButton();
@@ -38,20 +38,20 @@ public class ProductCartCell extends ListCell<ProductCart> {
     private VBox buttonBox = new VBox(5);
 
     public ProductCartCell() {
-
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 30, 0);
+        amount.setValueFactory(valueFactory);
+            
         ctrlCart = new CartController();
 
-        amount.setValueFactory(valueFactory);
 
         delete.setOnAction(ev -> {
-            int valueSpinner = amount.getValue();
-            ctrlCart.deleteProducto(currentProduct, valueSpinner);
+            ctrlCart.deleteProducto(currentProduct, amount.getValue());
         });
 
         edit.setOnAction(ev -> {
-            int valueSpinner = amount.getValue();
-            ctrlCart.addProduct(currentProduct, valueSpinner);
+            ctrlCart.addProduct(currentProduct, amount.getValue());
         });
+        
 
         // Configurar el tamaño de la imagen
         imageView.setFitWidth(80);
@@ -60,7 +60,6 @@ public class ProductCartCell extends ListCell<ProductCart> {
 
         // Configurar los anchos preferidos de los labels
         titleLabel.setPrefWidth(200);
-        quantityLabel.setPrefWidth(100);
         unityPriceLabel.setPrefWidth(150);
         totalAmountLabel.setPrefWidth(100);
 
@@ -69,7 +68,6 @@ public class ProductCartCell extends ListCell<ProductCart> {
         edit.getStyleClass().add("product-botonAdd");
         imageView.getStyleClass().add("product-image");
         titleLabel.getStyleClass().add("product-title");
-        quantityLabel.getStyleClass().add("product-quantity");
         unityPriceLabel.getStyleClass().add("product-price");
         totalAmountLabel.getStyleClass().add("product-total");
 
@@ -91,7 +89,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
         // Configurar el HBox
         content.setAlignment(Pos.CENTER_LEFT);
         content.setPadding(new Insets(10));
-        content.getChildren().addAll(imageView, titleLabel, quantityLabel, unityPriceLabel, totalAmountLabel, amount);
+        content.getChildren().addAll(imageView, titleLabel, unityPriceLabel, totalAmountLabel, amount);
         content.getStyleClass().add("product-cart-cell");
 
         content.getStylesheets().add(Burton.class.getResource("/styles/cartmenu.css").toExternalForm());
@@ -115,10 +113,10 @@ public class ProductCartCell extends ListCell<ProductCart> {
             }
 
             titleLabel.setText(title);
-            quantityLabel.setText("Cantidad: " + product.getQuantity());
+            amount.getValueFactory().setValue((int) product.getQuantity());
+            
             unityPriceLabel.setText("Unitario: $" + product.getUnitePrice());
             totalAmountLabel.setText("Total: $" + product.getSubtotal());
-
             try {
                 imageView.setImage(new Image(product.getImagePrincipal()));
             } catch (Exception e) {
