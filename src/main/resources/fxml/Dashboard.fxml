@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #FAFAFA;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.DashboardController">
+    <stylesheets>
+        <URL value="@/styles/menu.css" />
+    </stylesheets>
+   <children>
+      <Pane layoutX="-1.0" layoutY="54.0" prefHeight="666.0" prefWidth="1282.0" style="-fx-background-color: #ebefff;">
+         <children>
+            <MFXButton depthLevel="LEVEL5" layoutX="33.0" layoutY="28.0" prefHeight="40.0" prefWidth="160.0" text="Baja Rotación">
+               <font>
+                  <Font name="Poppins Regular" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/trending_down.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton depthLevel="LEVEL5" layoutX="211.0" layoutY="28.0" prefHeight="40.0" prefWidth="195.0" text="Comparativa Ventas">
+               <font>
+                  <Font name="Poppins Regular" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/dateHistory.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton depthLevel="LEVEL5" layoutX="423.0" layoutY="28.0" text="Tendencias de Ventas">
+               <font>
+                  <Font name="Poppins Regular" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/trending_up.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXLegacyListView depthLevel="LEVEL5" layoutX="663.0" layoutY="97.0" prefHeight="548.0" prefWidth="601.0" />
+            <Text layoutX="853.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Historial de Ordenes Realizadas">
+               <font>
+                  <Font name="Poppins Regular" size="14.0" />
+               </font>
+            </Text>
+            <MFXLegacyListView depthLevel="LEVEL5" layoutX="34.0" layoutY="97.0" prefHeight="548.0" prefWidth="575.0" />
+            <Text layoutX="919.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aqui se van a cargar el historial de todas las compras que se han hecho en el sistema" wrappingWidth="181.68231201171875" />
+            <Text layoutX="218.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aqui se va a cargar una previsualizacion del reporte seleccionado antes de descargarlo" wrappingWidth="181.68231201171875" />
+         </children></Pane>
+      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #6f71de;">
+         <children>
+
+            <ImageView id="avatar" fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/user.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="username" fill="WHITE" layoutX="64.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+               <font>
+                  <Font name="Poppins Regular" size="18.0" />
+               </font></Text>
+            <MFXButton fx:id="logout" layoutX="1219.0" layoutY="10.0" prefHeight="33.0" prefWidth="29.0" text=" ">
+               <graphic>
+                  <ImageView id="avatar" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="store" layoutX="568.0" layoutY="10.0" text="Volver a Tienda">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/store.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+
+         </children></Pane>
+      <Separator layoutX="635.0" layoutY="78.0" orientation="VERTICAL" prefHeight="622.0" prefWidth="11.0" />
+   </children>
+</AnchorPane>
