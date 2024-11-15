@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -88,6 +89,15 @@ public class MenuController implements Initializable {
     @FXML
     private Text username;
 
+    @FXML
+    private MFXButton historialCompras;
+
+    @FXML
+    private MFXButton dashboard;
+
+    @FXML
+    private MFXButton logout;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -136,16 +146,28 @@ public class MenuController implements Initializable {
             CartMenuController.initGui((Stage) openCart.getScene().getWindow());
         });
 
+        logout.setOnMouseClicked(ev -> {
+            LoginController.logout(logout);
+        });
+
+        dashboard.setOnMouseClicked(ev -> {
+            DashboardController.initGui((Stage) dashboard.getScene().getWindow());
+        });
+        
+        historialCompras.setOnMouseClicked(ev->{
+            Alerts.show(new Message("WIP", "Aqui se van a mostrar las compras realizadas por el usuario"), AlertType.INFORMATION);
+        });
+                
         //Sets the User's avatar & Name into GUI
         loadUserInfo();
-        
+
         // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting
         setTotalProducts();
         Cart.getInstance().getProducts().addListener((ListChangeListener<ProductCart>) ev -> {
             setTotalProducts();
         });
 
-    }
+    } 
 
     public void setTotalProducts() {
         int t = 0;
@@ -159,6 +181,9 @@ public class MenuController implements Initializable {
     public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());
         BufferedImage image;
+
+        dashboard.setVisible(UserSession.getInstance().getRole().equals("admin"));
+
         try {
             image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
             avatar.setImage(SwingFXUtils.toFXImage(image, null));

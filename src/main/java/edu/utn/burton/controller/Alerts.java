@@ -40,11 +40,11 @@ public class Alerts {
     
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("/assets/icon.png"));
-
+        alert.setHeaderText(null);
       
         ButtonType aceptarButton = ButtonType.APPLY;
-        ButtonType noButton = ButtonType.CANCEL;  
-
+        ButtonType noButton = ButtonType.NO;  
+        
        
         alert.getButtonTypes().setAll(aceptarButton, noButton);  // Solo "Aceptar" y "No"
 
