@@ -24,9 +24,11 @@ import javafx.scene.image.ImageView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -49,6 +51,9 @@ public class CartMenuController implements Initializable {
 
     @FXML
     private MFXButton btnBuy;
+
+    @FXML
+    private MFXButton btnCancelarCompra;
 
     @FXML
     private ObservableList<HBox> observableProductList;
@@ -74,11 +79,40 @@ public class CartMenuController implements Initializable {
         loadProducts();
 
         btnBuy.setOnAction(ev -> {
+            Message message = new Message(
+                    "Advertencia",
+                    "¿Estás seguro de que deseas realizar la compra?",
+                    "Si finalizas la compra, no podras modificar tu orden."
+            );
+            Alerts.showConfirmation(message, response -> {
+                if (response == ButtonType.APPLY) {
 
-            ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), 3);
-            ordersDAO.completeCart(3);
-            Cart.getInstance().cleanCart();
-            CartMenuController.getInstance().loadProducts();
+                    ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts());
+                    ordersDAO.completeCart();
+                    Cart.getInstance().cleanCart();
+                    CartMenuController.getInstance().loadProducts();
+                }
+
+            });
+        });
+
+        btnCancelarCompra.setOnAction(ev -> {
+            // set mesagge
+            Message message = new Message(
+                    "Advertencia",
+                    "¿Estás seguro de que deseas cancelar la compra?",
+                    "Si cancelas la compra, se eliminarán todos los productos de tu carrito."
+            );
+
+            Alerts.showConfirmation(message, response -> {
+                if (response == ButtonType.APPLY) {
+
+                    ordersDAO.cancelCart();
+                    Cart.getInstance().cleanCart();
+                    CartMenuController.getInstance().loadProducts();
+                }
+
+            });
 
         });
 
@@ -142,6 +176,7 @@ public class CartMenuController implements Initializable {
 
             btnBuy.setVisible(false);
             lblTotalPago.setVisible(false);
+            btnCancelarCompra.setVisible(false);
         }
 
         cartListView.setItems(observableProductList);

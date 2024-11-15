@@ -14,13 +14,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #ebefff;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.CartMenuController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #ebefff;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.CartMenuController">
     <stylesheets>
         <URL value="@/styles/cartmenu.css" />
     </stylesheets>
    <children>
       <MFXLegacyListView fx:id="cartListView" layoutX="28.0" layoutY="70.0" prefHeight="624.0" prefWidth="1223.0" trackColor="#d03434" />
-      <MFXButton fx:id="btnBuy" layoutX="512.0" layoutY="657.0" prefHeight="25.0" prefWidth="284.0" text="Comprar" textFill="#0d0d0d">
+      <MFXButton fx:id="btnBuy" layoutX="747.0" layoutY="648.0" prefHeight="26.0" prefWidth="257.0" text="Comprar" textFill="#0d0d0d">
          <rippleColor>
             <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-118.22" radius="0.5">
                <stops>
@@ -66,6 +66,24 @@
             </Label>
          </children>
       </Pane>
+      <MFXButton fx:id="btnCancelarCompra" layoutX="256.0" layoutY="648.0" prefHeight="26.0" prefWidth="257.0" text="Cancelar compra" textFill="#0d0d0d">
+         <rippleColor>
+            <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-118.22" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.06578947603702545" green="0.013096978887915611" blue="0.013096978887915611" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.2774122953414917" green="0.8238304257392883" blue="0.9078947305679321" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </rippleColor>
+      </MFXButton>
    </children>
    
 </AnchorPane>
