@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
  */
 public class ordersDAO {
 
-    public static int getOrCreateActiveCart(int userId) {
+    public static int getOrCreateActiveCart(int idUser) {
 
         int cartId = -1;
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
@@ -31,7 +31,7 @@ public class ordersDAO {
             psE.execute();
 
             CallableStatement ps = adapter.getConnection().prepareCall("{CALL get_or_create_active_cart(?)}");
-            ps.setInt(1, userId);
+            ps.setInt(1, idUser);
             ResultSet rs = ps.executeQuery();
 
             PreparedStatement psA = adapter.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 1;");
@@ -50,12 +50,12 @@ public class ordersDAO {
         return cartId;
     }
 
-    public static void completeCart(int idPersona) {
+    public static void completeCart() {
         
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         
         try {
-            int cartId = getActiveCartId(idPersona);
+            int cartId = getActiveCartId(UserSession.getInstance().getId());
 
             CallableStatement stmt = adapter.getConnection().prepareCall("{CALL complete_cart(?)}");
             stmt.setInt(1, cartId);
@@ -68,14 +68,14 @@ public class ordersDAO {
         }
     }
 
-    public static int getActiveCartId(int userId) throws SQLException {
+    public static int getActiveCartId(int idUser) throws SQLException {
         int cartId = -1;
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
         try {
 
             CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_active_cart_by_user(?)}");
-            stmt.setInt(1, userId);
+            stmt.setInt(1, idUser);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -90,13 +90,13 @@ public class ordersDAO {
         return cartId;
     }
 
-    public static int createActiveCart(int userId) {
+    public static int createActiveCart(int idUser) {
         int cartId = -1;
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
         try {
             CallableStatement stmt = adapter.getConnection().prepareCall("{CALL create_active_cart(?)}");
-            stmt.setInt(1, userId);
+            stmt.setInt(1, idUser);
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -110,15 +110,18 @@ public class ordersDAO {
 
         return cartId;
     }
+    
+    
 
-    public static void removeProduct(int idItem, int iduser) {
+    public static void removeProduct(int idItem) {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         String consulta = "DELETE FROM cart_items WHERE product_id = ? AND cart_id = ?;";
 
         try {
-            int cart = getActiveCartId(iduser);
-
+            int cart = getActiveCartId(UserSession.getInstance().getId());
+            PreparedStatement psF = adapter.getConnection().prepareStatement("SET foreign_key_checks = 1;");
+            psF.execute();
             PreparedStatement ps = adapter.getConnection().prepareStatement(consulta);
             ps.setInt(1, idItem);
             ps.setInt(2, cart);
@@ -132,8 +135,30 @@ public class ordersDAO {
         }
 
     }
+    
+    
+    public static void cancelCart() {
 
-    public void addProductsToCart(int idPersona, ObservableList<ProductCart> items) {
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
+        String consulta = "DELETE FROM carts WHERE cart_id = ?";
+
+        try {
+            int cart = getActiveCartId(UserSession.getInstance().getId());
+            PreparedStatement ps = adapter.getConnection().prepareStatement(consulta);
+            ps.setInt(1, cart);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+        } finally {
+            adapter.disconnect();
+        }
+
+    }
+    
+    
+
+    public void addProductsToCart(ObservableList<ProductCart> items) {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
         try {
@@ -141,7 +166,7 @@ public class ordersDAO {
             PreparedStatement psE = adapter.getConnection().prepareStatement("SET FOREIGN_KEY_CHECKS = 0;");
             psE.execute();
 
-            int cart = getActiveCartId(idPersona);
+            int cart = getActiveCartId(UserSession.getInstance().getId());
 
             CallableStatement stmt = adapter.getConnection().prepareCall("{CALL add_product_to_cart(?, ?, ?, ?, ?, ?, ?)}");
 
@@ -169,7 +194,7 @@ public class ordersDAO {
         }
     }
     
-    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item, int idUser) {
+    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item) {
 
     IDBAdapter adapter = DBAdapterFactory.getAdapter();
     String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";
@@ -178,7 +203,7 @@ public class ordersDAO {
     try {
         // Preparar el statement para insertar en `orders` con `RETURN_GENERATED_KEYS`
         PreparedStatement psE = adapter.getConnection().prepareStatement(consult1, Statement.RETURN_GENERATED_KEYS);
-        psE.setInt(1, idUser);
+        psE.setInt(1, UserSession.getInstance().getId());
         psE.setDouble(2, order.getTotalAmount());
         psE.setString(3, order.getStatus());
         psE.setString(4, order.getTypePay());
@@ -222,19 +247,19 @@ public class ordersDAO {
     }
 }
 
-    public static ObservableList<ProductCart> getProductSave(int idUser) {
+    public static ObservableList<ProductCart> getProductSave() {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         ObservableList<ProductCart> products = FXCollections.observableArrayList();
 
         try {
 
-            int cart = getActiveCartId(idUser);
+            int cart = getActiveCartId( UserSession.getInstance().getId());
 
-            int cartId = ordersDAO.getActiveCartId(idUser);
+            int cartId = ordersDAO.getActiveCartId(UserSession.getInstance().getId());
             if (cartId == -1) {
 
-                cartId = ordersDAO.getOrCreateActiveCart(idUser);
+                cartId = ordersDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
 
             }
 

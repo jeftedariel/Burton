@@ -27,7 +27,7 @@ public class Cart {
     }
 
     private Cart() {
-        products = ordersDAO.getProductSave(3);
+        products = ordersDAO.getProductSave();
         this.userID = UserSession.getInstance().getId();
     }
 
@@ -39,7 +39,7 @@ public class Cart {
 
         if (existingProduct != null) {
 
-            existingProduct.setQuantity(existingProduct.getQuantity() + cantidad);
+            existingProduct.setQuantity(cantidad);
 
         } else {
 
@@ -58,11 +58,17 @@ public class Cart {
                 .orElse(null);
 
         if (existingProduct != null) {
-            long nuevaCantidad = existingProduct.getQuantity() - cantidad;
+           // System.out.println(existingProduct.toString());
+            long nuevaCantidad = cantidad;
+            
+           // System.out.println("Nueva cantidad = " + nuevaCantidad);
+            
             if (nuevaCantidad > 0) {
+                
                 existingProduct.setQuantity(nuevaCantidad);
+                
             } else {
-
+            
                 products.remove(existingProduct);
                 Cart.getInstance().CartEmpty();
             }
