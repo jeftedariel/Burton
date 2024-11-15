@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -67,6 +69,32 @@ public class ordersDAO {
             adapter.disconnect();
         }
     }
+    
+    public static Cart getCartById(int cartId) {
+    Cart cart = null;
+    IDBAdapter adapter = DBAdapterFactory.getAdapter();
+    String queryCart = "SELECT * FROM carts WHERE cart_id = ?";
+
+    try (Connection conn = adapter.getConnection();
+         PreparedStatement stmtCart = conn.prepareStatement(queryCart)) {
+        
+        stmtCart.setInt(1, cartId);
+        ResultSet rsCart = stmtCart.executeQuery();
+
+        if (rsCart.next()) {
+            cart = new Cart();
+            cart.setUserID(rsCart.getInt("user_id"));
+            cart.setStatus(rsCart.getString("status"));
+            cart.setCreated_at(rsCart.getDate("created_at").toLocalDate());
+            cart.setUpdate_at(rsCart.getDate("updated_at").toLocalDate());
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener el carrito: " + e.getMessage());
+    } finally {
+        adapter.disconnect();
+    }
+      return cart;
+    }
 
     public static int getActiveCartId(int userId) throws SQLException {
         int cartId = -1;
@@ -88,6 +116,77 @@ public class ordersDAO {
         }
 
         return cartId;
+    }
+    
+    public static ObservableList<Integer> getOrdersByUser(int usuarioId) {
+        
+    ObservableList<Integer> orderIds = FXCollections.observableArrayList();
+    IDBAdapter adapter = DBAdapterFactory.getAdapter();
+
+    try {
+        CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_user(?)}");
+        stmt.setInt(1, usuarioId);
+        ResultSet rs = stmt.executeQuery();
+
+        // Verificar si hay resultados
+        if (!rs.isBeforeFirst()) {
+            System.out.println("No se encontraron órdenes para el usuario ID: " + usuarioId);
+        }
+
+        // Iterar a través de los resultados y agregar los IDs de las órdenes a la lista
+        while (rs.next()) {
+            int orderId = rs.getInt("order_id");
+            System.out.println("Orden encontrada con ID: " + orderId);
+            orderIds.add(orderId);
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener las órdenes: " + e.getMessage());
+    } finally {
+        adapter.disconnect();
+    }
+    if (orderIds.isEmpty()) {
+        System.out.println("No se encontraron órdenes en la base de datos.");
+    } else {
+        System.out.println("Número de órdenes encontradas: " + orderIds.size());
+    }
+
+      return orderIds;
+    }
+    
+    public static ObservableList<HBox> loadOrderItemsByOrderId(int orderId) {
+        
+    ObservableList<HBox> orderItemsList = FXCollections.observableArrayList();
+
+    String procedureCall = "{CALL get_order_items_by_order_id(?)}"; 
+
+    try (Connection conn = DBAdapterFactory.getAdapter().getConnection();
+         CallableStatement stmt = conn.prepareCall(procedureCall)) {
+        stmt.setInt(1, orderId);
+        ResultSet rs = stmt.executeQuery();
+
+        // Iterar sobre el ResultSet y construir la lista de HBox
+        while (rs.next()) {
+            String productName = rs.getString("product_name");
+            int quantity = rs.getInt("quantity");
+            double unitPrice = rs.getDouble("unit_price");
+            double subtotal = rs.getDouble("subtotal");
+
+            HBox orderItemRow = new HBox(10);  
+            orderItemRow.setStyle("-fx-padding: 10px;");
+
+            Label productLabel = new Label("Producto: " + productName);
+            Label quantityLabel = new Label("Cantidad: " + quantity);
+            Label priceLabel = new Label("Precio Unitario: " + unitPrice);
+            Label subtotalLabel = new Label("Subtotal: " + subtotal);
+
+            orderItemRow.getChildren().addAll(productLabel, quantityLabel, priceLabel, subtotalLabel);
+
+            orderItemsList.add(orderItemRow);
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
+    }
+      return orderItemsList;
     }
 
     public static int createActiveCart(int userId) {

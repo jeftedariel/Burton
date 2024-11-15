@@ -7,6 +7,7 @@ package edu.utn.burton.controller;
 import edu.utn.burton.entities.Cart;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
+import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.entities.ordersDAO;
 import javax.swing.JOptionPane;
 
@@ -28,8 +29,8 @@ public class CartController {
 
             ProductCart productUser = new ProductCart(currentProduct.id(), currentProduct.title(), Cart.getInstance().getCantidadd(currentProduct.id(), count), currentProduct.price(), currentProduct.images().get(0)); // igual qui lo de abajo para que agregue segun lo que el usuario quiera
             Cart.getInstance().addProduct(productUser, count);
-            odDAO.getOrCreateActiveCart(3);
-            odDAO.addProductsToCart(3, Cart.getProducts());
+            odDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
+            odDAO.addProductsToCart(UserSession.getInstance().getId(), Cart.getProducts());
             System.out.println(Cart.getInstance().getProducts().toString());
             JOptionPane.showMessageDialog(null, "Producto Agregado " + currentProduct.title());
 
@@ -40,14 +41,14 @@ public class CartController {
     if (!isEmptySpinner(count)) {
         if (currentProduct.getQuantity() <= count) {
           
-            odDAO.removeProduct(currentProduct.getProductId(),3);
+            odDAO.removeProduct(currentProduct.getProductId(),UserSession.getInstance().getId());
             Cart.getInstance().deleteProducts(currentProduct, count);
             CartMenuController.getInstance().loadProducts();
             
         } else {      
           
             Cart.getInstance().deleteProducts(currentProduct, count);
-            odDAO.addProductsToCart(3, Cart.getProducts());  
+            odDAO.addProductsToCart(UserSession.getInstance().getId(), Cart.getProducts());  
             CartMenuController.getInstance().loadProducts();
         }
     }
@@ -60,7 +61,7 @@ public class CartController {
             ProductCart productUser = new ProductCart(currentProduct.getProductId(), currentProduct.getNameProduct(), Cart.getInstance().getCantidadd(currentProduct.getProductId(), count), currentProduct.getUnitePrice(), currentProduct.getImagePrincipal()); // igual qui lo de abajo para que agregue segun lo que el usuario quiera
             Cart.getInstance().addProduct(productUser, count);
             System.out.println(Cart.getInstance().getProducts().toString());
-            odDAO.addProductsToCart(3, Cart.getProducts());
+            odDAO.addProductsToCart(UserSession.getInstance().getId(), Cart.getProducts());
             CartMenuController.getInstance().loadProducts();
         }
     }

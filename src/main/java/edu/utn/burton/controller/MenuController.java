@@ -76,6 +76,9 @@ public class MenuController implements Initializable {
     @FXML
     private MFXButton openCart;
     
+    @FXML
+    private MFXButton Historial;
+    
     private  ordersDAO ordDAO;
 
     @FXML
@@ -130,6 +133,11 @@ public class MenuController implements Initializable {
         
         openCart.setOnMouseClicked(ev -> {
             CartMenuController.initGui((Stage) openCart.getScene().getWindow());
+        });
+        
+        Historial.setOnMouseClicked(ev -> {
+             Stage stage = (Stage) Historial.getScene().getWindow();
+           HistorialController.initGui(stage);
         });
         
         //Sets the User's avatar & Name into GUI

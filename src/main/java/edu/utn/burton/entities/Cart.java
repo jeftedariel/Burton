@@ -26,9 +26,33 @@ public class Cart {
         return instance;
     }
 
-    private Cart() {
-        products = ordersDAO.getProductSave(3);
-        this.userID = 3;
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCreated_at(LocalDate created_at) {
+        this.created_at = created_at;
+    }
+
+    public void setUpdate_at(LocalDate update_at) {
+        this.update_at = update_at;
+    }
+
+    public static void setProducts(ObservableList<ProductCart> products) {
+        Cart.products = products;
+    }
+
+    public static void setInstance(Cart instance) {
+        Cart.instance = instance;
+    }
+ 
+    public Cart() {
+        UserSession.getInstance().getId();
+        products = ordersDAO.getProductSave(userID);
     }
 
     public void addProduct(ProductCart prUs, int cantidad) {
