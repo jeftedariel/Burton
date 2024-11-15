@@ -4,6 +4,8 @@
  */
 package edu.utn.burton.entities;
 
+import java.util.Date;
+
 /**
  *
  * @author Justin Rodriguez Gonzalez
@@ -14,12 +16,14 @@ public class ProductClient {
     private int userId;
     private double totalAmount;
     private String typePay, status;
+    private Date date;
 
     public ProductClient() {
         this.userId = UserSession.getInstance().getId();
         this.totalAmount = Cart.getInstance().calcularTotal();
         this.typePay = "Credit Card";
         this.status = "Completed";
+        this.date = new Date();
     }
 
     public static ProductClient getInstance() {
