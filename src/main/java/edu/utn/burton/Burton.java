@@ -18,9 +18,7 @@ public class Burton extends Application {
     //666
     @Override
     public void start(Stage stage) throws Exception{
-        //LoginController.initGui();
-        SimpleReport sp = new SimpleReport();
-        sp.generate();
+        LoginController.initGui();
     }
     public static void main(String[] args) {
         launch(args);
