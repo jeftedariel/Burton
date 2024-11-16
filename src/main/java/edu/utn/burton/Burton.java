@@ -4,9 +4,7 @@
 
 package edu.utn.burton;
 
-import edu.utn.burton.controller.DashboardController;
 import edu.utn.burton.controller.LoginController;
-import edu.utn.burton.reports.SimpleReport;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

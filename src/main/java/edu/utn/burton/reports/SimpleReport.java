@@ -6,7 +6,6 @@ package edu.utn.burton.reports;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
 import com.lowagie.text.Paragraph;
 
 /**
