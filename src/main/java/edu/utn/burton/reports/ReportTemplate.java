@@ -16,6 +16,7 @@ import edu.utn.burton.entities.Message;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -46,8 +47,8 @@ public abstract class ReportTemplate {
                     path += separator;  
                 }
                 
-                PdfWriter.getInstance(document, new FileOutputStream(path + pdfNameFile + ".pdf"));
-                System.out.println( path+pdfNameFile + ".pdf");
+                PdfWriter.getInstance(document, new FileOutputStream(path + pdfNameFile +"_"+LocalDate.now()+ ".pdf"));
+                System.out.println(path + pdfNameFile +"_"+LocalDate.now()+ ".pdf");
                 document.open();
 
                 // Header info (title & banner)
