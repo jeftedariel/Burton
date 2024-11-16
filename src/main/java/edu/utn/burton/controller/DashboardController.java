@@ -40,24 +40,37 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Text username;
-    
+
     @FXML
     private MFXButton logout;
-    
+
+    @FXML
+    private MFXButton trendingSellsReport;
+
+    @FXML
+    private MFXButton comparativeReport;
+
+    @FXML
+    private MFXButton turnoverReport;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         store.setOnMouseClicked(ev -> {
             MenuController.initGui((Stage) store.getScene().getWindow());
         });
+
+        logout.setOnMouseClicked(ev -> {
+            LoginController.logout(store);
+        });
         
-        logout.setOnMouseClicked(ev -> {LoginController.logout(store);});
+        trendingSellsReport.setOnMouseClicked(ev->{
+        });
         
-        
+
         loadUserInfo();
 
     }
-    
+
     public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());
         BufferedImage image;
@@ -69,7 +82,7 @@ public class DashboardController implements Initializable {
             System.out.println("Hubo un error al intentar cargar la img");
         }
     }
-    
+
     public static void initGui(Stage stage) {
         try {
 
