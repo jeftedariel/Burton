@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -90,6 +91,8 @@ public class MenuController implements Initializable {
 
     @FXML
     private Text username;
+    
+    private ShowUserInfo user;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -143,8 +146,12 @@ public class MenuController implements Initializable {
              Stage stage = (Stage) Historial.getScene().getWindow();
            HistorialController.initGui(stage);
         });
-        //Sets the User's avatar & Name into GUI
-        loadUserInfo();
+    
+        user = new ShowUserInfo();
+        user.avatar = this.avatar; 
+        user.username = this.username; 
+     
+        user.loadUserInfo();
         
         // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting
         setTotalProducts();
@@ -161,17 +168,6 @@ public class MenuController implements Initializable {
             t += pc.getQuantity();
         }
         openCart.setText(String.valueOf(t));
-    }
-
-    public void loadUserInfo() {
-        username.setText(UserSession.getInstance().getName());
-        BufferedImage image;
-        try {
-            image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
-            avatar.setImage(SwingFXUtils.toFXImage(image, null));
-        } catch (Exception ee) {
-            System.out.println("Hubo un error al intentar cargar la img");
-        }
     }
 
     public void loadProducts(boolean Search) {
@@ -294,6 +290,8 @@ public class MenuController implements Initializable {
             stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {
+            e.printStackTrace();  // Imprime el error para depuración
+    Alerts.show(new Message("Error", "Hubo un problema al cargar la interfaz del menú."), Alert.AlertType.ERROR);
         }
     }
 }

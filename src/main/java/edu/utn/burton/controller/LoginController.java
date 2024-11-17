@@ -36,8 +36,7 @@ public class LoginController implements Initializable {
     @FXML
     private CustomPasswordField Contraseña;
     @FXML
-    private MFXButton Ingresar;
-    
+    private MFXButton Ingresar;    
     @FXML 
     private MFXButton googleBtn;
 

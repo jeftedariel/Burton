@@ -53,16 +53,18 @@
                   <Image url="@../assets/user.png" />
                </image>
             </ImageView>
-<<<<<<< HEAD
-            <Text fx:id="username" layoutX="61.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-            <MFXButton fx:id="Historial" layoutX="1014.0" layoutY="14.0" text="Historial Compras" />
-=======
+            <MFXButton fx:id="Historial" layoutX="1077.0" layoutY="9.0" text="">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="43.0">
+                     <image>
+                        <Image url="@../assets/ordencompletada.png" />
+                     </image>
+                  </ImageView>
+               </graphic></MFXButton>
             <Text fx:id="username" fill="WHITE" layoutX="64.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                <font>
                   <Font name="Poppins Regular" size="18.0" />
                </font></Text>
->>>>>>> 2e201aebe7c0a5c9eb513ae4648ca2686ecd31cd
-
          </children></Pane>
       <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="100.0" prefHeight="562.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
       <Pagination fx:id="pagination" layoutX="483.0" layoutY="653.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />

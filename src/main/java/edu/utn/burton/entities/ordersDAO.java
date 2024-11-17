@@ -15,6 +15,8 @@ import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javax.swing.JOptionPane;
 
@@ -52,7 +54,7 @@ public class ordersDAO {
         return cartId;
     }
 
-    public static void completeCart() {
+    public static void completeCart(int usuarioId) {
         
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         
@@ -68,32 +70,6 @@ public class ordersDAO {
         } finally {
             adapter.disconnect();
         }
-    }
-    
-    public static Cart getCartById(int cartId) {
-    Cart cart = null;
-    IDBAdapter adapter = DBAdapterFactory.getAdapter();
-    String queryCart = "SELECT * FROM carts WHERE cart_id = ?";
-
-    try (Connection conn = adapter.getConnection();
-         PreparedStatement stmtCart = conn.prepareStatement(queryCart)) {
-        
-        stmtCart.setInt(1, cartId);
-        ResultSet rsCart = stmtCart.executeQuery();
-
-        if (rsCart.next()) {
-            cart = new Cart();
-            cart.setUserID(rsCart.getInt("user_id"));
-            cart.setStatus(rsCart.getString("status"));
-            cart.setCreated_at(rsCart.getDate("created_at").toLocalDate());
-            cart.setUpdate_at(rsCart.getDate("updated_at").toLocalDate());
-        }
-    } catch (SQLException e) {
-        System.err.println("Error al obtener el carrito: " + e.getMessage());
-    } finally {
-        adapter.disconnect();
-    }
-      return cart;
     }
 
     public static int getActiveCartId(int idUser) throws SQLException {
@@ -128,12 +104,11 @@ public class ordersDAO {
         stmt.setInt(1, usuarioId);
         ResultSet rs = stmt.executeQuery();
 
-        // Verificar si hay resultados
         if (!rs.isBeforeFirst()) {
             System.out.println("No se encontraron órdenes para el usuario ID: " + usuarioId);
         }
 
-        // Iterar a través de los resultados y agregar los IDs de las órdenes a la lista
+        //Iterar a través de los resultados y agregar los IDs de las órdenes a la lista
         while (rs.next()) {
             int orderId = rs.getInt("order_id");
             System.out.println("Orden encontrada con ID: " + orderId);
@@ -164,12 +139,13 @@ public class ordersDAO {
         stmt.setInt(1, orderId);
         ResultSet rs = stmt.executeQuery();
 
-        // Iterar sobre el ResultSet y construir la lista de HBox
+        //Iterar sobre el ResultSet y construir la lista de HBox
         while (rs.next()) {
             String productName = rs.getString("product_name");
             int quantity = rs.getInt("quantity");
             double unitPrice = rs.getDouble("unit_price");
             double subtotal = rs.getDouble("subtotal");
+            String productImage = rs.getString("product_image");
 
             HBox orderItemRow = new HBox(10);  
             orderItemRow.setStyle("-fx-padding: 10px;");
@@ -179,13 +155,25 @@ public class ordersDAO {
             Label priceLabel = new Label("Precio Unitario: " + unitPrice);
             Label subtotalLabel = new Label("Subtotal: " + subtotal);
 
-            orderItemRow.getChildren().addAll(productLabel, quantityLabel, priceLabel, subtotalLabel);
+            ImageView imageView = new ImageView();
+            try {
+                Image image = new Image(productImage, true); 
+                imageView.setImage(image);
+                imageView.setFitWidth(50);  
+                imageView.setFitHeight(50); 
+                imageView.setPreserveRatio(true);
+            } catch (IllegalArgumentException e) {
+                System.err.println("No se pudo cargar la imagen: " + e.getMessage());
+            }
+
+            orderItemRow.getChildren().addAll(imageView, productLabel, quantityLabel, priceLabel, subtotalLabel);
 
             orderItemsList.add(orderItemRow);
         }
     } catch (SQLException e) {
         System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
     }
+
       return orderItemsList;
     }
 
@@ -293,7 +281,7 @@ public class ordersDAO {
         }
     }
     
-    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item) {
+    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item, int usuarioId) {
 
     IDBAdapter adapter = DBAdapterFactory.getAdapter();
     String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";

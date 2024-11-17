@@ -92,8 +92,8 @@ public class CartMenuController implements Initializable {
             Alerts.showConfirmation(message, response -> {
                 if (response == ButtonType.APPLY) {
 
-                    ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts());
-                    ordersDAO.completeCart();
+                    ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
+                    ordersDAO.completeCart(UserSession.getInstance().getId());
                     Cart.getInstance().cleanCart();
                     CartMenuController.getInstance().loadProducts();
                 }
