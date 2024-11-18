@@ -69,9 +69,18 @@ public class CartMenuController implements Initializable {
 
     @FXML
     private Text username;
+    
+    private ShowUserInfo user;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        user = new ShowUserInfo();
+        user.avatar = this.avatar;  
+        user.username = this.username;  
+   
+        user.loadUserInfo();
+        
         instance = this;
         observableProductList = FXCollections.observableArrayList();
         lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
@@ -80,11 +89,11 @@ public class CartMenuController implements Initializable {
 
         btnBuy.setOnAction(ev -> {
           
-            ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
+            /*ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
             ordersDAO.completeCart(UserSession.getInstance().getId());
             Cart.getInstance().cleanCart();
             CartMenuController.getInstance().loadProducts();
-            Message message = new Message(
+            */Message message = new Message(
                     "Advertencia",
                     "¿Estás seguro de que deseas realizar la compra?",
                     "Si finalizas la compra, no podras modificar tu orden."
@@ -124,19 +133,6 @@ public class CartMenuController implements Initializable {
         returnBtn.setOnAction(ev -> {
             MenuController.initGui((Stage) returnBtn.getScene().getWindow());
         });
-
-        //Sets the User's avatar & Name into GUI
-        loadUserInfo();
-    }
-
-    public void loadUserInfo() {
-        username.setText(UserSession.getInstance().getName());
-        try {
-            Image img = new Image(UserSession.getInstance().getAvatar());
-            avatar.setImage(img);
-        } catch (Exception e) {
-            System.out.println("There was an error while loading Avatar image: " + e);
-        }
     }
 
     public static void initGui(Stage stage) {

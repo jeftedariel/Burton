@@ -5,6 +5,7 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.entities.ordersDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -98,10 +99,10 @@ public class HistorialController implements Initializable{
     
     public void loadOrders() {
     observableOrderList.clear();
-    List<Integer> orderIds = ordersDAO.getOrdersByUser(UserSession.getInstance().getId());
+    List<ProductClient> orderDetailsList = ordersDAO.getOrdersByUser(UserSession.getInstance().getId());
 
-    if (orderIds != null && !orderIds.isEmpty()) {
-        for (int orderId : orderIds) {
+    if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
+        for (ProductClient order : orderDetailsList) {
             HBox orderRow = new HBox(20);
             orderRow.setAlignment(Pos.CENTER_LEFT);
             orderRow.setStyle("-fx-padding: 10px; -fx-background-color: #f4f4f4; -fx-border-radius: 5px; -fx-border-color: #dcdcdc; -fx-border-width: 1px;");
@@ -109,14 +110,18 @@ public class HistorialController implements Initializable{
             Label documentIcon = new Label("\uD83D\uDCCB"); //Unicode para documento
             documentIcon.setStyle("-fx-font-size: 20px; -fx-text-fill: #3f7cba;");
 
-            //Crear el texto de la orden
-            Label orderLabel = new Label("Orden #" + orderId);
+            //Texto de la orden
+            Label orderLabel = new Label(
+                "Orden #" + order.getId() + 
+                " | Fecha: " + order.getDate() + 
+                " | Monto: $" + order.getTotalAmount()
+            );
             orderLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;");
 
-            //Se añade el icono y el texto a la fila
+            //Añadir icono y texto a la fila
             orderRow.getChildren().addAll(documentIcon, orderLabel);
 
-            orderRow.setOnMouseClicked(event -> loadOrderDetails(orderId));
+            orderRow.setOnMouseClicked(event -> loadOrderDetails(order.getId()));
 
             observableOrderList.add(orderRow);
         }

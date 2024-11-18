@@ -13,10 +13,17 @@ import java.util.Date;
 public class ProductClient {
 
     private static ProductClient instance;
+    private int id;
     public int userId;
     private double totalAmount;
     private String typePay, status;
     private Date date;
+
+    public ProductClient(int id, Date date, double totalAmount) {
+        this.id = id;
+        this.totalAmount = totalAmount;
+        this.date = date;
+    }
 
     public ProductClient() {
         this.userId = UserSession.getInstance().getId();
@@ -24,6 +31,14 @@ public class ProductClient {
         this.typePay = "Credit Card";
         this.status = "Completed";
         this.date = new Date();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     public static ProductClient getInstance() {

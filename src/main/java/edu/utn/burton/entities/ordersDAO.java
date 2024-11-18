@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javax.swing.JOptionPane;
+import java.sql.Date;
 
 /**
  *
@@ -94,9 +95,9 @@ public class ordersDAO {
         return cartId;
     }
     
-    public static ObservableList<Integer> getOrdersByUser(int usuarioId) {
+    public static ObservableList<ProductClient> getOrdersByUser(int usuarioId) {
         
-    ObservableList<Integer> orderIds = FXCollections.observableArrayList();
+    ObservableList<ProductClient> orderDetailsList = FXCollections.observableArrayList();
     IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
     try {
@@ -108,24 +109,26 @@ public class ordersDAO {
             System.out.println("No se encontraron órdenes para el usuario ID: " + usuarioId);
         }
 
-        //Iterar a través de los resultados y agregar los IDs de las órdenes a la lista
         while (rs.next()) {
             int orderId = rs.getInt("order_id");
-            System.out.println("Orden encontrada con ID: " + orderId);
-            orderIds.add(orderId);
+            Date orderDate = rs.getDate("order_date");
+            double totalAmount = rs.getDouble("total_amount");
+
+            orderDetailsList.add(new ProductClient(orderId, orderDate, totalAmount));
         }
     } catch (SQLException e) {
         System.err.println("Error al obtener las órdenes: " + e.getMessage());
     } finally {
         adapter.disconnect();
     }
-    if (orderIds.isEmpty()) {
+
+    if (orderDetailsList.isEmpty()) {
         System.out.println("No se encontraron órdenes en la base de datos.");
     } else {
-        System.out.println("Número de órdenes encontradas: " + orderIds.size());
+        System.out.println("Número de órdenes encontradas: " + orderDetailsList.size());
     }
 
-      return orderIds;
+    return orderDetailsList;
     }
     
     public static ObservableList<HBox> loadOrderItemsByOrderId(int orderId) {
