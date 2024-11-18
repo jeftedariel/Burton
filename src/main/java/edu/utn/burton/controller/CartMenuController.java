@@ -77,13 +77,9 @@ public class CartMenuController implements Initializable {
         lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
 
         loadProducts();
-
+         
         btnBuy.setOnAction(ev -> {
           
-            ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
-            ordersDAO.completeCart(UserSession.getInstance().getId());
-            Cart.getInstance().cleanCart();
-            CartMenuController.getInstance().loadProducts();
             Message message = new Message(
                     "Advertencia",
                     "¿Estás seguro de que deseas realizar la compra?",
