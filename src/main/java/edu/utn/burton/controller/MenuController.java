@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
@@ -80,14 +81,19 @@ public class MenuController implements Initializable {
 
     @FXML
     private MFXButton openCart;
-
-    private ordersDAO ordDAO;
-
+    
+    @FXML
+    private MFXButton Historial;
+    
+    private  ordersDAO ordDAO;
+    
     @FXML
     private ImageView avatar;
 
     @FXML
     private Text username;
+    
+    private ShowUserInfo user;
 
     @FXML
     private MFXButton historialCompras;
@@ -146,6 +152,19 @@ public class MenuController implements Initializable {
             CartMenuController.initGui((Stage) openCart.getScene().getWindow());
         });
 
+        
+        Historial.setOnMouseClicked(ev -> {
+             Stage stage = (Stage) Historial.getScene().getWindow();
+           HistorialController.initGui(stage);
+        });
+    
+        user = new ShowUserInfo();
+        user.avatar = this.avatar; 
+        user.username = this.username; 
+     
+        user.loadUserInfo();
+        
+
         logout.setOnMouseClicked(ev -> {
             LoginController.logout(logout);
         });
@@ -157,9 +176,6 @@ public class MenuController implements Initializable {
         historialCompras.setOnMouseClicked(ev->{
             Alerts.show(new Message("WIP", "Aqui se van a mostrar las compras realizadas por el usuario"), AlertType.INFORMATION);
         });
-                
-        //Sets the User's avatar & Name into GUI
-        loadUserInfo();
 
         // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting
         setTotalProducts();
@@ -176,7 +192,7 @@ public class MenuController implements Initializable {
             t += pc.getQuantity();
         }
         openCart.setText(String.valueOf(t));
-    }
+    } 
 
     public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());
@@ -192,7 +208,7 @@ public class MenuController implements Initializable {
         }
     }
 
-    public void loadProducts(boolean Search) {
+     public void loadProducts(boolean Search) {
         APIHandler api = new APIHandler();
         List<Product> products = null;
         String categoryQuery = "";
@@ -312,6 +328,8 @@ public class MenuController implements Initializable {
             stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {
+            e.printStackTrace();  // Imprime el error para depuración
+    Alerts.show(new Message("Error", "Hubo un problema al cargar la interfaz del menú."), Alert.AlertType.ERROR);
         }
     }
 }

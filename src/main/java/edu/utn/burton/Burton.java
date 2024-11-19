@@ -13,6 +13,7 @@ import javafx.stage.Stage;
  * @author jefte
  */
 public class Burton extends Application {
+    
     //666
     @Override
     public void start(Stage stage) throws Exception{
@@ -23,4 +24,5 @@ public class Burton extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
 }

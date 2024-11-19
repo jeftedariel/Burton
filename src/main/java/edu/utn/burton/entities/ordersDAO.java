@@ -14,7 +14,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javax.swing.JOptionPane;
+import java.sql.Date;
 
 /**
  *
@@ -50,7 +55,7 @@ public class ordersDAO {
         return cartId;
     }
 
-    public static void completeCart() {
+    public static void completeCart(int usuarioId) {
         
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         
@@ -88,6 +93,91 @@ public class ordersDAO {
         }
 
         return cartId;
+    }
+    
+    public static ObservableList<ProductClient> getOrdersByUser(int usuarioId) {
+        
+    ObservableList<ProductClient> orderDetailsList = FXCollections.observableArrayList();
+    IDBAdapter adapter = DBAdapterFactory.getAdapter();
+
+    try {
+        CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_user(?)}");
+        stmt.setInt(1, usuarioId);
+        ResultSet rs = stmt.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("No se encontraron órdenes para el usuario ID: " + usuarioId);
+        }
+
+        while (rs.next()) {
+            int orderId = rs.getInt("order_id");
+            Date orderDate = rs.getDate("order_date");
+            double totalAmount = rs.getDouble("total_amount");
+
+            orderDetailsList.add(new ProductClient(orderId, orderDate, totalAmount));
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener las órdenes: " + e.getMessage());
+    } finally {
+        adapter.disconnect();
+    }
+
+    if (orderDetailsList.isEmpty()) {
+        System.out.println("No se encontraron órdenes en la base de datos.");
+    } else {
+        System.out.println("Número de órdenes encontradas: " + orderDetailsList.size());
+    }
+
+    return orderDetailsList;
+    }
+    
+    public static ObservableList<HBox> loadOrderItemsByOrderId(int orderId) {
+        
+    ObservableList<HBox> orderItemsList = FXCollections.observableArrayList();
+
+    String procedureCall = "{CALL get_order_items_by_order_id(?)}"; 
+
+    try (Connection conn = DBAdapterFactory.getAdapter().getConnection();
+         CallableStatement stmt = conn.prepareCall(procedureCall)) {
+        stmt.setInt(1, orderId);
+        ResultSet rs = stmt.executeQuery();
+
+        //Iterar sobre el ResultSet y construir la lista de HBox
+        while (rs.next()) {
+            String productName = rs.getString("product_name");
+            int quantity = rs.getInt("quantity");
+            double unitPrice = rs.getDouble("unit_price");
+            double subtotal = rs.getDouble("subtotal");
+            String productImage = rs.getString("product_image");
+
+            HBox orderItemRow = new HBox(10);  
+            orderItemRow.setStyle("-fx-padding: 10px;");
+
+            Label productLabel = new Label("Producto: " + productName);
+            Label quantityLabel = new Label("Cantidad: " + quantity);
+            Label priceLabel = new Label("Precio Unitario: " + unitPrice);
+            Label subtotalLabel = new Label("Subtotal: " + subtotal);
+
+            ImageView imageView = new ImageView();
+            try {
+                Image image = new Image(productImage, true); 
+                imageView.setImage(image);
+                imageView.setFitWidth(50);  
+                imageView.setFitHeight(50); 
+                imageView.setPreserveRatio(true);
+            } catch (IllegalArgumentException e) {
+                System.err.println("No se pudo cargar la imagen: " + e.getMessage());
+            }
+
+            orderItemRow.getChildren().addAll(imageView, productLabel, quantityLabel, priceLabel, subtotalLabel);
+
+            orderItemsList.add(orderItemRow);
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
+    }
+
+      return orderItemsList;
     }
 
     public static int createActiveCart(int idUser) {
@@ -194,7 +284,7 @@ public class ordersDAO {
         }
     }
     
-    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item) {
+    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item, int usuarioId) {
 
     IDBAdapter adapter = DBAdapterFactory.getAdapter();
     String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";

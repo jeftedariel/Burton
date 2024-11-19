@@ -43,7 +43,6 @@ public class CartController {
       
    
         if (count == 0) {
-          
             odDAO.removeProduct(currentProduct.getProductId());
             Cart.getInstance().deleteProducts(currentProduct, count);
             CartMenuController.getInstance().loadProducts();
