@@ -4,7 +4,7 @@
 
 package edu.utn.burton;
 
-import edu.utn.burton.reports.SimpleReport;
+import edu.utn.burton.controller.LoginController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,13 +13,10 @@ import javafx.stage.Stage;
  * @author jefte
  */
 public class Burton extends Application {
-    
-    //666
+
     @Override
     public void start(Stage stage) throws Exception{
-        //LoginController.initGui();
-        SimpleReport sp = new SimpleReport();
-        sp.generate();
+        LoginController.initGui();
     }
     public static void main(String[] args) {
         launch(args);
