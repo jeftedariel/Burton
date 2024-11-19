@@ -33,6 +33,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -94,6 +95,15 @@ public class MenuController implements Initializable {
     
     private ShowUserInfo user;
 
+    @FXML
+    private MFXButton historialCompras;
+
+    @FXML
+    private MFXButton dashboard;
+
+    @FXML
+    private MFXButton logout;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -141,6 +151,7 @@ public class MenuController implements Initializable {
         openCart.setOnMouseClicked(ev -> {
             CartMenuController.initGui((Stage) openCart.getScene().getWindow());
         });
+
         
         Historial.setOnMouseClicked(ev -> {
              Stage stage = (Stage) Historial.getScene().getWindow();
@@ -153,13 +164,26 @@ public class MenuController implements Initializable {
      
         user.loadUserInfo();
         
+
+        logout.setOnMouseClicked(ev -> {
+            LoginController.logout(logout);
+        });
+
+        dashboard.setOnMouseClicked(ev -> {
+            DashboardController.initGui((Stage) dashboard.getScene().getWindow());
+        });
+        
+        historialCompras.setOnMouseClicked(ev->{
+            Alerts.show(new Message("WIP", "Aqui se van a mostrar las compras realizadas por el usuario"), AlertType.INFORMATION);
+        });
+
         // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting
         setTotalProducts();
         Cart.getInstance().getProducts().addListener((ListChangeListener<ProductCart>) ev -> {
             setTotalProducts();
         });
 
-    }
+    } 
 
     public void setTotalProducts() {
         int t = 0;
@@ -168,9 +192,23 @@ public class MenuController implements Initializable {
             t += pc.getQuantity();
         }
         openCart.setText(String.valueOf(t));
+    } 
+
+    public void loadUserInfo() {
+        username.setText(UserSession.getInstance().getName());
+        BufferedImage image;
+
+        dashboard.setVisible(UserSession.getInstance().getRole().equals("admin"));
+
+        try {
+            image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
+            avatar.setImage(SwingFXUtils.toFXImage(image, null));
+        } catch (Exception ee) {
+            System.out.println("Hubo un error al intentar cargar la img");
+        }
     }
 
-    public void loadProducts(boolean Search) {
+     public void loadProducts(boolean Search) {
         APIHandler api = new APIHandler();
         List<Product> products = null;
         String categoryQuery = "";

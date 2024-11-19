@@ -9,6 +9,7 @@ import edu.utn.burton.auth.GoogleAuthStrategy;
 import edu.utn.burton.auth.LoginStrategy;
 import edu.utn.burton.auth.PlatziAuthStrategy;
 import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.CustomPasswordField;
@@ -33,11 +35,14 @@ public class LoginController implements Initializable {
 
     @FXML
     private CustomTextField Correo;
+  
     @FXML
     private CustomPasswordField Contraseña;
-    @FXML
-    private MFXButton Ingresar;    
+  
     @FXML 
+    private MFXButton Ingresar;
+  
+    @FXML
     private MFXButton googleBtn;
 
     APIHandler api = new APIHandler();
@@ -48,10 +53,22 @@ public class LoginController implements Initializable {
         Ingresar.setOnAction(ev -> {
             auth();
         });
-        
+
         googleBtn.setOnAction(ev -> {
             googleAuth();
         });
+    }
+
+    public static void logout(MFXButton button) {
+        Stage spStage = (Stage) button.getScene().getWindow();
+        Alerts.showConfirmation(new Message("Cerrar Sesión", "¿Realmente quieres cerrar sesión?"), onResponse -> {
+            if (onResponse == ButtonType.APPLY) {
+                spStage.close();
+                LoginController.initGui();
+                UserSession.getInstance().logout();
+            }
+        });
+
     }
 
     private void auth() {
@@ -62,12 +79,10 @@ public class LoginController implements Initializable {
             Alerts.show(new Message("Error de autenticación", "Email o Contraseña incorrectos."), Alert.AlertType.WARNING);
         }
     }
-    
-    
-    
-    private void googleAuth(){
+
+    private void googleAuth() {
         GoogleAuthStrategy googleAuth = new GoogleAuthStrategy();
-        if(googleAuth.oAuth()){
+        if (googleAuth.oAuth()) {
             loadMenu();
         } else {
             Alerts.show(new Message("Error de autenticación", "Ha ocurrido un error durante la autenticación con Google."), Alert.AlertType.WARNING);
