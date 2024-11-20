@@ -14,12 +14,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javax.swing.JOptionPane;
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -105,10 +103,6 @@ public class ordersDAO {
         stmt.setInt(1, usuarioId);
         ResultSet rs = stmt.executeQuery();
 
-        if (!rs.isBeforeFirst()) {
-            System.out.println("No se encontraron órdenes para el usuario ID: " + usuarioId);
-        }
-
         while (rs.next()) {
             int orderId = rs.getInt("order_id");
             Date orderDate = rs.getDate("order_date");
@@ -122,62 +116,38 @@ public class ordersDAO {
         adapter.disconnect();
     }
 
-    if (orderDetailsList.isEmpty()) {
-        System.out.println("No se encontraron órdenes en la base de datos.");
-    } else {
-        System.out.println("Número de órdenes encontradas: " + orderDetailsList.size());
-    }
-
     return orderDetailsList;
     }
     
-    public static ObservableList<HBox> loadOrderItemsByOrderId(int orderId) {
+    //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
+    public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
         
-    ObservableList<HBox> orderItemsList = FXCollections.observableArrayList();
-
-    String procedureCall = "{CALL get_order_items_by_order_id(?)}"; 
+    ObservableList<Map<String, Object>> orderItemsList = FXCollections.observableArrayList();
+    String procedureCall = "{CALL get_order_items_by_order_id(?)}";
 
     try (Connection conn = DBAdapterFactory.getAdapter().getConnection();
          CallableStatement stmt = conn.prepareCall(procedureCall)) {
         stmt.setInt(1, orderId);
         ResultSet rs = stmt.executeQuery();
 
-        //Iterar sobre el ResultSet y construir la lista de HBox
         while (rs.next()) {
-            String productName = rs.getString("product_name");
-            int quantity = rs.getInt("quantity");
-            double unitPrice = rs.getDouble("unit_price");
-            double subtotal = rs.getDouble("subtotal");
-            String productImage = rs.getString("product_image");
+            Map<String, Object> row = new HashMap<>();
+            row.put("order_item_id", rs.getInt("order_item_id"));
+            row.put("order_id", rs.getInt("order_id"));
+            row.put("product_id", rs.getInt("product_id"));
+            row.put("quantity", rs.getInt("quantity"));
+            row.put("unit_price", rs.getDouble("unit_price"));
+            row.put("subtotal", rs.getDouble("subtotal"));
+            row.put("product_name", rs.getString("product_name"));
+            row.put("product_image", rs.getString("product_image"));
 
-            HBox orderItemRow = new HBox(10);  
-            orderItemRow.setStyle("-fx-padding: 10px;");
-
-            Label productLabel = new Label("Producto: " + productName);
-            Label quantityLabel = new Label("Cantidad: " + quantity);
-            Label priceLabel = new Label("Precio Unitario: " + unitPrice);
-            Label subtotalLabel = new Label("Subtotal: " + subtotal);
-
-            ImageView imageView = new ImageView();
-            try {
-                Image image = new Image(productImage, true); 
-                imageView.setImage(image);
-                imageView.setFitWidth(50);  
-                imageView.setFitHeight(50); 
-                imageView.setPreserveRatio(true);
-            } catch (IllegalArgumentException e) {
-                System.err.println("No se pudo cargar la imagen: " + e.getMessage());
-            }
-
-            orderItemRow.getChildren().addAll(imageView, productLabel, quantityLabel, priceLabel, subtotalLabel);
-
-            orderItemsList.add(orderItemRow);
+            orderItemsList.add(row);
         }
     } catch (SQLException e) {
         System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
     }
 
-      return orderItemsList;
+    return orderItemsList;
     }
 
     public static int createActiveCart(int idUser) {

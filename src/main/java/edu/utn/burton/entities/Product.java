@@ -11,4 +11,5 @@ import java.util.List;
  * @author jefte
  */
 public record Product(int id, String title, double price, String description, List<String> images, String creationAt) {
+    
 }

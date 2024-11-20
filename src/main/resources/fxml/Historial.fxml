@@ -10,14 +10,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.HistorialController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1282.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.HistorialController">
    <children>
-      <HBox layoutX="7.0" layoutY="110.0" prefHeight="483.0" prefWidth="786.0">
+      <HBox layoutY="53.0" prefHeight="720.0" prefWidth="1282.0">
          <children>
-            <MFXLegacyListView fx:id="Historial" prefHeight="514.0" prefWidth="793.0" />
+            <MFXLegacyListView fx:id="Historial" prefHeight="720.0" prefWidth="1282.0" />
          </children>
       </HBox>
-      <Pane fx:id="header" layoutX="10.0" layoutY="10.0" prefHeight="53.0" prefWidth="770.0" style="-fx-background-color: #6f71de;">
+      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #6f71de;">
          <children>
             <ImageView id="avatar" fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -29,9 +29,18 @@
                   <Font name="Poppins Regular" size="18.0" />
                </font>
             </Text>
-            <MFXButton fx:id="Regresar" layoutX="719.0" layoutY="2.0" prefHeight="9.0" prefWidth="30.0" text="">
+            <MFXButton fx:id="Regresar" layoutX="1173.0" layoutY="2.0" prefHeight="48.0" prefWidth="86.0" text="Menú">
                <graphic>
                   <ImageView fx:id="Imagen" fitHeight="40.0" fitWidth="31.0">
+                     <image>
+                        <Image url="@../assets/return.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="RegresarOrdenes" layoutX="995.0" layoutY="1.0" prefHeight="48.0" prefWidth="115.0" text="Ordenes">
+               <graphic>
+                  <ImageView fx:id="Imagen1" fitHeight="40.0" fitWidth="31.0">
                      <image>
                         <Image url="@../assets/return.png" />
                      </image>
