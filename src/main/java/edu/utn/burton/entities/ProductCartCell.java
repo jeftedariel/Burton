@@ -3,8 +3,6 @@ package edu.utn.burton.entities;
 import edu.utn.burton.Burton;
 import edu.utn.burton.controller.CartController;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -51,7 +49,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
         edit.setOnAction(ev -> {
             ctrlCart.addProduct(currentProduct, amount.getValue());
         });
-        
+      
 
         // Configurar el tamaño de la imagen
         imageView.setFitWidth(80);
@@ -95,11 +93,11 @@ public class ProductCartCell extends ListCell<ProductCart> {
         content.getStylesheets().add(Burton.class.getResource("/styles/cartmenu.css").toExternalForm());
         content.getChildren().add(buttonBox);
         // Configurar el gráfico de la celda
-        setGraphic(content);
+        setGraphic(content);        
     }
-
+ 
     @Override
-    public void updateItem(ProductCart product, boolean empty) {
+    public void updateItem(ProductCart product, boolean empty) {        
         super.updateItem(product, empty);
 
         if (empty || product == null) {

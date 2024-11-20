@@ -39,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
@@ -97,6 +98,9 @@ public class MenuController implements Initializable {
 
     @FXML
     private MFXButton logout;
+    
+    @FXML
+    private StackPane rootPane; 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -143,7 +147,8 @@ public class MenuController implements Initializable {
         });
 
         openCart.setOnMouseClicked(ev -> {
-            CartMenuController.initGui((Stage) openCart.getScene().getWindow());
+            CartMenuController.initGui((Stage) 
+                    openCart.getScene().getWindow());
         });
 
         logout.setOnMouseClicked(ev -> {

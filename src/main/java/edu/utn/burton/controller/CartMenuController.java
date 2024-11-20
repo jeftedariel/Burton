@@ -28,7 +28,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -75,7 +74,6 @@ public class CartMenuController implements Initializable {
         instance = this;
         observableProductList = FXCollections.observableArrayList();
         lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
-
         loadProducts();
 
         btnBuy.setOnAction(ev -> {
