@@ -5,6 +5,8 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.entities.OrderDetailsView;
+import edu.utn.burton.entities.OrderRow;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.entities.ordersDAO;
@@ -19,7 +21,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -52,9 +53,17 @@ public class HistorialController implements Initializable{
         
         loadOrders();
 
-         Regresar.setOnAction(ev -> {
+        Regresar.setOnAction(ev -> {
             MenuController.initGui((Stage) Regresar.getScene().getWindow());
         });
+        
+        RegresarOrdenes.setOnAction(ev -> {
+            HistorialController.initGui((Stage) RegresarOrdenes.getScene().getWindow());
+            RegresarOrdenes.setVisible(false);
+        });
+        
+        RegresarOrdenes.setVisible(false);
+        
     }
     
     private ShowUserInfo user;
@@ -67,6 +76,9 @@ public class HistorialController implements Initializable{
     
     @FXML
     private MFXButton Regresar;
+    
+    @FXML
+    private MFXButton RegresarOrdenes;
     
     @FXML
     private StackPane Stack;
@@ -88,7 +100,7 @@ public class HistorialController implements Initializable{
             FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/Historial.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(Burton.class.getResource("/styles/cartmenu.css").toExternalForm());
+            scene.getStylesheets().add(Burton.class.getResource("/styles/orders.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
             
@@ -103,73 +115,24 @@ public class HistorialController implements Initializable{
 
     if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
         for (ProductClient order : orderDetailsList) {
-            HBox orderRow = new HBox(20);
-            orderRow.setAlignment(Pos.CENTER_LEFT);
-            orderRow.setStyle("-fx-padding: 10px; -fx-background-color: #f4f4f4; -fx-border-radius: 5px; -fx-border-color: #dcdcdc; -fx-border-width: 1px;");
-
-            Label documentIcon = new Label("\uD83D\uDCCB"); //Unicode para documento
-            documentIcon.setStyle("-fx-font-size: 20px; -fx-text-fill: #3f7cba;");
-
-            //Texto de la orden
-            Label orderLabel = new Label(
-                "Orden #" + order.getId() + 
-                " | Fecha: " + order.getDate() + 
-                " | Monto: $" + order.getTotalAmount()
-            );
-            orderLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;");
-
-            //Añadir icono y texto a la fila
-            orderRow.getChildren().addAll(documentIcon, orderLabel);
-
-            orderRow.setOnMouseClicked(event -> loadOrderDetails(order.getId()));
-
-            observableOrderList.add(orderRow);
+            OrderRow orderRow = new OrderRow(order, event -> loadOrderDetails(order.getId()));
+            observableOrderList.add(orderRow.getOrderRow());
         }
     } else {
         HBox emptyOrderRow = new HBox();
-        emptyOrderRow.setAlignment(Pos.CENTER);
-        emptyOrderRow.setStyle("-fx-padding: 10px; -fx-background-color: #f8d7da; -fx-border-radius: 5px; -fx-border-color: #f5c6cb; -fx-border-width: 1px;");
+        emptyOrderRow.getStyleClass().add("empty-order-row");
         Label emptyLabel = new Label("No hay órdenes");
-        emptyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #721c24;");
+        emptyLabel.getStyleClass().add("empty-label");
         emptyOrderRow.getChildren().add(emptyLabel);
-
         observableOrderList.add(emptyOrderRow);
     }
     Historial.setItems(observableOrderList);
     }
 
     public void loadOrderDetails(int orderId) {
+       OrderDetailsView detailsView = new OrderDetailsView(orderId);
+       Historial.setItems(detailsView.getOrderDetailsList());
+       RegresarOrdenes.setVisible(true);
+    }
         
-    ObservableList<HBox> orderDetailsList = FXCollections.observableArrayList();
-    ObservableList<HBox> orderItems = ordersDAO.loadOrderItemsByOrderId(orderId);
-
-    if (orderItems != null && !orderItems.isEmpty()) {
-        for (HBox item : orderItems) {
-            item.setAlignment(Pos.CENTER_LEFT);
-            item.setStyle("-fx-padding: 15px; -fx-background-color: #ffffff; -fx-border-radius: 5px; "
-                    + "-fx-border-color: #dcdcdc; -fx-border-width: 1px; "
-                    + "-fx-effect: dropshadow(gaussian, lightgrey, 3, 0, 0, 2);");
-
-            Label productIcon = new Label("\uD83D\uDED2"); //Icono de carrito de compras
-            productIcon.setStyle("-fx-font-size: 24px; -fx-text-fill: #FF9800;");
-
-            //Se coloca el ícono al principio del HBox
-            item.getChildren().add(0, productIcon);
-
-            orderDetailsList.add(item);
-        }
-    } else {
-        HBox emptyRow = new HBox();
-        emptyRow.setAlignment(Pos.CENTER);
-        emptyRow.setStyle("-fx-padding: 20px; -fx-background-color: #f8d7da; "
-                + "-fx-border-radius: 5px; -fx-border-color: #f5c6cb; -fx-border-width: 1px;");
-        Label emptyLabel = new Label("No hay productos en esta orden");
-        emptyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #721c24;");
-        emptyRow.getChildren().add(emptyLabel);
-
-        orderDetailsList.add(emptyRow);
-    }
-    Historial.setItems(orderDetailsList);
-    }
-
 }

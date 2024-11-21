@@ -13,7 +13,6 @@ import javafx.stage.Stage;
  * @author jefte
  */
 public class Burton extends Application {
-
     @Override
     public void start(Stage stage) throws Exception{
         LoginController.initGui();
