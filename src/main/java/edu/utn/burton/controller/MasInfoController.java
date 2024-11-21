@@ -12,33 +12,28 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 /**
  * @author Justin Rodriguez Gonzalez
  */
 public class MasInfoController implements Initializable {
 
- 
-    @FXML  
-    private VBox hboxMasInfo;
-
+    @FXML
+    private VBox vboxImages;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
 
     public static void showPopup(Stage stage, Product p) {
 
         try {
 
-            FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/MasInfo.fxml"));
+            FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/masInfo.fxml"));
             Parent root = loader.load();
 
             MasInfoController controller = loader.getController();
@@ -64,21 +59,19 @@ public class MasInfoController implements Initializable {
     }
 
     public void getItem(Product currentProduct) {
-    hboxMasInfo.getChildren().clear(); 
-    for (String image : currentProduct.images()) {
-        hboxMasInfo.getStylesheets().add(Burton.class.getResource("/styles/product_cell.css").toExternalForm());
+        vboxImages.getChildren().clear();
+        for (String image : currentProduct.images()) {
+            vboxImages.getStylesheets().add(Burton.class.getResource("/styles/product_cell.css").toExternalForm());
 
-        ImageView imageView = new ImageView();
-        imageView.setImage(new Image(image));
-        imageView.setFitWidth(200);
-        imageView.setFitHeight(200);
-        imageView.setPreserveRatio(true);
-        imageView.getStyleClass().add("image-view"); 
+            ImageView imageView = new ImageView();
+            imageView.setImage(new Image(image));
+            imageView.setFitWidth(150);
+            imageView.setFitHeight(150);
+            imageView.setPreserveRatio(true);
+            imageView.getStyleClass().add("image-view");
 
-       
-     
-        hboxMasInfo.getChildren().add(imageView);
+            vboxImages.getChildren().add(imageView);
+        }
     }
-}
 
 }
