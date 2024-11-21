@@ -26,9 +26,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.text.Text;
-import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -86,14 +85,9 @@ public class CartMenuController implements Initializable {
         lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
 
         loadProducts();
-
+         
         btnBuy.setOnAction(ev -> {
-          
-            /*ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
-            ordersDAO.completeCart(UserSession.getInstance().getId());
-            Cart.getInstance().cleanCart();
-            CartMenuController.getInstance().loadProducts();
-            */Message message = new Message(
+            Message message = new Message(
                     "Advertencia",
                     "¿Estás seguro de que deseas realizar la compra?",
                     "Si finalizas la compra, no podras modificar tu orden."
