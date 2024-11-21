@@ -4,6 +4,7 @@
  */
 package edu.utn.burton.entities;
 
+import edu.utn.burton.dao.ordersDAO;
 import java.time.LocalDate;
 import javafx.collections.ObservableList;
 

@@ -7,7 +7,7 @@ import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.ProductCartCell;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.entities.ordersDAO;
+import edu.utn.burton.dao.ordersDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import javafx.collections.FXCollections;

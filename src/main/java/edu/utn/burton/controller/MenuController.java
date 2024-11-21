@@ -12,7 +12,7 @@ import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ProductCell;
-import edu.utn.burton.entities.ordersDAO;
+import edu.utn.burton.dao.ordersDAO;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
