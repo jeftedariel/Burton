@@ -39,7 +39,7 @@
       </Pane>
       <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #6f71de;">
          <children>
-            <MFXButton fx:id="openCart" layoutX="1184.0" layoutY="10.0" text="0">
+            <MFXButton fx:id="openCart" layoutX="1142.0" layoutY="10.0" text="0">
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -65,6 +65,33 @@
                <font>
                   <Font name="Poppins Regular" size="18.0" />
                </font></Text>
+            <MFXButton fx:id="logout" layoutX="1219.0" layoutY="10.0" prefHeight="33.0" prefWidth="29.0" text=" ">
+               <graphic>
+                  <ImageView id="avatar" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="historialCompras" layoutX="964.0" layoutY="10.0" text="Mis Compras">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/historial.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="dashboard" layoutX="568.0" layoutY="10.0" text="Dashboard">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/escudo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
          </children></Pane>
       <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="100.0" prefHeight="562.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
       <Pagination fx:id="pagination" layoutX="483.0" layoutY="653.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
