@@ -85,24 +85,20 @@ public class MenuController implements Initializable {
     @FXML
     private MFXButton Historial;
     
-    private  ordersDAO ordDAO;
-    
     @FXML
     private ImageView avatar;
 
     @FXML
     private Text username;
     
-    private ShowUserInfo user;
-
-    @FXML
-    private MFXButton historialCompras;
-
     @FXML
     private MFXButton dashboard;
 
     @FXML
     private MFXButton logout;
+
+    private ShowUserInfo user;
+    private  ordersDAO ordDAO;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -171,10 +167,6 @@ public class MenuController implements Initializable {
 
         dashboard.setOnMouseClicked(ev -> {
             DashboardController.initGui((Stage) dashboard.getScene().getWindow());
-        });
-        
-        historialCompras.setOnMouseClicked(ev->{
-            Alerts.show(new Message("WIP", "Aqui se van a mostrar las compras realizadas por el usuario"), AlertType.INFORMATION);
         });
 
         // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting

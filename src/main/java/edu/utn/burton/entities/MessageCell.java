@@ -2,11 +2,15 @@ package edu.utn.burton.entities;
 
 import edu.utn.burton.Burton;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javax.imageio.ImageIO;
 
 public class MessageCell extends ListCell<Message> {
 
@@ -45,7 +49,8 @@ public class MessageCell extends ListCell<Message> {
             descLabel.setText(message.description());
             
             try {
-                imageView.setImage(new Image(message.imgUrl()));
+                BufferedImage image = ImageIO.read(new URL(message.imgUrl()));
+                imageView.setImage(SwingFXUtils.toFXImage(image, null));
             } catch (Exception e) {
                 imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
             }

@@ -4,6 +4,7 @@
  */
 package edu.utn.burton.entities;
 
+import edu.utn.burton.dao.ordersDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.HBox;

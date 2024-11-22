@@ -31,7 +31,7 @@ public class ShowUserInfo {
         try {
             image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
             avatar.setImage(SwingFXUtils.toFXImage(image, null));
-        } catch (Exception ee) {
+        } catch (Exception e) {
             System.out.println("Hubo un error al intentar cargar la img");
         }
     }
