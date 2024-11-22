@@ -174,8 +174,6 @@ public class OrdersDAO {
         return cartId;
     }
     
-    
-
     public static void removeProduct(int idItem) {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
