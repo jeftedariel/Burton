@@ -81,6 +81,10 @@ public class Cart {
             }
         }
     }
+    
+    public static void setDelete(ProductCart prUs){
+       getProducts().remove(prUs); 
+    }
 
     public void CartEmpty() {
         if (products.stream().count() == 0) {

@@ -10,7 +10,9 @@ import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.entities.ordersDAO;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Spinner;
 
 /**
  *
@@ -32,7 +34,6 @@ public class CartController {
             Cart.getInstance().addProduct(productUser, count);
             odDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
             odDAO.addProductsToCart(Cart.getProducts());
-            System.out.println(Cart.getInstance().getProducts().toString());
             Alerts.show(new Message("Exito", "Se agregado a tu carrito de compras un " +  currentProduct.title()), Alert.AlertType.INFORMATION);
              
         }
@@ -71,7 +72,37 @@ public class CartController {
 
     public boolean isEmptySpinner(int count) {
         return (count == 0);
-
+    }
+    
+    public void deleteButton(ProductCart currentProduct){
+        
+    ordersDAO.removeProduct(currentProduct.getProductId());
+    Cart.getInstance().setDelete(currentProduct);
+    CartMenuController.getInstance().loadProducts();
+    
+    }
+    
+    public void functionSpinner(Spinner amount, ProductCart currentProduct){
+    
+       amount.skinProperty().addListener((obs, oldSkin, newSkin) -> {
+        if (newSkin != null) {
+            // le doy una referencia a los nodos de cual es la flecha para arriba y la de abajo
+            Node incrementButton = amount.lookup(".increment-arrow-button");
+            Node decrementButton = amount.lookup(".decrement-arrow-button");
+            // el evento obteniendo el boton de incrementar 
+            if (incrementButton != null) {
+                incrementButton.setOnMouseClicked(e -> {        
+                  addProduct(currentProduct, (int) amount.getValue());      
+                });
+            }
+            // el evento obteniendo el boton de decrementar 
+            if (decrementButton != null) {
+                decrementButton.setOnMouseClicked(e -> {
+                    deleteProducto(currentProduct, (int) amount.getValue());
+                });
+            }
+        }
+    });
     }
     
 }

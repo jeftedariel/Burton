@@ -43,7 +43,7 @@ public class MasInfoController implements Initializable {
 
             Stage popupStage = new Stage();
             popupStage.setScene(scene);
-            popupStage.initStyle(StageStyle.UNDECORATED);
+            //popupStage.initStyle(StageStyle.UNDECORATED);
             popupStage.initOwner(stage);
             popupStage.setResizable(false);
             popupStage.centerOnScreen();
@@ -62,15 +62,22 @@ public class MasInfoController implements Initializable {
         vboxImages.getChildren().clear();
         for (String image : currentProduct.images()) {
             vboxImages.getStylesheets().add(Burton.class.getResource("/styles/product_cell.css").toExternalForm());
-
+            
+                
             ImageView imageView = new ImageView();
-            imageView.setImage(new Image(image));
-            imageView.setFitWidth(150);
-            imageView.setFitHeight(150);
+            try {
+               imageView.setImage(new Image(image));
+            imageView.setFitWidth(200);
+            imageView.setFitHeight(200);
             imageView.setPreserveRatio(true);
             imageView.getStyleClass().add("image-view");
 
             vboxImages.getChildren().add(imageView);
+            } catch (Exception e) {
+                imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
+            }
+            
+            
         }
     }
 
