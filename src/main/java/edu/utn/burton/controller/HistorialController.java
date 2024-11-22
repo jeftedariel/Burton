@@ -9,7 +9,7 @@ import edu.utn.burton.entities.OrderDetailsView;
 import edu.utn.burton.entities.OrderRow;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.dao.OrdersDAO;
+import edu.utn.burton.dao.OrderDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class HistorialController implements Initializable{
     @FXML
     private ImageView View;
     
-    private OrdersDAO orderDAO;
+    private OrderDAO orderDAO;
     
     @FXML
     private ImageView avatar;
@@ -68,7 +68,7 @@ public class HistorialController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
                 
-        orderDAO = new OrdersDAO();
+        orderDAO = new OrderDAO();
         
         observableOrderList = FXCollections.observableArrayList(); 
         
@@ -108,7 +108,7 @@ public class HistorialController implements Initializable{
     
     public void loadOrders() {
     observableOrderList.clear();
-    List<ProductClient> orderDetailsList = OrdersDAO.getOrdersByUser(UserSession.getInstance().getId());
+    List<ProductClient> orderDetailsList = OrderDAO.getOrdersByUser(UserSession.getInstance().getId());
 
     if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
         for (ProductClient order : orderDetailsList) {

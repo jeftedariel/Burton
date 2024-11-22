@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author Justin Rodriguez Gonzalez
  */
-public class OrdersDAO {
+public class OrderDAO {
 
     public static int getOrCreateActiveCart(int idUser) {
 
@@ -317,10 +317,10 @@ public class OrdersDAO {
 
             int cart = getActiveCartId( UserSession.getInstance().getId());
 
-            int cartId = OrdersDAO.getActiveCartId(UserSession.getInstance().getId());
+            int cartId = OrderDAO.getActiveCartId(UserSession.getInstance().getId());
             if (cartId == -1) {
 
-                cartId = OrdersDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
+                cartId = OrderDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
 
             }
 

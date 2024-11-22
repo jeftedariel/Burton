@@ -7,7 +7,7 @@ import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.ProductCartCell;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.dao.OrdersDAO;
+import edu.utn.burton.dao.OrderDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import javafx.collections.FXCollections;
@@ -92,8 +92,8 @@ public class CartMenuController implements Initializable {
             Alerts.showConfirmation(message, response -> {
                 if (response == ButtonType.APPLY) {
 
-                    OrdersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
-                    OrdersDAO.completeCart(UserSession.getInstance().getId());
+                    OrderDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
+                    OrderDAO.completeCart(UserSession.getInstance().getId());
                     Cart.getInstance().cleanCart();
                     CartMenuController.getInstance().loadProducts();
                 }
@@ -112,7 +112,7 @@ public class CartMenuController implements Initializable {
             Alerts.showConfirmation(message, response -> {
                 if (response == ButtonType.APPLY) {
 
-                    OrdersDAO.cancelCart();
+                    OrderDAO.cancelCart();
                     Cart.getInstance().cleanCart();
                     CartMenuController.getInstance().loadProducts();
                 }

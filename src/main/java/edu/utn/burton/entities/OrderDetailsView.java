@@ -4,7 +4,7 @@
  */
 package edu.utn.burton.entities;
 
-import edu.utn.burton.dao.OrdersDAO;
+import edu.utn.burton.dao.OrderDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.HBox;
@@ -26,7 +26,7 @@ public class OrderDetailsView {
     }
 
     private void loadOrderDetails(int orderId) {
-        ObservableList<Map<String, Object>> orderItems = OrdersDAO.loadOrderItemsByOrderId(orderId);
+        ObservableList<Map<String, Object>> orderItems = OrderDAO.loadOrderItemsByOrderId(orderId);
 
         if (orderItems != null && !orderItems.isEmpty()) {
             for (Map<String, Object> item : orderItems) {
