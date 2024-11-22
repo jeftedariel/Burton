@@ -8,6 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import edu.utn.burton.controller.CartController;
+import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
+import java.awt.image.BufferedImage;
+import java.net.URL;
+import javax.imageio.ImageIO;
 
 public class ProductCell extends ListCell<Product> {
 
@@ -80,9 +84,9 @@ public class ProductCell extends ListCell<Product> {
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");
             info.setText("Más Info");
-            
             try {
-                imageView.setImage(new Image(product.images().get(0)));
+                BufferedImage image = ImageIO.read(new URL(product.images().get(0)));
+                imageView.setImage(SwingFXUtils.toFXImage(image, null));
             } catch (Exception e) {
                 imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
             }

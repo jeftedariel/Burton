@@ -7,7 +7,7 @@ import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.ProductCartCell;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.entities.ordersDAO;
+import edu.utn.burton.dao.OrderDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import javafx.collections.FXCollections;
@@ -74,10 +74,7 @@ public class CartMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        user = new ShowUserInfo();
-        user.avatar = this.avatar;  
-        user.username = this.username;  
-   
+        user = new ShowUserInfo(this.avatar , this.username);
         user.loadUserInfo();
         
         instance = this;
@@ -95,8 +92,8 @@ public class CartMenuController implements Initializable {
             Alerts.showConfirmation(message, response -> {
                 if (response == ButtonType.APPLY) {
 
-                    ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
-                    ordersDAO.completeCart(UserSession.getInstance().getId());
+                    OrderDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
+                    OrderDAO.completeCart(UserSession.getInstance().getId());
                     Cart.getInstance().cleanCart();
                     CartMenuController.getInstance().loadProducts();
                 }
@@ -115,7 +112,7 @@ public class CartMenuController implements Initializable {
             Alerts.showConfirmation(message, response -> {
                 if (response == ButtonType.APPLY) {
 
-                    ordersDAO.cancelCart();
+                    OrderDAO.cancelCart();
                     Cart.getInstance().cleanCart();
                     CartMenuController.getInstance().loadProducts();
                 }

@@ -53,14 +53,6 @@
                   <Image url="@../assets/user.png" />
                </image>
             </ImageView>
-            <MFXButton fx:id="Historial" layoutX="1077.0" layoutY="9.0" text="">
-               <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="43.0">
-                     <image>
-                        <Image url="@../assets/ordencompletada.png" />
-                     </image>
-                  </ImageView>
-               </graphic></MFXButton>
             <Text fx:id="username" fill="WHITE" layoutX="64.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                <font>
                   <Font name="Poppins Regular" size="18.0" />
@@ -74,7 +66,7 @@
                   </ImageView>
                </graphic>
             </MFXButton>
-            <MFXButton fx:id="historialCompras" layoutX="964.0" layoutY="10.0" text="Mis Compras">
+            <MFXButton fx:id="Historial" layoutX="990.0" layoutY="10.0" text="Mis Compras">
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>

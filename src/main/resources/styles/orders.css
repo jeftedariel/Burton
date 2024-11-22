@@ -27,7 +27,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-spacing: 20px;
     -fx-effect: dropshadow(gaussian, #bbbbbb, 10, 0, 0, 5);
     -fx-cursor: hand;
-    -fx-hover-effect: opacity(0.8);
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }

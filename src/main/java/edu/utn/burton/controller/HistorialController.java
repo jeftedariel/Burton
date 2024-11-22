@@ -9,7 +9,7 @@ import edu.utn.burton.entities.OrderDetailsView;
 import edu.utn.burton.entities.OrderRow;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.entities.ordersDAO;
+import edu.utn.burton.dao.OrderDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
@@ -36,36 +36,7 @@ import javafx.stage.Stage;
  * @author alexledezma
  */
 public class HistorialController implements Initializable{
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-                
-        orderDAO = new ordersDAO();
-        
-        observableOrderList = FXCollections.observableArrayList(); 
-        
- 
-        user = new ShowUserInfo();
-        user.avatar = this.avatar;  
-        user.username = this.username;  
-   
-        user.loadUserInfo();
-        
-        loadOrders();
 
-        Regresar.setOnAction(ev -> {
-            MenuController.initGui((Stage) Regresar.getScene().getWindow());
-        });
-        
-        RegresarOrdenes.setOnAction(ev -> {
-            HistorialController.initGui((Stage) RegresarOrdenes.getScene().getWindow());
-            RegresarOrdenes.setVisible(false);
-        });
-        
-        RegresarOrdenes.setVisible(false);
-        
-    }
-    
     private ShowUserInfo user;
     
     @FXML
@@ -86,13 +57,39 @@ public class HistorialController implements Initializable{
     @FXML
     private ImageView View;
     
-    private ordersDAO orderDAO;
+    private OrderDAO orderDAO;
     
     @FXML
     private ImageView avatar;
 
     @FXML
     private Text username;
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+                
+        orderDAO = new OrderDAO();
+        
+        observableOrderList = FXCollections.observableArrayList(); 
+        
+ 
+        user = new ShowUserInfo(this.avatar, this.username);
+        user.loadUserInfo();
+        
+        loadOrders();
+
+        Regresar.setOnAction(ev -> {
+            MenuController.initGui((Stage) Regresar.getScene().getWindow());
+        });
+        
+        RegresarOrdenes.setOnAction(ev -> {
+            HistorialController.initGui((Stage) RegresarOrdenes.getScene().getWindow());
+            RegresarOrdenes.setVisible(false);
+        });
+        
+        RegresarOrdenes.setVisible(false);
+        
+    }
     
     public static void initGui(Stage stage) {
         try {
@@ -111,7 +108,7 @@ public class HistorialController implements Initializable{
     
     public void loadOrders() {
     observableOrderList.clear();
-    List<ProductClient> orderDetailsList = ordersDAO.getOrdersByUser(UserSession.getInstance().getId());
+    List<ProductClient> orderDetailsList = OrderDAO.getOrdersByUser(UserSession.getInstance().getId());
 
     if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
         for (ProductClient order : orderDetailsList) {

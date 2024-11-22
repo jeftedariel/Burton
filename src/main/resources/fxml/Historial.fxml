@@ -29,18 +29,18 @@
                   <Font name="Poppins Regular" size="18.0" />
                </font>
             </Text>
-            <MFXButton fx:id="Regresar" layoutX="1173.0" layoutY="2.0" prefHeight="48.0" prefWidth="86.0" text="Menú">
+            <MFXButton fx:id="Regresar" layoutX="1131.0" layoutY="7.0" prefHeight="40.0" prefWidth="93.0" text="Menú">
                <graphic>
-                  <ImageView fx:id="Imagen" fitHeight="40.0" fitWidth="31.0">
+                  <ImageView fx:id="Imagen" fitHeight="30.0" fitWidth="30.0">
                      <image>
                         <Image url="@../assets/return.png" />
                      </image>
                   </ImageView>
                </graphic>
             </MFXButton>
-            <MFXButton fx:id="RegresarOrdenes" layoutX="995.0" layoutY="1.0" prefHeight="48.0" prefWidth="115.0" text="Ordenes">
+            <MFXButton fx:id="RegresarOrdenes" layoutX="1008.0" layoutY="7.0" prefHeight="40.0" prefWidth="109.0" text="Ordenes">
                <graphic>
-                  <ImageView fx:id="Imagen1" fitHeight="40.0" fitWidth="31.0">
+                  <ImageView fx:id="Imagen1" fitHeight="30.0" fitWidth="30.0">
                      <image>
                         <Image url="@../assets/return.png" />
                      </image>

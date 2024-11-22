@@ -2,10 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.utn.burton.entities;
+package edu.utn.burton.dao;
 
 import edu.utn.burton.database.DBAdapterFactory;
 import edu.utn.burton.database.IDBAdapter;
+import edu.utn.burton.entities.ProductCart;
+import edu.utn.burton.entities.ProductClient;
+import edu.utn.burton.entities.UserSession;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +26,7 @@ import java.util.Map;
  *
  * @author Justin Rodriguez Gonzalez
  */
-public class ordersDAO {
+public class OrderDAO {
 
     public static int getOrCreateActiveCart(int idUser) {
 
@@ -171,8 +174,6 @@ public class ordersDAO {
         return cartId;
     }
     
-    
-
     public static void removeProduct(int idItem) {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
@@ -316,10 +317,10 @@ public class ordersDAO {
 
             int cart = getActiveCartId( UserSession.getInstance().getId());
 
-            int cartId = ordersDAO.getActiveCartId(UserSession.getInstance().getId());
+            int cartId = OrderDAO.getActiveCartId(UserSession.getInstance().getId());
             if (cartId == -1) {
 
-                cartId = ordersDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
+                cartId = OrderDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
 
             }
 
