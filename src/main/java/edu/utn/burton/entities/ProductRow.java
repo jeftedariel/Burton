@@ -32,9 +32,7 @@ public class ProductRow {
     public ProductRow(Map<String, Object> item) {
         this.itemRow = new HBox(20);
         this.itemRow.setAlignment(Pos.CENTER_LEFT);
-        this.itemRow.setStyle("-fx-padding: 15px; -fx-background-color: #ffffff; -fx-border-radius: 5px; "
-                + "-fx-border-color: #dcdcdc; -fx-border-width: 1px; "
-                + "-fx-effect: dropshadow(gaussian, lightgrey, 3, 0, 0, 2);");
+
 
         String productName = (String) item.get("product_name");
         double unitPrice = (double) item.get("unit_price");
@@ -42,8 +40,7 @@ public class ProductRow {
 
         this.productImageView = createImageView(productImage);
         this.productInfo = new Label(productName + " | $" + unitPrice);
-        this.productInfo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;");
-
+        
         this.itemRow.getChildren().addAll(productImageView, productInfo);
     }
 

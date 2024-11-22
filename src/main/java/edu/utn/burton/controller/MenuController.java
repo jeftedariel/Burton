@@ -102,9 +102,10 @@ public class MenuController implements Initializable {
         //Set the max value for the Price Range
         rangeSlider.setHighValue(500);//Then sets the range Text
         setRange();
-
+        
         loadProducts(false);
         loadCategories();
+        setPaginationSize(false);
 
         //Listen if the min picker had been changed
         rangeSlider.lowValueProperty().addListener((observable, oldValue, newValue) -> {
@@ -117,6 +118,7 @@ public class MenuController implements Initializable {
         //Until user released mouse click it will do the query
         rangeSlider.setOnMouseReleased(ev -> {
             loadProducts(false);
+            setPaginationSize(false);
         });
 
         // it is just for doin the pag selector
@@ -126,16 +128,19 @@ public class MenuController implements Initializable {
 
         cbxCategories.setOnAction(ev -> {
             loadProducts(false);
+            setPaginationSize(false);
         });
 
         clearFilters.setOnAction(ev -> {
             clearFilters();
             loadProducts(false);
+            setPaginationSize(false);
         });
 
         //If user search by name
         search.setOnAction(ev -> {
             loadProducts(true);
+            setPaginationSize(true);
         });
 
         openCart.setOnMouseClicked(ev -> {
@@ -171,6 +176,37 @@ public class MenuController implements Initializable {
         }
         openCart.setText(String.valueOf(t));
     }
+    
+    public void setPaginationSize(boolean Search){
+        String categoryQuery = "";
+        String searchByName = "";
+
+        if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
+            categoryQuery = "&categoryId=" + CategoryDAO.getCategoryIdByName(cbxCategories.getItems().get(cbxCategories.getSelectionModel().getSelectedIndex()).toString());
+        }
+
+        if (Search && productNameTXT != null) {
+            searchByName = "&title=" + productNameTXT.getText();
+        }
+        
+        
+        
+        int products = (ProductDAO.getProducts(0, 0, (int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue(), categoryQuery, searchByName).size());
+        int pag=products/10;
+        
+        if(pag*10 < products){
+            pag ++;
+        }
+        
+        if(pag == 0){
+            pagination.setPageCount(1);
+            pagination.setCurrentPageIndex(0);
+        }
+        
+        System.out.println("Total:" + products + "Paginas:" + pag);
+        
+        pagination.setPageCount(pag);
+    }
 
     public void loadProducts(boolean Search) {
         String categoryQuery = "";
@@ -186,11 +222,12 @@ public class MenuController implements Initializable {
         
         List<Product> products=null;
         try {
-             products = ProductDAO.getProducts(pagination.getCurrentPageIndex()*10, 10, (int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue(), categoryQuery, searchByName);
+             products = ProductDAO.getProducts(pagination.getCurrentPageIndex(), 10, (int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue(), categoryQuery, searchByName);
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
         displayProducts(products);
+        
 
     }
     
