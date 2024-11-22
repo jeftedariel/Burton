@@ -9,7 +9,7 @@ import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.dao.ordersDAO;
+import edu.utn.burton.dao.OrdersDAO;
 import javafx.scene.control.Alert;
 
 /**
@@ -18,10 +18,10 @@ import javafx.scene.control.Alert;
  */
 public class CartController {
 
-    private ordersDAO odDAO;
+    private OrdersDAO odDAO;
 
     public CartController() {
-        odDAO = new ordersDAO();
+        odDAO = new OrdersDAO();
     }
 
     public void getProduct(Product currentProduct, int count) {

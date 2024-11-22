@@ -20,10 +20,15 @@ import javax.imageio.ImageIO;
 public class ShowUserInfo {
     
     @FXML
-    public ImageView avatar;
+    private ImageView avatar;
 
     @FXML
-    public Text username;
+    private Text username;
+
+    public ShowUserInfo(ImageView avatar, Text username) {
+        this.avatar = avatar;
+        this.username = username;
+    }
 
     public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());

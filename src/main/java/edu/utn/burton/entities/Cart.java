@@ -4,7 +4,7 @@
  */
 package edu.utn.burton.entities;
 
-import edu.utn.burton.dao.ordersDAO;
+import edu.utn.burton.dao.OrdersDAO;
 import java.time.LocalDate;
 import javafx.collections.ObservableList;
 
@@ -52,7 +52,7 @@ public class Cart {
     }
     
     private Cart() {
-        products = ordersDAO.getProductSave();
+        products = OrdersDAO.getProductSave();
     }
 
     public void addProduct(ProductCart prUs, int cantidad) {
