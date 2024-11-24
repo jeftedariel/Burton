@@ -13,8 +13,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.StageStyle;
 
 /**
  * @author Justin Rodriguez Gonzalez
@@ -24,6 +27,21 @@ public class MasInfoController implements Initializable {
     @FXML
     private VBox vboxImages;
 
+    @FXML
+    private HBox hBoxAllImage;
+
+    @FXML
+    private Label lblTitle;
+
+    @FXML
+    private Label lblPrice;
+    
+    @FXML
+    private TextArea textAreaDescrip;
+    
+    @FXML
+    private Label lblDe;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -37,7 +55,7 @@ public class MasInfoController implements Initializable {
             Parent root = loader.load();
 
             MasInfoController controller = loader.getController();
-            controller.getItem(p);
+            controller.showImagePrincipal(p);
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Burton.class.getResource("/styles/masinfo.css").toExternalForm());
 
@@ -58,27 +76,59 @@ public class MasInfoController implements Initializable {
         }
     }
 
-    public void getItem(Product currentProduct) {
-        vboxImages.getChildren().clear();
-        for (String image : currentProduct.images()) {
-            vboxImages.getStylesheets().add(Burton.class.getResource("/styles/product_cell.css").toExternalForm());
-            
-                
-            ImageView imageView = new ImageView();
-            try {
-               imageView.setImage(new Image(image));
-            imageView.setFitWidth(200);
-            imageView.setFitHeight(200);
-            imageView.setPreserveRatio(true);
-            imageView.getStyleClass().add("image-view");
+    public void showImagePrincipal(Product currentProduct) {
 
-            vboxImages.getChildren().add(imageView);
+        ImageView imageLoad = getItem(currentProduct);
+
+        imageLoad.setFitWidth(340);
+        imageLoad.setFitHeight(300);
+        imageLoad.setImage(new Image(currentProduct.images().getFirst()));
+        vboxImages.getChildren().add(imageLoad);
+        lblTitle.getStyleClass().add("label-title");
+        lblPrice.getStyleClass().add("label-price");
+        lblDe.getStyleClass().add("label-des");
+        lblTitle.setText(currentProduct.title());
+        lblPrice.setText("$ " + currentProduct.price());
+        textAreaDescrip.getStyleClass().add("text-area");
+        textAreaDescrip.setText(currentProduct.description());
+        textAreaDescrip.setWrapText(true);
+        textAreaDescrip.setEditable(false);
+    }
+
+    public ImageView getItem(Product currentProduct) {
+        hBoxAllImage.getChildren().clear();
+        ImageView imageviewReturn = new ImageView();
+        for (String image : currentProduct.images()) {
+
+            // aplico los estilos 
+            hBoxAllImage.getStylesheets().add(Burton.class.getResource("/styles/masinfo.css").toExternalForm());
+            ImageView imageView = new ImageView();
+            // aplicar como quiero que se vean las imagenes 
+            try {
+                imageView.setImage(new Image(image));
+                imageView.setFitWidth(100);
+                imageView.setFitHeight(110);
+                imageView.getStyleClass().add("image-view");
+                HBox.setMargin(imageView, new Insets(5, 10, 5, 10));
+
+                hBoxAllImage.getChildren().add(imageView);
+                hBoxAllImage.getStyleClass().add(".hbox-container");
+                //evento para poder obtener la imagen
+                imageView.setOnMouseEntered(ev -> {
+                    imageView.getStyleClass().add(".image-view:hover");
+                    imageviewReturn.setImage(imageView.getImage());
+
+                });
+
+                imageView.setOnMouseExited(event -> imageView.setStyle(""));
+
             } catch (Exception e) {
+
                 imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
             }
-            
-            
+
         }
+        return imageviewReturn;
     }
 
 }
