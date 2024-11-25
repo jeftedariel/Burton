@@ -10,6 +10,9 @@ import java.util.List;
  *
  * @author jefte
  */
-public record Product(int id, String title, double price, String description, List<String> images, String creationAt) {
-    
+public record Product(int id, String title, double price, String description, List<String> images, String creationAt, int quantity) {
+
+    public Product(int id, String title, double price, String description, List<String> images, String creationAt) {
+        this(id, title, price, description, images, creationAt, 1);
+    }
 }

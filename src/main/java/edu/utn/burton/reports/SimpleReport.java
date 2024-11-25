@@ -7,23 +7,31 @@ package edu.utn.burton.reports;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Paragraph;
+import edu.utn.burton.dao.ReportDataDAO;
 
 /**
  *
  * @author jefte
  */
-public class SimpleReport extends ReportTemplate{
-    public SimpleReport(){
+public class SimpleReport extends ReportTemplate {
+
+    public SimpleReport() {
         //It is the name of the report File
-        this.pdfNameFile="SimpleReport";
-        this.reportTitleName= "Simple Example Report";
+        this.pdfNameFile = "SimpleReport";
+        this.reportTitleName = "Simple Example Report";
     }
-    
+
     @Override
     protected void addContent(Document document) throws DocumentException {
-        Paragraph p = new Paragraph("ope ope ope");
+        ReportDataDAO rp = new ReportDataDAO();
         
-        document.add(p);
+        rp.getProductSells().forEach(
+                n -> {
+                    Paragraph p = new Paragraph(n.title() + "->" + n.quantity());
+                    document.add(p);
+                }
+        );
+
     }
-    
+
 }
