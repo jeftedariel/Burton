@@ -219,7 +219,7 @@ public class OrderDAO {
     
     
 
-    public void addProductsToCart(ObservableList<ProductCart> items) {
+    public static void addProductsToCart(ObservableList<ProductCart> items) {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
         try {

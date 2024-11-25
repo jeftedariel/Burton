@@ -9,7 +9,6 @@ import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.entities.ordersDAO;
 import javafx.scene.Node;
 import edu.utn.burton.dao.OrderDAO;
 import javafx.scene.control.Alert;
@@ -76,7 +75,7 @@ public class CartController {
     
     public void deleteButton(ProductCart currentProduct){
         
-    ordersDAO.removeProduct(currentProduct.getProductId());
+    odDAO.removeProduct(currentProduct.getProductId());
     Cart.getInstance().setDelete(currentProduct);
     CartMenuController.getInstance().loadProducts();
     
