@@ -43,4 +43,33 @@ public class ReportDataDAO {
 
         return products;
     }
+
+    public int getTotalSells() {
+        int totalSells = 0;
+        List<Product> sells = getProductSells();
+        //Creates a list of all sold Items and then return the total amount of general sells.
+        for (Product product : sells) {
+            totalSells += product.quantity();
+        }
+        return totalSells;
+    }
+    
+    
+
+    public List<Product> topSells() {
+        List<Product> products = getProductSells();
+       
+        final int average = getTotalSells() / products.size();
+        //In base of total sells & items calculates the average
+        return products.stream().filter(product -> product.quantity() >= average).toList(); //Return the ones that are higher than the average or equals
+    }
+
+    public List<Product> lowSells() {
+        List<Product> products = getProductSells();
+
+        final int average = getTotalSells() / products.size();
+         // The same that topSells() but just the ones that are lower than the average
+        return products.stream().filter(product -> product.quantity() < average).toList();
+    }
+
 }
