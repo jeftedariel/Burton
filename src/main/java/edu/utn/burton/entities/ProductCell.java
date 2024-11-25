@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import edu.utn.burton.controller.CartController;
+import edu.utn.burton.controller.MasInfoController;
+import javafx.stage.Stage;
 import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -21,7 +23,6 @@ public class ProductCell extends ListCell<Product> {
     private Label priceLabel = new Label();
     private MFXButton addToCart = new MFXButton();
     private MFXButton info = new MFXButton();
-
     private Product currentProduct;
 
     private CartController ctrlCart;
@@ -31,13 +32,19 @@ public class ProductCell extends ListCell<Product> {
 
     public ProductCell() {
         //Initialize the functionality for the shoping
+      
         ctrlCart = new CartController();
 
-        addToCart.setOnAction(event -> {
-            ctrlCart.getProduct(currentProduct,1);
-            
+        info.setOnAction(ev -> {
+            System.out.println(currentProduct.toString());
+            MasInfoController.showPopup((Stage) info.getScene().getWindow(), currentProduct);
         });
-       
+
+        addToCart.setOnAction(ev -> {
+            ctrlCart.getProduct(currentProduct, 1);
+
+        });
+
         // Aply the corresponding css 
         imageView.getStyleClass().add("product-image");
         titleLabel.getStyleClass().add("product-title");
@@ -45,12 +52,12 @@ public class ProductCell extends ListCell<Product> {
         addToCart.getStyleClass().add("product-button");
         info.getStyleClass().add("product-button");
         shopingcartIcon.getStyleClass().add("icon-image");
-        
+
         //Apply icons for Buttons
         shopingcartIcon.setImage(new Image("/assets/shopingcart.png"));
         addToCart.setGraphic(shopingcartIcon);
-        
-         //Container props
+
+        //Container props
         VBox content = new VBox(imageView, titleLabel, priceLabel, addToCart, info);
         content.getStyleClass().add("product-cell");
         setGraphic(content);
@@ -64,7 +71,7 @@ public class ProductCell extends ListCell<Product> {
         super.updateItem(product, empty);
         //It will be use to be displayed
         String title = product.title();
-        
+
         //Checks if product title is too long, if its true it will add some ... 
         if (product.title().length() > 27) {
             title = "";
@@ -73,7 +80,7 @@ public class ProductCell extends ListCell<Product> {
             }
             title += "...";
         }
-        
+
         //Then try to add the info
         if (empty || product == null) {
             setGraphic(null);
@@ -84,6 +91,7 @@ public class ProductCell extends ListCell<Product> {
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");
             info.setText("Más Info");
+
             try {
                 BufferedImage image = ImageIO.read(new URL(product.images().get(0)));
                 imageView.setImage(SwingFXUtils.toFXImage(image, null));

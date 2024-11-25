@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Spinner;
@@ -18,13 +19,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import javax.swing.JOptionPane;
 import javax.imageio.ImageIO;
 
 /**
  *
  * @author Justin Rodriguez Gonzalez
  */
-
 public class ProductCartCell extends ListCell<ProductCart> {
 
     private ProductCart currentProduct;
@@ -34,7 +36,6 @@ public class ProductCartCell extends ListCell<ProductCart> {
     private Label unityPriceLabel = new Label();
     private Label totalAmountLabel = new Label();
     private MFXButton delete = new MFXButton();
-    private MFXButton edit = new MFXButton();
     private ImageView deleteimage = new ImageView();
     private ImageView addimage = new ImageView();
     private Spinner<Integer> amount = new Spinner<>();
@@ -44,19 +45,14 @@ public class ProductCartCell extends ListCell<ProductCart> {
     public ProductCartCell() {
         SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 30, 0);
         amount.setValueFactory(valueFactory);
-            
+
         ctrlCart = new CartController();
-
-
+       
+             
         delete.setOnAction(ev -> {
-            ctrlCart.deleteProducto(currentProduct, amount.getValue());
+           ctrlCart.deleteButton(currentProduct);
         });
-
-        edit.setOnAction(ev -> {
-            ctrlCart.addProduct(currentProduct, amount.getValue());
-        });
-        
-
+ 
         // Configurar el tamaño de la imagen
         imageView.setFitWidth(80);
         imageView.setFitHeight(80);
@@ -69,7 +65,6 @@ public class ProductCartCell extends ListCell<ProductCart> {
 
         // Configurar estilos
         delete.getStyleClass().add("product-botonDelete");
-        edit.getStyleClass().add("product-botonAdd");
         imageView.getStyleClass().add("product-image");
         titleLabel.getStyleClass().add("product-title");
         unityPriceLabel.getStyleClass().add("product-price");
@@ -80,13 +75,10 @@ public class ProductCartCell extends ListCell<ProductCart> {
         deleteimage.setFitWidth(12);
         delete.setGraphic(deleteimage);
 
-        addimage.setImage(new Image("/assets/add.png"));
-        addimage.setPreserveRatio(true);
-        addimage.setFitWidth(12);
-        edit.setGraphic(addimage);
+        
 
         // Configurar el VBox para los botones
-        buttonBox.getChildren().addAll(delete, edit);
+        buttonBox.getChildren().addAll(delete);
         buttonBox.setAlignment(Pos.CENTER); // Alinear los botones en el centro
         // Añadir el VBox al HBox de contenido    
 
@@ -111,6 +103,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
             currentProduct = null;
         } else {
             currentProduct = product;
+            ctrlCart.functionSpinner(amount, currentProduct);
             String title = product.getNameProduct();
             if (title.length() > 27) {
                 title = title.substring(0, 26) + "...";
@@ -118,7 +111,7 @@ public class ProductCartCell extends ListCell<ProductCart> {
 
             titleLabel.setText(title);
             amount.getValueFactory().setValue((int) product.getQuantity());
-            
+
             unityPriceLabel.setText("Unitario: $" + product.getUnitePrice());
             totalAmountLabel.setText("Total: $" + product.getSubtotal());
             try {

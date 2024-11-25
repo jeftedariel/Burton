@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.mfxcore.controls.Label?>
+<?import java.net.URL?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="516.0" prefWidth="881.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.MasInfoController">
+    <stylesheets>
+        <URL value="@/styles/masinfo.css" />
+    </stylesheets>
+   <children>
+      <VBox fx:id="vboxImages" layoutX="39.0" layoutY="30.0" prefHeight="300.0" prefWidth="450.0" />
+      <Label fx:id="lblTitle" layoutX="503.0" layoutY="30.0" prefHeight="35.0" prefWidth="345.0">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <Label fx:id="lblPrice" layoutX="503.0" layoutY="109.0" prefHeight="31.0" prefWidth="154.0" text="\$">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+      <HBox fx:id="hBoxAllImage" layoutX="30.0" layoutY="361.0" prefHeight="100.0" prefWidth="450.0" />
+      <Label fx:id="lblDe" layoutX="503.0" layoutY="208.0" prefHeight="35.0" prefWidth="222.0" text="Descripcion">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="textAreaDescrip" layoutX="503.0" layoutY="284.0" prefHeight="200.0" prefWidth="360.0" />
+   </children>
+</AnchorPane>

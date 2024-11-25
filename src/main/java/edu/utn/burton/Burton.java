@@ -17,6 +17,7 @@ public class Burton extends Application {
     public void start(Stage stage) throws Exception{
         LoginController.initGui();
     }
+
     public static void main(String[] args) {
         launch(args);
     }

@@ -1,0 +1,74 @@
+/*
+ * Empty Stylesheet file.
+ */
+/* Estilo general para el HBox */
+.hbox-container {
+    -fx-spacing: 10; /* Espacio entre elementos */
+    -fx-padding: 10; /* Margen interno */
+    -fx-background-color: #f9f9f9; /* Fondo claro */
+    -fx-border-color: #dcdcdc; /* Borde sutil */
+    -fx-border-width: 2;
+    -fx-border-radius: 8; /* Bordes redondeados */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 2); /* Sombra suave */
+}
+
+/* Estilo general para el VBox */
+.vbox-container {
+    -fx-spacing: 15;
+    -fx-padding: 15;
+    -fx-background-color: #ffffff; /* Fondo blanco */
+    -fx-border-color: #b0b0b0;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0.3, 0, 2); /* Sombra sutil */
+}
+
+/* Estilo base para las ImageView */
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 2); /* Sombra pequeña */
+    -fx-border-color: transparent; /* Sin borde por defecto */
+    -fx-border-width: 0;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand; /* Cambia el puntero al pasar sobre la imagen */
+}
+
+/* Efecto al pasar el ratón sobre una ImageView */
+.image-view:hover {
+    -fx-border-color: #2196F3; /* Azul claro */
+    -fx-border-width: 3;
+    -fx-border-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.4), 10, 0.5, 0, 2); /* Resaltado con sombra */
+}
+
+/* Estilo para el título */
+.label-title {
+    -fx-font-size: 24px; /* Tamaño grande para destacar el título */
+    -fx-font-weight: bold; /* Texto en negrita */
+    -fx-text-fill: #333333; /* Color oscuro para buen contraste */
+    -fx-padding: 10 0 5 0; /* Espaciado: arriba, derecha, abajo, izquierda */
+}
+
+/* Estilo para el precio */
+.label-price {
+    -fx-font-size: 24px; /* Tamaño más pequeño pero destacado */
+    -fx-font-weight: semi-bold; /* Seminegrita */
+    -fx-text-fill: #009688; /* Color verde azulado para resaltar */
+    -fx-padding: 5 0 10 0; /* Espaciado adicional abajo */
+}
+
+ .text-area {
+    -fx-font-size: 14px; /* Tamaño del texto */
+    -fx-padding: 10; /* Espaciado interno */
+    -fx-border-color: #cccccc; /* Borde gris claro */
+    -fx-border-radius: 5px; /* Bordes redondeados */
+    -fx-background-radius: 5px; /* Fondo redondeado */
+}
+
+.label-des {
+    -fx-font-size: 24px; /* Tamaño grande para destacar el título */
+    -fx-font-weight: bold; /* Texto en negrita */
+    -fx-text-fill: #333333; /* Color oscuro para buen contraste */
+    -fx-padding: 10 0 5 0; /* Espaciado: arriba, derecha, abajo, izquierda */
+}
+
