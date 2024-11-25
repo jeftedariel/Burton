@@ -4,6 +4,7 @@
  */
 package edu.utn.burton.entities;
 
+import edu.utn.burton.dao.OrderDAO;
 import java.time.LocalDate;
 import javafx.collections.ObservableList;
 
@@ -26,9 +27,32 @@ public class Cart {
         return instance;
     }
 
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCreated_at(LocalDate created_at) {
+        this.created_at = created_at;
+    }
+
+    public void setUpdate_at(LocalDate update_at) {
+        this.update_at = update_at;
+    }
+
+    public static void setProducts(ObservableList<ProductCart> products) {
+        Cart.products = products;
+    }
+
+    public static void setInstance(Cart instance) {
+        Cart.instance = instance;
+    }
+    
     private Cart() {
-        products = ordersDAO.getProductSave();
-        this.userID = UserSession.getInstance().getId();
+        products = OrderDAO.getProductSave();
     }
 
     public void addProduct(ProductCart prUs, int cantidad) {

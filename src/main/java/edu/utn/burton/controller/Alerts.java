@@ -17,35 +17,30 @@ import javafx.stage.Stage;
  * @author jefte
  */
 public class Alerts {
-
-    public static void show(Message message, AlertType type) {
-        Alert alert = new Alert(type);
+    
+    private static Alert initAlert(Message message,AlertType at){
+        Alert alert = new Alert(at);
+        
         alert.setTitle(message.title());
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("/assets/icon.png"));
-
         alert.setContentText(message.description());
         alert.setHeaderText(null);
-        alert.showAndWait();
-
+        return alert;
     }
+    
+    public static void show(Message message, AlertType type) {
+        Alert alert = initAlert(message,type);
+        alert.showAndWait();
+    }
+    
     public static void showConfirmation(Message message, Consumer<ButtonType> onResponse) {
    
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-
-       
-        alert.setTitle(message.title());
-        alert.setContentText(message.description());
-
-    
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("/assets/icon.png"));
-        alert.setHeaderText(null);
+        Alert alert = initAlert(message,AlertType.CONFIRMATION);
       
         ButtonType aceptarButton = ButtonType.APPLY;
-        ButtonType noButton = ButtonType.NO;  
+        ButtonType noButton = ButtonType.NO; 
         
-       
         alert.getButtonTypes().setAll(aceptarButton, noButton);  // Solo "Aceptar" y "No"
 
         alert.showAndWait().ifPresent(response -> {

@@ -11,6 +11,7 @@ import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.entities.ordersDAO;
 import javafx.scene.Node;
+import edu.utn.burton.dao.OrderDAO;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
 
@@ -20,10 +21,10 @@ import javafx.scene.control.Spinner;
  */
 public class CartController {
 
-    private ordersDAO odDAO;
+    private OrderDAO odDAO;
 
     public CartController() {
-        odDAO = new ordersDAO();
+        odDAO = new OrderDAO();
     }
 
     public void getProduct(Product currentProduct, int count) {
@@ -44,7 +45,6 @@ public class CartController {
       
    
         if (count == 0) {
-          
             odDAO.removeProduct(currentProduct.getProductId());
             Cart.getInstance().deleteProducts(currentProduct, count);
             CartMenuController.getInstance().loadProducts();

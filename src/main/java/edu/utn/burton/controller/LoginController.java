@@ -35,11 +35,13 @@ public class LoginController implements Initializable {
 
     @FXML
     private CustomTextField Correo;
+  
     @FXML
     private CustomPasswordField Contraseña;
-    @FXML
+  
+    @FXML 
     private MFXButton Ingresar;
-
+  
     @FXML
     private MFXButton googleBtn;
 

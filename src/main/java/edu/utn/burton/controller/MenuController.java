@@ -5,25 +5,20 @@ package edu.utn.burton.controller;
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 import edu.utn.burton.Burton;
+import edu.utn.burton.dao.CategoryDAO;
+import edu.utn.burton.dao.ProductDAO;
 import edu.utn.burton.entities.Cart;
-import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Message;
 import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ProductCell;
-import edu.utn.burton.entities.ordersDAO;
-import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
-import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -32,7 +27,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -42,7 +37,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.imageio.ImageIO;
 import org.controlsfx.control.RangeSlider;
 
 /**
@@ -82,16 +76,14 @@ public class MenuController implements Initializable {
     @FXML
     private MFXButton openCart;
 
-    private ordersDAO ordDAO;
+    @FXML
+    private MFXButton Historial;
 
     @FXML
     private ImageView avatar;
 
     @FXML
     private Text username;
-
-    @FXML
-    private MFXButton historialCompras;
 
     @FXML
     private MFXButton dashboard;
@@ -102,17 +94,22 @@ public class MenuController implements Initializable {
     @FXML
     private StackPane rootPane; 
 
+    private ShowUserInfo showUserInfo;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        ordDAO = new ordersDAO();
+        
+        //Displays on header the user's data
+        showUserInfo = new ShowUserInfo(avatar, username);
+        showUserInfo.loadUserInfo();
 
         //Set the max value for the Price Range
         rangeSlider.setHighValue(500);//Then sets the range Text
         setRange();
-
+        
         loadProducts(false);
-        setCbxCategories();
+        loadCategories();
+        setPaginationSize(false);
 
         //Listen if the min picker had been changed
         rangeSlider.lowValueProperty().addListener((observable, oldValue, newValue) -> {
@@ -125,6 +122,7 @@ public class MenuController implements Initializable {
         //Until user released mouse click it will do the query
         rangeSlider.setOnMouseReleased(ev -> {
             loadProducts(false);
+            setPaginationSize(false);
         });
 
         // it is just for doin the pag selector
@@ -134,21 +132,29 @@ public class MenuController implements Initializable {
 
         cbxCategories.setOnAction(ev -> {
             loadProducts(false);
+            setPaginationSize(false);
         });
 
         clearFilters.setOnAction(ev -> {
             clearFilters();
             loadProducts(false);
+            setPaginationSize(false);
         });
 
         //If user search by name
         search.setOnAction(ev -> {
             loadProducts(true);
+            setPaginationSize(true);
         });
 
         openCart.setOnMouseClicked(ev -> {
             CartMenuController.initGui((Stage) 
                     openCart.getScene().getWindow());
+        });
+
+        Historial.setOnMouseClicked(ev -> {
+            Stage stage = (Stage) Historial.getScene().getWindow();
+            HistorialController.initGui(stage);
         });
 
         logout.setOnMouseClicked(ev -> {
@@ -158,13 +164,6 @@ public class MenuController implements Initializable {
         dashboard.setOnMouseClicked(ev -> {
             DashboardController.initGui((Stage) dashboard.getScene().getWindow());
         });
-        
-        historialCompras.setOnMouseClicked(ev->{
-            Alerts.show(new Message("WIP", "Aqui se van a mostrar las compras realizadas por el usuario"), AlertType.INFORMATION);
-        });
-                
-        //Sets the User's avatar & Name into GUI
-        loadUserInfo();
 
         // It uses a addListener from ObservableLists, to update the CartProducts counter :) its simple but interesting
         setTotalProducts();
@@ -172,7 +171,7 @@ public class MenuController implements Initializable {
             setTotalProducts();
         });
 
-    } 
+    }
 
     public void setTotalProducts() {
         int t = 0;
@@ -182,41 +181,69 @@ public class MenuController implements Initializable {
         }
         openCart.setText(String.valueOf(t));
     }
-
-    public void loadUserInfo() {
-        username.setText(UserSession.getInstance().getName());
-        BufferedImage image;
-
-        dashboard.setVisible(UserSession.getInstance().getRole().equals("admin"));
-
-        try {
-            image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
-            avatar.setImage(SwingFXUtils.toFXImage(image, null));
-        } catch (Exception ee) {
-            System.out.println("Hubo un error al intentar cargar la img");
-        }
-    }
-
-    public void loadProducts(boolean Search) {
-        APIHandler api = new APIHandler();
-        List<Product> products = null;
+    
+    public void setPaginationSize(boolean Search){
         String categoryQuery = "";
         String searchByName = "";
 
         if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
-            categoryQuery = "&categoryId=" + retrieveCategoryId();
+            categoryQuery = "&categoryId=" + CategoryDAO.getCategoryIdByName(cbxCategories.getItems().get(cbxCategories.getSelectionModel().getSelectedIndex()).toString());
         }
 
         if (Search && productNameTXT != null) {
             searchByName = "&title=" + productNameTXT.getText();
         }
+        
+        
+        
+        int products = (ProductDAO.getProducts(0, 0, (int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue(), categoryQuery, searchByName).size());
+        int pag=products/10;
+        
+        if(pag*10 < products){
+            pag ++;
+        }
+        
+        if(pag == 0){
+            pagination.setPageCount(1);
+            pagination.setCurrentPageIndex(0);
+        }
+        
+        System.out.println("Total:" + products + "Paginas:" + pag);
+        
+        pagination.setPageCount(pag);
+    }
 
+    public void loadProducts(boolean Search) {
+        String categoryQuery = "";
+        String searchByName = "";
+
+        if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
+            categoryQuery = "&categoryId=" + CategoryDAO.getCategoryIdByName(cbxCategories.getItems().get(cbxCategories.getSelectionModel().getSelectedIndex()).toString());
+        }
+
+        if (Search && productNameTXT != null) {
+            searchByName = "&title=" + productNameTXT.getText();
+        }
+        
+        List<Product> products=null;
         try {
-            products = api.getList(Product.class, "products?offset=" + pagination.getCurrentPageIndex() * 10 + "&limit=10" + "&price_min=" + (int) rangeSlider.getLowValue() + "&price_max=" + (int) rangeSlider.getHighValue() + categoryQuery + searchByName, null);
-
+             products = ProductDAO.getProducts(pagination.getCurrentPageIndex(), 10, (int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue(), categoryQuery, searchByName);
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
+        displayProducts(products);
+        
+
+    }
+    
+    public void loadCategories() {
+        //Set the categories into the Cbx, but without duplicates, bc its just text
+        List<String> categoryNames = CategoryDAO.getCategoryNames().stream().toList();
+        pagination.setCurrentPageIndex(0);
+        cbxCategories.setItems(FXCollections.observableArrayList(categoryNames));
+    }
+
+    public void displayProducts(List<Product> products) {
 
         //Sets the pagination size
         //pagination.setMaxPageIndicatorCount(products.size()%10);
@@ -254,41 +281,6 @@ public class MenuController implements Initializable {
                 row.setAlignment(Pos.CENTER);
             }
         }
-
-    }
-
-    public List<Category> loadCategories() {
-        //Return all the available categories (with duplicates)
-        APIHandler api = new APIHandler();
-        List<Category> categories = null;
-        try {
-            categories = api.getList(Category.class, "categories", null);
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-        }
-        return categories;
-    }
-
-    public void setCbxCategories() {
-        //Set the categories into the Cbx, but without duplicates, bc its just text
-        List<String> categoryNames = loadCategories().stream()
-                .filter(cn -> !cn.name().isBlank())
-                .map(Category::name)
-                .distinct()
-                .collect(Collectors.toList());
-        pagination.setCurrentPageIndex(0);
-        cbxCategories.setItems(FXCollections.observableArrayList(categoryNames));
-    }
-
-    public int retrieveCategoryId() {
-        //Get the catg id by reverse, using its name
-        //Thats why the cbx dont have duplicates.
-        return loadCategories()
-                .stream()
-                .filter(n -> n.name().equals(cbxCategories.getItems().get(cbxCategories.getSelectionModel().getSelectedIndex()).toString()))
-                .distinct()
-                .toList()
-                .get(0).id();
     }
 
     public void clearFilters() {
@@ -317,6 +309,9 @@ public class MenuController implements Initializable {
             stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {
+            e.printStackTrace();  // Imprime el error para depuración
+            Alerts.show(new Message("Error", "Hubo un problema al cargar la interfaz del menú."), Alert.AlertType.ERROR);
         }
     }
+
 }

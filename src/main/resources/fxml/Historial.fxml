@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1282.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.HistorialController">
+   <children>
+      <HBox layoutY="53.0" prefHeight="720.0" prefWidth="1282.0">
+         <children>
+            <MFXLegacyListView fx:id="Historial" prefHeight="720.0" prefWidth="1282.0" />
+         </children>
+      </HBox>
+      <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #6f71de;">
+         <children>
+            <ImageView id="avatar" fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/user.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="username" fill="WHITE" layoutX="64.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+               <font>
+                  <Font name="Poppins Regular" size="18.0" />
+               </font>
+            </Text>
+            <MFXButton fx:id="Regresar" layoutX="1131.0" layoutY="7.0" prefHeight="40.0" prefWidth="93.0" text="Menú">
+               <graphic>
+                  <ImageView fx:id="Imagen" fitHeight="30.0" fitWidth="30.0">
+                     <image>
+                        <Image url="@../assets/return.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+            <MFXButton fx:id="RegresarOrdenes" layoutX="1008.0" layoutY="7.0" prefHeight="40.0" prefWidth="109.0" text="Ordenes">
+               <graphic>
+                  <ImageView fx:id="Imagen1" fitHeight="30.0" fitWidth="30.0">
+                     <image>
+                        <Image url="@../assets/return.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </MFXButton>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

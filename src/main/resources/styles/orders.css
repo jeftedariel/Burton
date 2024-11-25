@@ -1,0 +1,146 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 19 nov 2024, 20:54:01
+    Author     : alexledezma
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Fondo de la aplicación */
+.root {
+    -fx-background-color: #f4f7fa;
+}
+
+/* Estilo para las filas de las órdenes */
+.order-row {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-padding: 15px;
+    -fx-spacing: 20px;
+    -fx-effect: dropshadow(gaussian, #bbbbbb, 10, 0, 0, 5);
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Cambio de color al pasar el cursor sobre la fila de la orden */
+.order-row:hover {
+    -fx-background-color: #f1f1f1;
+}
+
+/* Estilo de los iconos de documento */
+.document-icon {
+    -fx-font-size: 22px;
+    -fx-text-fill: #007bff;
+}
+
+/* Estilo de las etiquetas de las órdenes */
+.order-label {
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+}
+
+/* Estilo para las órdenes vacías */
+.empty-order-row {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+    -fx-effect: dropshadow(gaussian, #bbbbbb, 10, 0, 0, 5);
+    -fx-text-fill: #aaa;
+}
+
+/* Estilo para las filas de productos dentro de una orden */
+.item-row {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 8px;
+    -fx-padding: 12px;
+    -fx-spacing: 15px;
+    -fx-effect: dropshadow(gaussian, #ddd, 5, 0, 0, 3);
+    -fx-cursor: hand;
+}
+
+/* Fondo de la fila de productos al pasar el cursor */
+.item-row:hover {
+    -fx-background-color: #f9f9f9;
+}
+
+/* Imagen del producto */
+.item-row .product-image {
+    -fx-fit-width: 50px;
+    -fx-fit-height: 50px;
+    -fx-preserve-ratio: true;
+    -fx-background-color: #f0f0f0;
+    -fx-border-radius: 8px;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+}
+
+/* Información del producto (nombre y precio) */
+.item-row .product-info {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+/* Estilo para las filas vacías de productos */
+.empty-product-row {
+    -fx-background-color: #f8d7da;
+    -fx-border-radius: 8px;
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+    -fx-border-color: #f5c6cb;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, #f5c6cb, 3, 0, 0, 2);
+}
+
+/* Estilo de la etiqueta cuando no hay productos */
+.empty-product-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #721c24;
+    -fx-font-weight: bold;
+}
+
+/* Fondo de la ventana del historial */
+#Historial {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+    -fx-border-radius: 12px;
+    -fx-border-color: #ddd;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, #bbbbbb, 10, 0, 0, 5);
+}
+
+/* Estilo para las barras de desplazamiento */
+.scroll-bar {
+    -fx-background-color: #f4f7fa;
+}
+
+/* Estilo para la tabla */
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-border-color: #ddd;
+    -fx-border-width: 2px;
+    -fx-padding: 10px;
+}
+
+.table-view .column-header {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-cell {
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+}

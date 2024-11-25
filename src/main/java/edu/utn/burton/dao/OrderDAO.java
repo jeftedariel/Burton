@@ -2,10 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.utn.burton.entities;
+package edu.utn.burton.dao;
 
 import edu.utn.burton.database.DBAdapterFactory;
 import edu.utn.burton.database.IDBAdapter;
+import edu.utn.burton.entities.ProductCart;
+import edu.utn.burton.entities.ProductClient;
+import edu.utn.burton.entities.UserSession;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,12 +18,15 @@ import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Justin Rodriguez Gonzalez
  */
-public class ordersDAO {
+public class OrderDAO {
 
     public static int getOrCreateActiveCart(int idUser) {
 
@@ -50,7 +56,7 @@ public class ordersDAO {
         return cartId;
     }
 
-    public static void completeCart() {
+    public static void completeCart(int usuarioId) {
         
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         
@@ -89,6 +95,63 @@ public class ordersDAO {
 
         return cartId;
     }
+    
+    public static ObservableList<ProductClient> getOrdersByUser(int usuarioId) {
+        
+    ObservableList<ProductClient> orderDetailsList = FXCollections.observableArrayList();
+    IDBAdapter adapter = DBAdapterFactory.getAdapter();
+
+    try {
+        CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_user(?)}");
+        stmt.setInt(1, usuarioId);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            int orderId = rs.getInt("order_id");
+            Date orderDate = rs.getDate("order_date");
+            double totalAmount = rs.getDouble("total_amount");
+
+            orderDetailsList.add(new ProductClient(orderId, orderDate, totalAmount));
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener las órdenes: " + e.getMessage());
+    } finally {
+        adapter.disconnect();
+    }
+
+    return orderDetailsList;
+    }
+    
+    //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
+    public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
+        
+    ObservableList<Map<String, Object>> orderItemsList = FXCollections.observableArrayList();
+    String procedureCall = "{CALL get_order_items_by_order_id(?)}";
+
+    try (Connection conn = DBAdapterFactory.getAdapter().getConnection();
+         CallableStatement stmt = conn.prepareCall(procedureCall)) {
+        stmt.setInt(1, orderId);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Map<String, Object> row = new HashMap<>();
+            row.put("order_item_id", rs.getInt("order_item_id"));
+            row.put("order_id", rs.getInt("order_id"));
+            row.put("product_id", rs.getInt("product_id"));
+            row.put("quantity", rs.getInt("quantity"));
+            row.put("unit_price", rs.getDouble("unit_price"));
+            row.put("subtotal", rs.getDouble("subtotal"));
+            row.put("product_name", rs.getString("product_name"));
+            row.put("product_image", rs.getString("product_image"));
+
+            orderItemsList.add(row);
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
+    }
+
+    return orderItemsList;
+    }
 
     public static int createActiveCart(int idUser) {
         int cartId = -1;
@@ -111,8 +174,6 @@ public class ordersDAO {
         return cartId;
     }
     
-    
-
     public static void removeProduct(int idItem) {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
@@ -194,7 +255,7 @@ public class ordersDAO {
         }
     }
     
-    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item) {
+    public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item, int usuarioId) {
 
     IDBAdapter adapter = DBAdapterFactory.getAdapter();
     String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";
@@ -256,10 +317,10 @@ public class ordersDAO {
 
             int cart = getActiveCartId( UserSession.getInstance().getId());
 
-            int cartId = ordersDAO.getActiveCartId(UserSession.getInstance().getId());
+            int cartId = OrderDAO.getActiveCartId(UserSession.getInstance().getId());
             if (cartId == -1) {
 
-                cartId = ordersDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
+                cartId = OrderDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
 
             }
 

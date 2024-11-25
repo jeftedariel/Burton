@@ -3,6 +3,11 @@ package edu.utn.burton.entities;
 import edu.utn.burton.Burton;
 import edu.utn.burton.controller.CartController;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
+import java.awt.image.BufferedImage;
+import java.net.URL;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -14,7 +19,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -108,7 +115,8 @@ public class ProductCartCell extends ListCell<ProductCart> {
             unityPriceLabel.setText("Unitario: $" + product.getUnitePrice());
             totalAmountLabel.setText("Total: $" + product.getSubtotal());
             try {
-                imageView.setImage(new Image(product.getImagePrincipal()));
+                BufferedImage image = ImageIO.read(new URL(product.getImagePrincipal()));
+                imageView.setImage(SwingFXUtils.toFXImage(image, null));
             } catch (Exception e) {
                 imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
             }

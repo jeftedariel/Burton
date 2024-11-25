@@ -7,7 +7,7 @@ import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.ProductCartCell;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
-import edu.utn.burton.entities.ordersDAO;
+import edu.utn.burton.dao.OrderDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import javafx.collections.FXCollections;
@@ -26,7 +26,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 
 /**
@@ -68,14 +67,20 @@ public class CartMenuController implements Initializable {
 
     @FXML
     private Text username;
+    
+    private ShowUserInfo user;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        user = new ShowUserInfo(this.avatar , this.username);
+        user.loadUserInfo();
+        
         instance = this;
         observableProductList = FXCollections.observableArrayList();
         lblTotalPago.setText("Total: " + ProductClient.getInstance().getTotalAmount());
         loadProducts();
-
+         
         btnBuy.setOnAction(ev -> {
             Message message = new Message(
                     "Advertencia",
@@ -85,8 +90,8 @@ public class CartMenuController implements Initializable {
             Alerts.showConfirmation(message, response -> {
                 if (response == ButtonType.APPLY) {
 
-                    ordersDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts());
-                    ordersDAO.completeCart();
+                    OrderDAO.addProducItemsAndComplete(ProductClient.getInstance(), Cart.getProducts(), UserSession.getInstance().getId());
+                    OrderDAO.completeCart(UserSession.getInstance().getId());
                     Cart.getInstance().cleanCart();
                     CartMenuController.getInstance().loadProducts();
                 }
@@ -105,7 +110,7 @@ public class CartMenuController implements Initializable {
             Alerts.showConfirmation(message, response -> {
                 if (response == ButtonType.APPLY) {
 
-                    ordersDAO.cancelCart();
+                    OrderDAO.cancelCart();
                     Cart.getInstance().cleanCart();
                     CartMenuController.getInstance().loadProducts();
                 }
@@ -117,19 +122,6 @@ public class CartMenuController implements Initializable {
         returnBtn.setOnAction(ev -> {
             MenuController.initGui((Stage) returnBtn.getScene().getWindow());
         });
-
-        //Sets the User's avatar & Name into GUI
-        loadUserInfo();
-    }
-
-    public void loadUserInfo() {
-        username.setText(UserSession.getInstance().getName());
-        try {
-            Image img = new Image(UserSession.getInstance().getAvatar());
-            avatar.setImage(img);
-        } catch (Exception e) {
-            System.out.println("There was an error while loading Avatar image: " + e);
-        }
     }
 
     public static void initGui(Stage stage) {
