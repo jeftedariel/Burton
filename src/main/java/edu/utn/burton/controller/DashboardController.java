@@ -5,8 +5,10 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.dao.ReportDataDAO;
 import edu.utn.burton.entities.UserSession;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -32,6 +34,9 @@ public class DashboardController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    DrawGraphsController draw;
+    ReportDataDAO rpDAO;
+
     @FXML
     private MFXButton store;
 
@@ -52,6 +57,18 @@ public class DashboardController implements Initializable {
 
     @FXML
     private MFXButton turnoverReport;
+    
+    @FXML
+    private MFXButton prueba;
+
+    @FXML
+    public MFXLegacyListView showGraphs;
+
+    public DashboardController() {
+        draw = new DrawGraphsController();
+        rpDAO = new ReportDataDAO();
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -62,14 +79,27 @@ public class DashboardController implements Initializable {
         logout.setOnMouseClicked(ev -> {
             LoginController.logout(store);
         });
-        
-        trendingSellsReport.setOnMouseClicked(ev->{
+
+        trendingSellsReport.setOnMouseClicked(ev -> {
         });
-        
 
         loadUserInfo();
 
+        trendingSellsReport.setOnAction(ev -> {    
+           draw.drawGraph(rpDAO.topSells(), showGraphs);
+        });
+        
+        turnoverReport.setOnAction(ev -> {    
+           draw.drawGraph(rpDAO.lowSells(), showGraphs);
+        });
+        
+        prueba.setOnAction(ev -> {    
+            ShowGraphPDFController report = new ShowGraphPDFController();
+            report.generate();
+        });
     }
+    
+   
 
     public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());

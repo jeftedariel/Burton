@@ -48,7 +48,7 @@ public class OrderDAO {
             }
         } catch (SQLException e) {
 
-            System.err.println("Error al ejecutar el procedimiento: " + e.getMessage());
+            System.out.println("Error al ejecutar el procedimiento: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -68,7 +68,7 @@ public class OrderDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
 
-            System.err.println("Error al ejecutar el procedimiento: " + e.getMessage());
+            System.out.println("Error al ejecutar el procedimiento: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -87,8 +87,8 @@ public class OrderDAO {
             if (rs.next()) {
                 cartId = rs.getInt("cart_id");
             }
-        } catch (SQLException e) {
-            System.err.println("Error al obtener el carrito activo: " + e.getMessage());
+        } catch (SQLException e) {         
+            System.out.println("Error al obtener el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -114,7 +114,7 @@ public class OrderDAO {
             orderDetailsList.add(new ProductClient(orderId, orderDate, totalAmount));
         }
     } catch (SQLException e) {
-        System.err.println("Error al obtener las órdenes: " + e.getMessage());
+        System.out.println("Error al obtener las órdenes: " + e.getMessage());
     } finally {
         adapter.disconnect();
     }
@@ -147,7 +147,7 @@ public class OrderDAO {
             orderItemsList.add(row);
         }
     } catch (SQLException e) {
-        System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
+        System.out.println("Error al obtener los productos de la orden: " + e.getMessage());
     }
 
     return orderItemsList;
@@ -166,7 +166,7 @@ public class OrderDAO {
                 cartId = rs.getInt("cart_id");
             }
         } catch (SQLException e) {
-            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+            System.out.println("Error al crear el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -190,7 +190,7 @@ public class OrderDAO {
             System.out.println("eliminado");
 
         } catch (SQLException e) {
-            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+            System.out.println("Error al crear el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -210,7 +210,7 @@ public class OrderDAO {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+            System.out.println("Error al crear el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -249,7 +249,7 @@ public class OrderDAO {
             psA.execute();
 
         } catch (SQLException e) {
-            System.err.println("Error al agregar productos al carrito: " + e.getMessage());
+            System.out.println("Error al agregar productos al carrito: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -302,7 +302,7 @@ public class OrderDAO {
         stmt.close();
 
     } catch (SQLException e) {
-        System.err.println("Error al agregar productos al carrito: " + e.getMessage());
+        System.out.println("Error al agregar productos al carrito: " + e.getMessage());
     } finally {
         adapter.disconnect();
     }
