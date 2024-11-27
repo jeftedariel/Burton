@@ -33,7 +33,6 @@ public class ProductDAO {
             return null; // Return empty list if error
         }
     }
-
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static List<Product> getDBProducts() {
 
@@ -53,5 +52,22 @@ public class ProductDAO {
             System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
         }
         return items;
+    }
+    
+     public static ArrayList<String> unserializeUrl(String url){
+        ArrayList<String> urls =  new ArrayList<>(List.of(url.split(",")));
+        return urls;
+    }
+    
+     public static String serializeUrl(ArrayList<String> palabras) {
+        StringBuilder sb = new StringBuilder();
+        for (String palabra : palabras) {
+            if (palabra.equals(palabras.getLast())) {
+                sb.append(palabra) ;
+            } else {
+                sb.append(palabra).append(",");
+            }
+        }
+        return sb.toString();
     }
 }
