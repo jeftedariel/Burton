@@ -30,8 +30,11 @@ public class ProductDAO {
             return null; // Return empty list if error
         }
     }
-    
-    public static String devolverStringgg(ArrayList<String> palabras) {
+     public static ArrayList<String> desearilizarString(String url){
+        ArrayList<String> urls =  new ArrayList<>(List.of(url.split(",")));
+        return urls;
+    }
+    public static String serealizarImagenes(ArrayList<String> palabras) {
         StringBuilder sb = new StringBuilder();
         for (String palabra : palabras) {
             if (palabra.equals(palabras.getLast())) {
@@ -42,4 +45,7 @@ public class ProductDAO {
         }
         return sb.toString();
     }
+
+    
+    
 }
