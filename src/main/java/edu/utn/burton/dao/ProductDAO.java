@@ -6,6 +6,7 @@ package edu.utn.burton.dao;
 
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.handlers.APIHandler;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,5 +29,17 @@ public class ProductDAO {
             System.out.println("Error fetching products: " + e);
             return null; // Return empty list if error
         }
+    }
+    
+    public static String devolverStringgg(ArrayList<String> palabras) {
+        StringBuilder sb = new StringBuilder();
+        for (String palabra : palabras) {
+            if (palabra.equals(palabras.getLast())) {
+                sb.append(palabra) ;
+            } else {
+                sb.append(palabra).append(",");
+            }
+        }
+        return sb.toString();
     }
 }
