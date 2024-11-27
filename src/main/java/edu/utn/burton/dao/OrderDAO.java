@@ -259,7 +259,7 @@ public class OrderDAO {
 
     IDBAdapter adapter = DBAdapterFactory.getAdapter();
     String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";
-    String consult2 = "INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, product_name, product_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String consult2 = "INSERT INTO order_items (order_id, product_id, quantity, subtotal) VALUES (?, ?, ?, ?)";
 
     try {
         // Preparar el statement para insertar en `orders` con `RETURN_GENERATED_KEYS`
@@ -302,7 +302,7 @@ public class OrderDAO {
         stmt.close();
 
     } catch (SQLException e) {
-        System.err.println("Error al agregar productos al carrito: " + e.getMessage());
+        System.out.println("Error al agregar productos al carrito: " + e.getMessage());
     } finally {
         adapter.disconnect();
     }
