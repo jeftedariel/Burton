@@ -19,7 +19,7 @@ import java.util.List;
  * @author jefte
  */
 public class ProductDAO {
-
+//666
     private static APIHandler api = new APIHandler();
 
     public static List<Product> getProducts(int offset, int limit, int priceMin, int priceMax, String categoryQuery, String searchByName) {
@@ -33,6 +33,7 @@ public class ProductDAO {
             return null; // Return empty list if error
         }
     }
+    
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static List<Product> getDBProducts() {
 
@@ -42,12 +43,11 @@ public class ProductDAO {
         try (Connection conn = DBAdapterFactory.getAdapter().getConnection(); CallableStatement stmt = conn.prepareCall(query)) {
 
             ResultSet rs = stmt.executeQuery(query);
-
+            
             while (rs.next()) {
-                List<String> imgUrl = new ArrayList<>();
-                imgUrl.add(rs.getString("images"));
-                items.add(new Product(rs.getInt("product_id"), rs.getString("title"), rs.getDouble("price"), rs.getString("description"), imgUrl, rs.getInt("category_id")));
+                items.add(new Product(rs.getInt("product_id"), rs.getString("title"), rs.getDouble("price"), rs.getString("description"), ProductDAO.unserializeUrl(rs.getString("images")), rs.getInt("category_id")));
             }
+            
         } catch (SQLException e) {
             System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
         }

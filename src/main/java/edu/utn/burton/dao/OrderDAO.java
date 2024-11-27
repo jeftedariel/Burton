@@ -121,7 +121,6 @@ public class OrderDAO {
 
     return orderDetailsList;
     }
-    
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
         

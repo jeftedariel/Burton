@@ -36,7 +36,6 @@ import javafx.stage.Stage;
  * @author alexledezma
  */
 public class HistorialController implements Initializable{
-
     private ShowUserInfo user;
     
     @FXML
