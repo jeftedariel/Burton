@@ -10,9 +10,14 @@ import java.util.List;
  *
  * @author jefte
  */
-public record Product(int id, String title, double price, String description, List<String> images, String creationAt, int quantity) {
-
+public record Product(int id, String title, double price, String description, List<String> images, String creationAt, int quantity, int category_id) {
     public Product(int id, String title, double price, String description, List<String> images, String creationAt) {
-        this(id, title, price, description, images, creationAt, 1);
+        this(id, title, price, description, images, creationAt, 1, 0);
     }
+    
+    public Product(int id, String title, double price, String description, List<String> images, int category_id) {
+        this(id, title, price, description, images, "", 1, category_id);
+    }
+    
+   
 }

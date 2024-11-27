@@ -32,7 +32,7 @@ public class ReportDataDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity")));
+                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity"), 0));
             }
 
         } catch (SQLException e) {
