@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.mfxcore.controls.Label?>
-<?import java.net.URL?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="516.0" prefWidth="881.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.MasInfoController">
-    <stylesheets>
-        <URL value="@/styles/masinfo.css" />
-    </stylesheets>
+<AnchorPane id="AnchorPane" prefHeight="516.0" prefWidth="881.0" styleClass="mainFxmlClass" stylesheets="@../styles/masinfo.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utn.burton.controller.MasInfoController">
    <children>
-      <VBox fx:id="vboxImages" layoutX="39.0" layoutY="30.0" prefHeight="300.0" prefWidth="450.0" />
-      <Label fx:id="lblTitle" layoutX="503.0" layoutY="30.0" prefHeight="35.0" prefWidth="345.0">
+      <VBox fx:id="vboxImages" layoutX="39.0" layoutY="30.0" prefHeight="300.0" prefWidth="450.0" stylesheets="@../styles/masinfo.css" />
+      <Label fx:id="lblTitle" layoutX="503.0" layoutY="30.0" prefHeight="35.0" prefWidth="345.0" styleClass="label-title" text="Ejemplo de Nombre ">
          <font>
             <Font size="24.0" />
          </font></Label>
-      <Label fx:id="lblPrice" layoutX="503.0" layoutY="109.0" prefHeight="31.0" prefWidth="154.0" text="\$">
+      <Label fx:id="lblPrice" layoutX="503.0" layoutY="216.0" prefHeight="31.0" prefWidth="154.0" styleClass="label-price" stylesheets="@../styles/masinfo.css" text="\$">
          <font>
             <Font size="24.0" />
          </font></Label>
       <HBox fx:id="hBoxAllImage" layoutX="30.0" layoutY="361.0" prefHeight="100.0" prefWidth="450.0" />
-      <Label fx:id="lblDe" layoutX="503.0" layoutY="208.0" prefHeight="35.0" prefWidth="222.0" text="Descripcion">
+      <Label fx:id="lblDe" layoutX="503.0" layoutY="248.0" prefHeight="35.0" prefWidth="222.0" styleClass="label-des" stylesheets="@../styles/masinfo.css" text="Descripcion">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextArea fx:id="textAreaDescrip" layoutX="503.0" layoutY="284.0" prefHeight="200.0" prefWidth="360.0" />
+      <TextArea fx:id="textAreaDescrip" editable="false" layoutX="503.0" layoutY="284.0" prefHeight="200.0" prefWidth="360.0" styleClass="text-area" stylesheets="@../styles/masinfo.css">
+         <font>
+            <Font name="Poppins Regular" size="12.0" />
+         </font></TextArea>
+      <Label fx:id="lblDe1" layoutX="503.0" layoutY="180.0" prefHeight="35.0" prefWidth="222.0" styleClass="label-des" stylesheets="@../styles/masinfo.css" text="Precio">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

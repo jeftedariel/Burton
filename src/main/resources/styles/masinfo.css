@@ -1,74 +1,72 @@
-/*
- * Empty Stylesheet file.
- */
-/* Estilo general para el HBox */
-.hbox-container {
-    -fx-spacing: 10; /* Espacio entre elementos */
-    -fx-padding: 10; /* Margen interno */
-    -fx-background-color: #f9f9f9; /* Fondo claro */
-    -fx-border-color: #dcdcdc; /* Borde sutil */
-    -fx-border-width: 2;
-    -fx-border-radius: 8; /* Bordes redondeados */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 2); /* Sombra suave */
+
+.mainFxmlClass {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 20px;
 }
 
-/* Estilo general para el VBox */
-.vbox-container {
-    -fx-spacing: 15;
-    -fx-padding: 15;
-    -fx-background-color: #ffffff; /* Fondo blanco */
-    -fx-border-color: #b0b0b0;
-    -fx-border-width: 1.5;
-    -fx-border-radius: 6;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0.3, 0, 2); /* Sombra sutil */
-}
-
-/* Estilo base para las ImageView */
-.image-view {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 2); /* Sombra pequeña */
-    -fx-border-color: transparent; /* Sin borde por defecto */
-    -fx-border-width: 0;
-    -fx-border-radius: 4;
-    -fx-background-radius: 4;
-    -fx-cursor: hand; /* Cambia el puntero al pasar sobre la imagen */
-}
-
-/* Efecto al pasar el ratón sobre una ImageView */
-.image-view:hover {
-    -fx-border-color: #2196F3; /* Azul claro */
-    -fx-border-width: 3;
-    -fx-border-radius: 6;
-    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.4), 10, 0.5, 0, 2); /* Resaltado con sombra */
-}
-
-/* Estilo para el título */
 .label-title {
-    -fx-font-size: 24px; /* Tamaño grande para destacar el título */
-    -fx-font-weight: bold; /* Texto en negrita */
-    -fx-text-fill: #333333; /* Color oscuro para buen contraste */
-    -fx-padding: 10 0 5 0; /* Espaciado: arriba, derecha, abajo, izquierda */
+    -fx-font-family: 'Arial Black', sans-serif;
+    -fx-font-size: 24px;
+    -fx-text-fill: #333;
 }
 
-/* Estilo para el precio */
+/* Estilo del precio */
 .label-price {
-    -fx-font-size: 24px; /* Tamaño más pequeño pero destacado */
-    -fx-font-weight: semi-bold; /* Seminegrita */
-    -fx-text-fill: #009688; /* Color verde azulado para resaltar */
-    -fx-padding: 5 0 10 0; /* Espaciado adicional abajo */
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 24px;
+    -fx-text-fill: #00a676; /* Verde atractivo */
+    -fx-font-weight: bold;
 }
 
- .text-area {
-    -fx-font-size: 14px; /* Tamaño del texto */
-    -fx-padding: 10; /* Espaciado interno */
-    -fx-border-color: #cccccc; /* Borde gris claro */
-    -fx-border-radius: 5px; /* Bordes redondeados */
-    -fx-background-radius: 5px; /* Fondo redondeado */
-}
 
 .label-des {
-    -fx-font-size: 24px; /* Tamaño grande para destacar el título */
-    -fx-font-weight: bold; /* Texto en negrita */
-    -fx-text-fill: #333333; /* Color oscuro para buen contraste */
-    -fx-padding: 10 0 5 0; /* Espaciado: arriba, derecha, abajo, izquierda */
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 18px;
+    -fx-text-fill: #666;
+    -fx-font-style: italic;
+}
+
+.text-area {
+    -fx-font-family: 'Courier New', monospace;
+    -fx-font-size: 14px;
+    -fx-text-fill: #444;
+    -fx-control-inner-background: #ffffff;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px;
+}
+
+
+.vboxImages {
+    -fx-alignment: center;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.5, 0, 4);
+}
+
+.hbox-container {
+    -fx-alignment: center-left;
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+}
+
+.image-view {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0.3, 0, 2);
+    -fx-border-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+
+.image-view:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 150, 100, 0.4), 8, 0.5, 0, 2);
+    -fx-border-color: #00a676;
+    -fx-border-width: 2px;
 }
 
