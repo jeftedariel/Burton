@@ -172,11 +172,9 @@ CREATE TABLE `products` (
   `title` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `description` varchar(512),
-  `category_id` int NOT NULL,
   `images` text,
-  PRIMARY KEY (`id`),
-  KEY `category_id` (`category_id`),
-  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+  `category_id` int NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

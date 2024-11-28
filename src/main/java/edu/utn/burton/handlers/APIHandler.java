@@ -76,7 +76,7 @@ public class APIHandler {
     }
 
     private void writeRequestBody(HttpURLConnection connection, String body) throws Exception {
-        if (body != null) { //For writing body into api call 666 Simple
+        if (body != null) { //For writing body into api calls Simple
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = body.getBytes();
                 os.write(input, 0, input.length);

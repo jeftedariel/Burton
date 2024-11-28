@@ -121,7 +121,6 @@ public class OrderDAO {
 
     return orderDetailsList;
     }
-    
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
         
@@ -140,6 +139,7 @@ public class OrderDAO {
             row.put("product_id", rs.getInt("product_id"));
             row.put("quantity", rs.getInt("quantity"));
             row.put("subtotal", rs.getInt("subtotal"));
+            row.put("title", rs.getString("title"));
             
             String images = rs.getString("images");
             if (images != null && !images.isEmpty()) {

@@ -34,7 +34,7 @@ public class ProductRow {
         this.itemRow.setAlignment(Pos.CENTER_LEFT);
 
 
-        int product = (int) item.get("order_item_id");
+        String product = (String) item.get("title");
         int unitPrice = (int) item.get("subtotal");
         String productImage = (String) item.get("images");
 
