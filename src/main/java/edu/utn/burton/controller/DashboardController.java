@@ -6,11 +6,9 @@ package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.dao.ReportDataDAO;
-import edu.utn.burton.entities.UserSession;
+
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
-import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -22,10 +20,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.imageio.ImageIO;
 
 /**
  * FXML Controller class
@@ -37,14 +34,19 @@ public class DashboardController implements Initializable {
     /**
      * Initializes the controller class.
      */
+
     DrawGraphsController draw;
     ReportDataDAO rpDAO;
+
+
+    private ShowUserInfo user;
+    
 
     @FXML
     private MFXButton store;
 
     @FXML
-    private ImageView avatar;
+    private Circle avatar;
 
     @FXML
     private Text username;
@@ -79,7 +81,13 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+
         llenarCombo();
+
+
+        user = new ShowUserInfo(this.avatar, this.username);
+        user.loadUserInfo();
+        
 
         store.setOnMouseClicked(ev -> {
             MenuController.initGui((Stage) store.getScene().getWindow());
@@ -92,7 +100,7 @@ public class DashboardController implements Initializable {
         trendingSellsReport.setOnMouseClicked(ev -> {
         });
 
-        loadUserInfo();
+        
 
         trendingSellsReport.setOnAction(ev -> {
             draw.drawGraph(rpDAO.topSells(), showGraphs);
@@ -145,18 +153,6 @@ public class DashboardController implements Initializable {
         // Si no se encuentra la categoría, devolvemos un valor de error
         System.out.println("Error: No se ha seleccionado una categoría válida.");
         return -1; // Retornamos un valor negativo para indicar un error
-    }
-
-    public void loadUserInfo() {
-        username.setText(UserSession.getInstance().getName());
-        BufferedImage image;
-
-        try {
-            image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
-            avatar.setImage(SwingFXUtils.toFXImage(image, null));
-        } catch (Exception ee) {
-            System.out.println("Hubo un error al intentar cargar la img");
-        }
     }
 
     public static void initGui(Stage stage) {

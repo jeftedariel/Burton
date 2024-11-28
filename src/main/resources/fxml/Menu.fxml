@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressSpinner?>
 <?import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView?>
 <?import java.net.URL?>
 <?import javafx.scene.control.ComboBox?>
@@ -10,6 +11,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.RangeSlider?>
@@ -47,12 +49,6 @@
                      </image>
                   </ImageView>
                </graphic></MFXButton>
-
-            <ImageView id="avatar" fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/user.png" />
-               </image>
-            </ImageView>
             <Text fx:id="username" fill="WHITE" layoutX="64.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                <font>
                   <Font name="Poppins Regular" size="18.0" />
@@ -75,7 +71,7 @@
                   </ImageView>
                </graphic>
             </MFXButton>
-            <MFXButton fx:id="dashboard" layoutX="568.0" layoutY="10.0" text="Dashboard">
+            <MFXButton fx:id="dashboard" layoutX="613.0" layoutY="10.0" text="Dashboard">
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -84,8 +80,10 @@
                   </ImageView>
                </graphic>
             </MFXButton>
+            <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="31.0" layoutY="27.0" radius="23.0" stroke="TRANSPARENT" strokeType="INSIDE" />
          </children></Pane>
       <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="100.0" prefHeight="562.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
-      <Pagination fx:id="pagination" layoutX="483.0" layoutY="653.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
+      <Pagination fx:id="pagination" layoutX="520.0" layoutY="652.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
+      <MFXProgressSpinner fx:id="loading" layoutX="640.0" layoutY="330.0" prefHeight="75.0" prefWidth="75.0" visible="false" />
    </children>
 </AnchorPane>
