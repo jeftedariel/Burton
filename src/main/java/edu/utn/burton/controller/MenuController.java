@@ -15,6 +15,7 @@ import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ProductCell;
 import edu.utn.burton.entities.UserSession;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -91,25 +93,28 @@ public class MenuController implements Initializable {
 
     @FXML
     private MFXButton logout;
+
+    @FXML
+    private StackPane rootPane;
     
     @FXML
-    private StackPane rootPane; 
+    private MFXProgressSpinner loading;
 
     private ShowUserInfo showUserInfo;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         //Displays on header the user's data
         showUserInfo = new ShowUserInfo(avatar, username);
         showUserInfo.loadUserInfo();
-        
+
         dashboard.setVisible(UserSession.getInstance().getRole().equals("admin"));
 
         //Set the max value for the Price Range
         rangeSlider.setHighValue(500);//Then sets the range Text
         setRange();
-        
+
         loadProducts(false);
         loadCategories();
         setPaginationSize(false);
@@ -151,8 +156,7 @@ public class MenuController implements Initializable {
         });
 
         openCart.setOnMouseClicked(ev -> {
-            CartMenuController.initGui((Stage) 
-                    openCart.getScene().getWindow());
+            CartMenuController.initGui((Stage) openCart.getScene().getWindow());
         });
 
         Historial.setOnMouseClicked(ev -> {
@@ -184,8 +188,8 @@ public class MenuController implements Initializable {
         }
         openCart.setText(String.valueOf(t));
     }
-    
-    public void setPaginationSize(boolean Search){
+
+    public void setPaginationSize(boolean Search) {
         String categoryQuery = "";
         String searchByName = "";
 
@@ -196,54 +200,79 @@ public class MenuController implements Initializable {
         if (Search && productNameTXT != null) {
             searchByName = "&title=" + productNameTXT.getText();
         }
-        
-        
-        
+
         int products = (ProductDAO.getProducts(0, 0, (int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue(), categoryQuery, searchByName).size());
-        int pag=products/10;
-        
-        if(pag*10 < products){
-            pag ++;
+        int pag = products / 10;
+
+        if (pag * 10 < products) {
+            pag++;
         }
-        
-        if(pag == 0){
+
+        if (pag == 0) {
             pagination.setPageCount(1);
             pagination.setCurrentPageIndex(0);
         }
-        
+
         System.out.println("Total:" + products + "Paginas:" + pag);
-        
+
         pagination.setPageCount(pag);
     }
 
     public void loadProducts(boolean Search) {
-        String categoryQuery = "";
-        String searchByName = "";
-
-        if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
-            categoryQuery = "&categoryId=" + CategoryDAO.getCategoryIdByName(cbxCategories.getItems().get(cbxCategories.getSelectionModel().getSelectedIndex()).toString());
-        }
-
-        if (Search && productNameTXT != null) {
-            searchByName = "&title=" + productNameTXT.getText();
-        }
+        final String categoryQuery;
+        final String searchByName;
         
-        List<Product> products=null;
-        try {
-             products = ProductDAO.getProducts(pagination.getCurrentPageIndex(), 10, (int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue(), categoryQuery, searchByName);
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-        }
-        displayProducts(products);
-        
+        categoryQuery = (cbxCategories.getSelectionModel().getSelectedIndex() != -1) ? "&categoryId=" + CategoryDAO.getCategoryIdByName(cbxCategories.getItems().get(cbxCategories.getSelectionModel().getSelectedIndex()).toString()) : "";
+
+        searchByName = (Search && productNameTXT != null) ? "&title=" + productNameTXT.getText() : "";
+
+        loading.setVisible(true);
+        Task<List<Product>> task = new Task<>() {
+            @Override
+            protected List<Product> call() {
+                
+                return ProductDAO.getProducts(
+                        pagination.getCurrentPageIndex(),
+                        10,
+                        (int) rangeSlider.getLowValue(),
+                        (int) rangeSlider.getHighValue(),
+                        categoryQuery,
+                        searchByName
+                );
+            }
+        };
+        task.setOnSucceeded(event -> displayProducts(task.getValue()));
+        task.setOnFailed(event -> {
+            System.out.println("Error al cargar productos: " + task.getException().getMessage());
+            Alerts.show(new Message("Error", "No se pudieron cargar los productos."), Alert.AlertType.ERROR);
+            loading.setVisible(false);
+        });
+
+        new Thread(task).start();
 
     }
-    
+
     public void loadCategories() {
-        //Set the categories into the Cbx, but without duplicates, bc its just text
-        List<String> categoryNames = CategoryDAO.getCategoryNames().stream().toList();
-        pagination.setCurrentPageIndex(0);
-        cbxCategories.setItems(FXCollections.observableArrayList(categoryNames));
+        Task<List<String>> task = new Task<>() {
+            @Override
+            protected List<String> call() {
+                return CategoryDAO.getCategoryNames().stream().toList();
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            List<String> categoryNames = task.getValue();
+            cbxCategories.setItems(FXCollections.observableArrayList(categoryNames));
+            pagination.setCurrentPageIndex(0);
+        });
+
+        task.setOnFailed(event -> {
+            System.out.println("Error al cargar categorías: " + task.getException().getMessage());
+            Alerts.show(new Message("Error", "No se pudieron cargar las categorías."), Alert.AlertType.ERROR);
+        });
+        
+
+        new Thread(task).start();
     }
 
     public void displayProducts(List<Product> products) {
@@ -284,6 +313,7 @@ public class MenuController implements Initializable {
                 row.setAlignment(Pos.CENTER);
             }
         }
+        loading.setVisible(false);
     }
 
     public void clearFilters() {
