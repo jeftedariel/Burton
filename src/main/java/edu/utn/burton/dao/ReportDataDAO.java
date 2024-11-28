@@ -25,7 +25,7 @@ public class ReportDataDAO {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
-        String query = "SELECT product_name AS Product, SUM(quantity) AS Quantity FROM order_items GROUP BY product_name;";
+        String query = "SELECT productos.title AS Product, SUM(orders.quantity) AS Quantity FROM  order_items orders INNER JOIN products productos ON orders.product_id = productos.id GROUP BY productos.title;";
 
         List<Product> products = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class ReportDataDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity"), new Category(0,"","")));
+                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity"), new Category(0, "", "")));
             }
 
         } catch (SQLException e) {
@@ -54,12 +54,10 @@ public class ReportDataDAO {
         }
         return totalSells;
     }
-    
-    
 
     public List<Product> topSells() {
         List<Product> products = getProductSells();
-       
+
         final int average = getTotalSells() / products.size();
         //In base of total sells & items calculates the average
         return products.stream().filter(product -> product.quantity() >= average).toList(); //Return the ones that are higher than the average or equals
@@ -69,7 +67,7 @@ public class ReportDataDAO {
         List<Product> products = getProductSells();
 
         final int average = getTotalSells() / products.size();
-         // The same that topSells() but just the ones that are lower than the average
+        // The same that topSells() but just the ones that are lower than the average
         return products.stream().filter(product -> product.quantity() < average).toList();
     }
 
