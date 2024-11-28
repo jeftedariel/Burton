@@ -6,6 +6,7 @@ package edu.utn.burton.dao;
 
 import edu.utn.burton.database.DBAdapterFactory;
 import edu.utn.burton.database.IDBAdapter;
+import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ public class ReportDataDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity")));
+                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity"), new Category(0,"","")));
             }
 
         } catch (SQLException e) {

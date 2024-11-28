@@ -86,9 +86,10 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
-  `category_id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`category_id`)
+  `image` text NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -115,10 +116,7 @@ CREATE TABLE `order_items` (
   `order_id` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
   `quantity` int NOT NULL,
-  `unit_price` decimal(10,2) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL,  -- Modificada para ser NOT NULL
-  `product_name` VARCHAR(255) DEFAULT NULL,  -- Nuevo campo para el nombre del producto
-  `product_image` VARCHAR(255) DEFAULT NULL, -- Nuevo campo para la imagen del producto
   PRIMARY KEY (`order_item_id`),
   KEY `order_id` (`order_id`),
   CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
@@ -170,18 +168,13 @@ DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
-  `product_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` text,
+  `id` int NOT NULL,
+  `title` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `stock` int DEFAULT '0',
-  `category_id` int DEFAULT NULL,
-  `image_url` varchar(512) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`product_id`),
-  KEY `category_id` (`category_id`),
-  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`)
+  `description` varchar(512),
+  `images` text,
+  `category_id` int NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -277,19 +270,22 @@ DELIMITER ;
 
 DELIMITER //
 
+DELIMITER //
+
 CREATE PROCEDURE get_order_items_by_order_id(IN orderId INT)
 BEGIN
     SELECT 
-        order_item_id,
-        order_id,
-        product_id,
-        quantity,
-        unit_price,
-        subtotal,
-        product_name,
-        product_image
+        order_items.order_item_id,
+        order_items.order_id,
+        order_items.product_id,
+        order_items.quantity,
+        order_items.subtotal,
+        products.title,
+        products.images
     FROM 
         order_items
+	INNER JOIN products
+    ON order_items.product_id = products.id
     WHERE 
         order_id = orderId;
 END //

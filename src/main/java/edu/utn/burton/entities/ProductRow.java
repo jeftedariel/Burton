@@ -34,12 +34,12 @@ public class ProductRow {
         this.itemRow.setAlignment(Pos.CENTER_LEFT);
 
 
-        String productName = (String) item.get("product_name");
-        double unitPrice = (double) item.get("unit_price");
-        String productImage = (String) item.get("product_image");
+        String product = (String) item.get("title");
+        int unitPrice = (int) item.get("subtotal");
+        String productImage = (String) item.get("images");
 
         this.productImageView = createImageView(productImage);
-        this.productInfo = new Label(productName + " | $" + unitPrice);
+        this.productInfo = new Label(product + " | $" + unitPrice);
         
         this.itemRow.getChildren().addAll(productImageView, productInfo);
     }
