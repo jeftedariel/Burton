@@ -422,5 +422,31 @@ END //
 
 DELIMITER ;
 
+SELECT * FROM products;
+SELECT * FROM orders;
+SELECT * FROM order_items;
+SELECT * FROM categories;
+
+SELECT productos.title AS Product, SUM(orders.quantity) AS Quantity FROM  order_items orders
+INNER JOIN products productos 
+ON orders.product_id = productos.id
+GROUP BY productos.title;
+
+
+SELECT cate.name AS nombre,productos.title AS Product, SUM(orders.quantity) AS Quantity FROM  order_items orders
+INNER JOIN products productos 
+ON orders.product_id = productos.id
+GROUP BY productos.title;
+
+SELECT cate.id as  id ,productos.title AS Product, SUM(orders.quantity) AS Quantity FROM  order_items orders
+INNER JOIN products productos 
+ON orders.product_id = productos.id
+INNER JOIN categories cate
+ON productos.category_id = cate.id
+WHERE cate.id = 1
+GROUP BY productos.title;
+
+
+
 
 -- Dump completed on 2024-10-26 16:29:14

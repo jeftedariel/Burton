@@ -13,12 +13,15 @@ import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -57,7 +60,10 @@ public class DashboardController implements Initializable {
 
     @FXML
     private MFXButton turnoverReport;
-    
+
+    @FXML
+    private ComboBox cbxCategories;
+
     @FXML
     private MFXButton prueba;
 
@@ -72,6 +78,9 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        llenarCombo();
+
         store.setOnMouseClicked(ev -> {
             MenuController.initGui((Stage) store.getScene().getWindow());
         });
@@ -85,21 +94,58 @@ public class DashboardController implements Initializable {
 
         loadUserInfo();
 
-        trendingSellsReport.setOnAction(ev -> {    
-           draw.drawGraph(rpDAO.topSells(), showGraphs);
+        trendingSellsReport.setOnAction(ev -> {
+            draw.drawGraph(rpDAO.topSells(), showGraphs);
+        });
+
+        turnoverReport.setOnAction(ev -> {
+            draw.drawGraph(rpDAO.lowSells(), showGraphs);
+            
         });
         
-        turnoverReport.setOnAction(ev -> {    
-           draw.drawGraph(rpDAO.lowSells(), showGraphs);
+        cbxCategories.setOnMouseClicked(ev ->{
+        draw.drawGraph(rpDAO.topSellsByCategories(devolverValorCombo()), showGraphs); 
         });
-        
-        prueba.setOnAction(ev -> {    
+
+        prueba.setOnAction(ev -> {
             ShowGraphPDFController report = new ShowGraphPDFController();
             report.generate();
         });
     }
-    
-   
+
+    public void llenarCombo() {
+        if (cbxCategories != null) {
+
+            cbxCategories.setItems(FXCollections.observableArrayList(rpDAO.getCategories().values()));
+
+            cbxCategories.setOnAction(event -> {
+
+                int categoryId = devolverValorCombo();
+                System.out.println("ID de la categoría seleccionada: " + categoryId);
+            });
+        } else {
+            System.out.println("Error: ComboBox no está inicializado.");
+        }
+    }
+
+    public int devolverValorCombo() {
+
+        String selectedCategory = (String) cbxCategories.getValue();
+
+        if (selectedCategory != null) {
+
+            for (Map.Entry<Integer, String> entry : rpDAO.getCategories().entrySet()) {
+                if (entry.getValue().equals(selectedCategory)) {
+
+                    return entry.getKey();
+                }
+            }
+        }
+
+        // Si no se encuentra la categoría, devolvemos un valor de error
+        System.out.println("Error: No se ha seleccionado una categoría válida.");
+        return -1; // Retornamos un valor negativo para indicar un error
+    }
 
     public void loadUserInfo() {
         username.setText(UserSession.getInstance().getName());
@@ -118,6 +164,8 @@ public class DashboardController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/Dashboard.fxml"));
             Parent root = loader.load();
+            DashboardController controller = loader.getController();
+            controller.llenarCombo();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Burton.class.getResource("/styles/dashboard.css").toExternalForm());
             stage.setScene(scene);

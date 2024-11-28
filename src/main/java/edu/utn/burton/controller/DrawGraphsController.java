@@ -28,21 +28,24 @@ public class DrawGraphsController {
     }
 
     public void drawGraph(List<Product> productos, MFXLegacyListView showGraphs) {
-        // asigana los datos que se obtienen para mostarr en el grafico
+        // Asigna los datos para mostrar en el gráfico
         ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        // Recorre la lista de productos
         for (Product p : productos) {
             String title = p.title();
-            if (p.title().length() > 27) {
-                title = "";
-                for (int i = 0; i < 26; i++) {
-                    title += p.title().charAt(i);
-                }
-                title += "...";
 
-                series.getData().add(new XYChart.Data<>(p.title(), p.quantity()));
+            // Si el título es demasiado largo, se recorta y se agrega "..."
+            if (title.length() > 27) {
+                title = title.substring(0, 26) + "...";
             }
+
+            // Agrega los datos a la serie
+            series.getData().add(new XYChart.Data<>(title, p.quantity()));
         }
+
+        // Agrega la serie al conjunto de datos
         data.add(series);
 
         // Crear el gráfico de barras
@@ -50,14 +53,15 @@ public class DrawGraphsController {
         NumberAxis yAxis = new NumberAxis();
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
 
+        // Asigna los datos al gráfico
         barChart.setData(data);
-        barChart.setTitle("Gráfica de Barras en JAVA FX");
+        barReturn = barChart;
+        barChart.setTitle("Gráfico de Barras en JavaFX");
 
-        // Recorre cada una de las barras
+        // Recorre cada barra en el gráfico
         for (XYChart.Data<String, Number> bar : series.getData()) {
-            // Se usa para dar el nombre a una propiedad y asigna la etiqueta a cada porcion del gráfico
+            // Crea un Tooltip para cada barra, mostrando el porcentaje
             Tooltip tooltip = new Tooltip(
-                    // Formato de porcentaje con un solo decimal
                     String.format("%.1f%%", bar.getYValue().doubleValue()
                             / series.getData().stream()
                                     .mapToDouble(d -> d.getYValue().doubleValue())
@@ -65,11 +69,11 @@ public class DrawGraphsController {
             );
             Tooltip.install(bar.getNode(), tooltip);
 
-            // Asignar un color aleatorio a cada barra
+            // Asigna un color aleatorio a cada barra
             bar.getNode().setStyle("-fx-bar-fill: " + generateRandomColor() + ";");
         }
 
-        // Agregar el gráfico de barras al MFXLegacyListView
+        // Asegúrate de que showGraphs es un contenedor adecuado para agregar el gráfico
         showGraphs.getItems().clear();
         showGraphs.getItems().add(barChart);
     }
