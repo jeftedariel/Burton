@@ -22,6 +22,7 @@ import java.util.List;
  */
 public class ProductDAO {
 //666
+
     private static APIHandler api = new APIHandler();
 
     public static List<Product> getProducts(int offset, int limit, int priceMin, int priceMax, String categoryQuery, String searchByName) {
@@ -35,72 +36,73 @@ public class ProductDAO {
             return null; // Return empty list if error
         }
     }
-    
+
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static List<Product> getDBProducts() {
 
         List<Product> items = new ArrayList<>();
 
         String query = "SELECT * FROM products";
-        try (Connection conn = DBAdapterFactory.getAdapter().getConnection(); CallableStatement stmt = conn.prepareCall(query)) {
 
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
+        try {
+            CallableStatement stmt = adapter.getConnection().prepareCall(query);
             ResultSet rs = stmt.executeQuery(query);
-            
+
             while (rs.next()) {
                 items.add(new Product(rs.getInt("id"), rs.getString("title"), rs.getDouble("price"), rs.getString("description"), ProductDAO.unserializeUrl(rs.getString("images")), rs.getInt("category_id")));
             }
-            
+
         } catch (SQLException e) {
             System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
+        } finally {
+            adapter.disconnect();
         }
         return items;
     }
-    
-    public static void dumpProducts(List<Product> products){
+
+    public static void dumpProducts(List<Product> products) {
 
         String query = "INSERT into  products(id, title, price, description, images, category_id) values(?,?,?,?,?,?)";
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         try {
-            
-            
-            
+
             PreparedStatement pstmt = adapter.getConnection().prepareStatement(query);
-            adapter.getConnection().setAutoCommit(false);
-            
-            for(Product p : products){
-                
+            //adapter.getConnection().setAutoCommit(false);
+
+            for (Product p : products) {
+
                 pstmt.setInt(1, p.id());
                 pstmt.setString(2, p.title());
                 pstmt.setDouble(3, p.price());
                 pstmt.setString(4, p.description());
                 pstmt.setString(5, ProductDAO.serializeUrl(p.images()));
-                pstmt.setInt(6,p.category_id());
-                
+                pstmt.setInt(6, p.category_id());
+
                 pstmt.addBatch();
             }
-            
+
             int[] r = pstmt.executeBatch();
-            adapter.getConnection().commit();
             System.out.println(r.length + " New products has been dumped");
 
         } catch (SQLException e) {
             System.err.println("Error while dumping products." + e.getMessage());
-        } finally{
+        } finally {
             adapter.disconnect();
         }
-    
+
     }
-    
-     public static ArrayList<String> unserializeUrl(String url){
-        ArrayList<String> urls =  new ArrayList<>(List.of(url.split(",")));
+
+    public static ArrayList<String> unserializeUrl(String url) {
+        ArrayList<String> urls = new ArrayList<>(List.of(url.split(",")));
         return urls;
     }
-    
-     public static String serializeUrl(List<String> palabras) {
+
+    public static String serializeUrl(List<String> palabras) {
         StringBuilder sb = new StringBuilder();
         for (String palabra : palabras) {
             if (palabra.equals(palabras.getLast())) {
-                sb.append(palabra) ;
+                sb.append(palabra);
             } else {
                 sb.append(palabra).append(",");
             }
