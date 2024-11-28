@@ -4,8 +4,7 @@
 
 package edu.utn.burton;
 
-import edu.utn.burton.controller.LoginController;
-import edu.utn.burton.database.DumpData;
+import edu.utn.burton.controller.MenuController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,10 +13,11 @@ import javafx.stage.Stage;
  * @author jefte
  */
 public class Burton extends Application {
+    //666
     @Override
     public void start(Stage stage) throws Exception{
-        DumpData.dumpData();
-        LoginController.initGui();
+        //DumpData.dumpData();
+        MenuController.initGui(stage);
     }
 
     public static void main(String[] args) {

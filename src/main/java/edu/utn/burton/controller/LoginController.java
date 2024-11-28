@@ -34,15 +34,22 @@ public class LoginController implements Initializable {
 
     @FXML
     private MFXButton Ingresar;
+    
+    @FXML
+    private MFXButton IngresarInvitado;
 
     @FXML
     private MFXButton googleBtn;
     
     @FXML
     private MFXProgressSpinner loading;
+    
+    @FXML
+    private MFXButton logout;
 
     APIHandler api = new APIHandler();
 
+    //666
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -52,6 +59,12 @@ public class LoginController implements Initializable {
 
         googleBtn.setOnAction(ev -> {
             authenticateAsync(null, null, true);
+        });
+        
+        IngresarInvitado.setOnAction(ev -> {
+           Stage currentStage = (Stage) IngresarInvitado.getScene().getWindow();
+           MenuController.initGui(currentStage);
+           //currentStage.close();
         });
     }
 
@@ -117,17 +130,16 @@ public class LoginController implements Initializable {
     }
 
     public static void logout(MFXButton button) {
-        Stage spStage = (Stage) button.getScene().getWindow();
-        Alerts.showConfirmation(new Message("Cerrar Sesión", "¿Realmente quieres cerrar sesión?"), onResponse -> {
-            if (onResponse == ButtonType.APPLY) {
-                spStage.close();
-                LoginController.initGui();
-                UserSession.getInstance().logout();
-            }
-        });
+    Stage currentStage = (Stage) button.getScene().getWindow();
 
+    Alerts.showConfirmation(new Message("Cerrar Sesión", "¿Realmente quieres cerrar sesión?"), onResponse -> {
+        if (onResponse == ButtonType.APPLY) {
+            currentStage.close();
+            UserSession.getInstance().logout();
+        }
+    });
     }
-
+    
     public static void initGui() {
         try {
             FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/Login.fxml"));

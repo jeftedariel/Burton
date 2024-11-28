@@ -15,8 +15,13 @@ public class UserSession {
     int id;
 
     private UserSession() {
+        this.id = 0;
+        this.name = "?";
+        this.email = "?";
+        this.avatar = "?";
+        this.role = "?"; 
     }
-
+    
     public static UserSession getInstance() {
         if (instance == null) {
             instance = new UserSession();
