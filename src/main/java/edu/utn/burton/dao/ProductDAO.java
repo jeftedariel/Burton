@@ -77,7 +77,7 @@ public class ProductDAO {
                 pstmt.setDouble(3, p.price());
                 pstmt.setString(4, p.description());
                 pstmt.setString(5, ProductDAO.serializeUrl(p.images()));
-                pstmt.setInt(6, p.category_id());
+                pstmt.setInt(6, p.category().id());
 
                 pstmt.addBatch();
             }

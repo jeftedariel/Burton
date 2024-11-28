@@ -4,13 +4,13 @@
  */
 package edu.utn.burton.database;
 
+import edu.utn.burton.dao.CategoryDAO;
 import edu.utn.burton.dao.ProductDAO;
+import edu.utn.burton.entities.Category;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.handlers.APIHandler;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -18,9 +18,31 @@ import java.util.Set;
  */
 public class DumpData {
 
-    public static void dumpData() {
-        APIHandler apiHandler = new APIHandler();
+    static APIHandler apiHandler = new APIHandler();
 
+    public static void dumpData() {
+        categories();
+        products();
+    }
+
+    private static void categories() {
+        List<Category> dbCategories = CategoryDAO.getDBCategories();
+        List<Category> apiCategories = new ArrayList<>();
+        try {
+            apiCategories = apiHandler.getList(Category.class, "categories", null);
+        } catch (Exception e) {
+            System.out.println("Error while loading api products:" + e);
+        }
+
+        apiCategories.removeAll(dbCategories);
+
+        if (apiCategories.size() > 0) {
+            CategoryDAO.dumpCategories(apiCategories.stream().toList());
+        }
+        
+    }
+
+    private static void products() {
         List<Product> dbProducts = ProductDAO.getDBProducts();
         List<Product> apiProducts = new ArrayList<>();
 
@@ -29,7 +51,7 @@ public class DumpData {
         } catch (Exception e) {
             System.out.println("Error while loading api products:" + e);
         }
-        
+
         apiProducts.removeAll(dbProducts);
 
         if (apiProducts.size() > 0) {
