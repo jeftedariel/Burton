@@ -270,19 +270,22 @@ DELIMITER ;
 
 DELIMITER //
 
+DELIMITER //
+
 CREATE PROCEDURE get_order_items_by_order_id(IN orderId INT)
 BEGIN
     SELECT 
-        order_item_id,
-        order_id,
-        product_id,
-        quantity,
-        unit_price,
-        subtotal,
-        product_name,
-        product_image
+        order_items.order_item_id,
+        order_items.order_id,
+        order_items.product_id,
+        order_items.quantity,
+        order_items.subtotal,
+        products.title,
+        products.images
     FROM 
         order_items
+	INNER JOIN products
+    ON order_items.product_id = products.id
     WHERE 
         order_id = orderId;
 END //
