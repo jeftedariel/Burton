@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class dumpProductInfo {
 
-    public static void dumbData() {
+    public static void dumpData() {
         APIHandler apiHandler = new APIHandler();
         List<Product> apiProducts = new ArrayList<>();
         try {
