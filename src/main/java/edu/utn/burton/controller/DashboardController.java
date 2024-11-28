@@ -6,11 +6,13 @@ package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.dao.ReportDataDAO;
+import edu.utn.burton.entities.Product;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -23,6 +25,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
 /**
  * FXML Controller class
@@ -34,13 +37,10 @@ public class DashboardController implements Initializable {
     /**
      * Initializes the controller class.
      */
-
     DrawGraphsController draw;
     ReportDataDAO rpDAO;
 
-
     private ShowUserInfo user;
-    
 
     @FXML
     private MFXButton store;
@@ -81,13 +81,10 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-
         llenarCombo();
-
 
         user = new ShowUserInfo(this.avatar, this.username);
         user.loadUserInfo();
-        
 
         store.setOnMouseClicked(ev -> {
             MenuController.initGui((Stage) store.getScene().getWindow());
@@ -100,19 +97,13 @@ public class DashboardController implements Initializable {
         trendingSellsReport.setOnMouseClicked(ev -> {
         });
 
-        
-
         trendingSellsReport.setOnAction(ev -> {
             draw.drawGraph(rpDAO.topSells(), showGraphs);
         });
 
         turnoverReport.setOnAction(ev -> {
             draw.drawGraph(rpDAO.lowSells(), showGraphs);
-            
-        });
-        
-        cbxCategories.setOnMouseClicked(ev ->{
-        draw.drawGraph(rpDAO.topSellsByCategories(devolverValorCombo()), showGraphs); 
+
         });
 
         prueba.setOnAction(ev -> {
@@ -123,36 +114,25 @@ public class DashboardController implements Initializable {
 
     public void llenarCombo() {
         if (cbxCategories != null) {
-
             cbxCategories.setItems(FXCollections.observableArrayList(rpDAO.getCategories().values()));
-
             cbxCategories.setOnAction(event -> {
-
                 int categoryId = devolverValorCombo();
-                System.out.println("ID de la categoría seleccionada: " + categoryId);
+                draw.drawGraph(rpDAO.topSellsByCategories(categoryId), showGraphs);
             });
-        } else {
-            System.out.println("Error: ComboBox no está inicializado.");
         }
     }
 
     public int devolverValorCombo() {
-
         String selectedCategory = (String) cbxCategories.getValue();
-
         if (selectedCategory != null) {
-
             for (Map.Entry<Integer, String> entry : rpDAO.getCategories().entrySet()) {
                 if (entry.getValue().equals(selectedCategory)) {
-
+                    System.out.println("esta es la categoria" + entry.getKey());
                     return entry.getKey();
                 }
             }
         }
-
-        // Si no se encuentra la categoría, devolvemos un valor de error
-        System.out.println("Error: No se ha seleccionado una categoría válida.");
-        return -1; // Retornamos un valor negativo para indicar un error
+        return -1;
     }
 
     public static void initGui(Stage stage) {

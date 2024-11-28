@@ -22,6 +22,7 @@ import java.util.Map;
  * @author jefte
  */
 public class ReportDataDAO {
+    // obtener los productos totales 
 
     public List<Product> getProductSells() {
 
@@ -46,7 +47,7 @@ public class ReportDataDAO {
 
         return products;
     }
-
+    // obtiene  lo productos por categoria 
     public List<Product> getProductByCategories(int id) {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
         String query = "SELECT productos.title AS Product,SUM(orders.quantity) AS Quantity FROM order_items orders INNER JOIN products productos  ON orders.product_id = productos.id INNER JOIN categories cate ON productos.category_id = cate.id INNER JOIN orders ord ON orders.order_id = ord.order_id  WHERE cate.id = ? GROUP BY productos.title;";
@@ -59,7 +60,7 @@ public class ReportDataDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                 products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity"), new Category(0, "", "")));
+                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity"), new Category(0, "", "")));
             }
 
         } catch (SQLException e) {
@@ -69,10 +70,35 @@ public class ReportDataDAO {
         adapter.disconnect();
         return products;
     }
+    
+    // obtiene los productos que estan por arriba del promedio por medio de categoria 
+    public List<Product> topSellsByCategories(int id) {
+        List<Product> products = getProductByCategories(id);
 
-    public int getTotalSells() {
+        final int average = getTotalSells(products) / products.size();
+        System.out.println("la lista " + products.stream().filter(product -> product.quantity() <= average).toList().toString());
+        return products.stream().filter(product -> product.quantity() >= average).toList();
+    }
+ // obtiene los productos que estan por encima del promedio 
+    public List<Product> topSells() {
+        List<Product> products = getProductSells();
+
+        final int average = getTotalSells(products) / products.size();
+        //In base of total sells & items calculates the average
+        return products.stream().filter(product -> product.quantity() >= average).toList(); //Return the ones that are higher than the average or equals
+    }
+    // obtiene los productos que estan por abajo del promedio 
+    public List<Product> lowSells() {
+        List<Product> products = getProductSells();
+
+        final int average = getTotalSells(products) / products.size();
+        // The same that topSells() but just the ones that are lower than the average      
+        return products.stream().filter(product -> product.quantity() <= average).toList();
+    }
+    //obtiene el total de la cantidad de cada uno
+    public int getTotalSells(List<Product> productos) {
         int totalSells = 0;
-        List<Product> sells = getProductSells();
+        List<Product> sells = productos;
         //Creates a list of all sold Items and then return the total amount of general sells.
         for (Product product : sells) {
             totalSells += product.quantity();
@@ -80,35 +106,8 @@ public class ReportDataDAO {
         return totalSells;
     }
 
-    public List<Product> topSells() {
-        List<Product> products = getProductSells();
-
-        final int average = getTotalSells() / products.size();
-        //In base of total sells & items calculates the average
-        return products.stream().filter(product -> product.quantity() >= average).toList(); //Return the ones that are higher than the average or equals
-    }
-
-    public List<Product> topSellsByCategories(int id) {
-        List<Product> products = getProductByCategories(id);
-        for(Product p : products){
-            System.out.println(p.title() + "  " + p.quantity());
-        }
-
-        final int average = getTotalSells() / products.size();
-        //In base of total sells & items calculates the average
-        return products.stream().filter(product -> product.quantity() >= average).toList(); //Return the ones that are higher than the average or equals
-    }
-
-    public List<Product> lowSells() {
-        List<Product> products = getProductSells();
-
-        final int average = getTotalSells() / products.size();
-        // The same that topSells() but just the ones that are lower than the average
-        return products.stream().filter(product -> product.quantity() < average).toList();
-    }
-
     public Map<Integer, String> getCategories() {
-        
+
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
         String query = "SELECT id, name FROM categories;";
@@ -119,7 +118,7 @@ public class ReportDataDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                categories.put( rs.getInt("id"),rs.getString("name"));
+                categories.put(rs.getInt("id"), rs.getString("name"));
             }
 
         } catch (SQLException e) {
