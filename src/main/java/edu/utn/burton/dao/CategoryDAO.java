@@ -94,6 +94,17 @@ public class CategoryDAO {
             return null;
         }
     }
+    
+    public static Category getCategory(int id){
+        Category c = null;
+        try {
+            c = api.getObject(Category.class, "categories/" + id, null);
+        } catch (Exception e) {
+            System.out.println("Error while getting category via id");
+        }
+        
+        return c;
+    }
 
     public static int getCategoryIdByName(String categoryName) {
         return getCategories()
