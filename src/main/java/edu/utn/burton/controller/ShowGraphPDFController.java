@@ -12,6 +12,7 @@ import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.image.WritableImage;
 import javax.imageio.ImageIO;
@@ -29,11 +30,11 @@ public class ShowGraphPDFController extends ReportTemplate {
 
     @Override
     protected void addContent(Document document) throws DocumentException {
-            PieChart pie = DrawGraphsController.pieReturn;
+            BarChart bar = DrawGraphsController.getBarReturn();
 
         try {
             // Capturar el gráfico como una imagen
-            WritableImage snapshot = pie.snapshot(null, null);
+            WritableImage snapshot = bar.snapshot(null, null);
 
             // Convertir WritableImage a BufferedImage
             BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
