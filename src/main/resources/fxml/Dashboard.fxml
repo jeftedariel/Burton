@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -72,12 +73,6 @@
          </children></Pane>
       <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #6f71de;">
          <children>
-
-            <ImageView id="avatar" fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/user.png" />
-               </image>
-            </ImageView>
             <Text fx:id="username" fill="WHITE" layoutX="64.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                <font>
                   <Font name="Poppins Regular" size="18.0" />
@@ -102,5 +97,6 @@
             </MFXButton>
 
          </children></Pane>
+    <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="31.0" layoutY="27.0" radius="23.0" stroke="TRANSPARENT" strokeType="INSIDE" />
    </children>
 </AnchorPane>

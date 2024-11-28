@@ -13,6 +13,7 @@ import edu.utn.burton.entities.MessageCell;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ProductCell;
+import edu.utn.burton.entities.UserSession;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
@@ -32,9 +33,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.controlsfx.control.RangeSlider;
@@ -80,7 +81,7 @@ public class MenuController implements Initializable {
     private MFXButton Historial;
 
     @FXML
-    private ImageView avatar;
+    private Circle avatar;
 
     @FXML
     private Text username;
@@ -102,6 +103,8 @@ public class MenuController implements Initializable {
         //Displays on header the user's data
         showUserInfo = new ShowUserInfo(avatar, username);
         showUserInfo.loadUserInfo();
+        
+        dashboard.setVisible(UserSession.getInstance().getRole().equals("admin"));
 
         //Set the max value for the Price Range
         rangeSlider.setHighValue(500);//Then sets the range Text
