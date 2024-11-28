@@ -16,7 +16,7 @@ import java.util.Set;
  *
  * @author jefte
  */
-public class dumbProductInfo {
+public class dumpProductInfo {
 
     public static void dumbData() {
         APIHandler apiHandler = new APIHandler();
