@@ -5,27 +5,29 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.entities.UserSession;
-import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 import javafx.fxml.FXML;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javax.imageio.ImageIO;
 
 /**
  *
  * @author alexledezma
  */
 public class ShowUserInfo {
-    
+
     @FXML
-    private ImageView avatar;
+    private Circle avatar;
 
     @FXML
     private Text username;
 
-    public ShowUserInfo(ImageView avatar, Text username) {
+    public ShowUserInfo(Circle avatar, Text username) {
         this.avatar = avatar;
         this.username = username;
     }
@@ -34,11 +36,12 @@ public class ShowUserInfo {
         username.setText(UserSession.getInstance().getName());
         BufferedImage image;
         try {
-            image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
-            avatar.setImage(SwingFXUtils.toFXImage(image, null));
+            Image im = new Image(UserSession.getInstance().getAvatar(), false);
+            avatar.setFill(new ImagePattern(im));
+            avatar.setEffect(new DropShadow(+25d, 0d, +2d, Color.DARKSEAGREEN));
         } catch (Exception e) {
             System.out.println("Hubo un error al intentar cargar la img");
         }
     }
-    
+
 }
