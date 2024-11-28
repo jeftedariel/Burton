@@ -172,8 +172,8 @@ CREATE TABLE `products` (
   `title` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `description` varchar(512),
-  `category_id` int NOT NULL,
   `images` text,
+  `category_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)

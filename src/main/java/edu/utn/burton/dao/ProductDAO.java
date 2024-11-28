@@ -5,10 +5,12 @@
 package edu.utn.burton.dao;
 
 import edu.utn.burton.database.DBAdapterFactory;
+import edu.utn.burton.database.IDBAdapter;
 import edu.utn.burton.entities.Product;
 import edu.utn.burton.handlers.APIHandler;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,13 +41,13 @@ public class ProductDAO {
 
         List<Product> items = new ArrayList<>();
 
-        String query = "SELECT * FROM Products";
+        String query = "SELECT * FROM products";
         try (Connection conn = DBAdapterFactory.getAdapter().getConnection(); CallableStatement stmt = conn.prepareCall(query)) {
 
             ResultSet rs = stmt.executeQuery(query);
             
             while (rs.next()) {
-                items.add(new Product(rs.getInt("product_id"), rs.getString("title"), rs.getDouble("price"), rs.getString("description"), ProductDAO.unserializeUrl(rs.getString("images")), rs.getInt("category_id")));
+                items.add(new Product(rs.getInt("id"), rs.getString("title"), rs.getDouble("price"), rs.getString("description"), ProductDAO.unserializeUrl(rs.getString("images")), rs.getInt("category_id")));
             }
             
         } catch (SQLException e) {
@@ -54,12 +56,47 @@ public class ProductDAO {
         return items;
     }
     
+    public static void dumpProducts(List<Product> products){
+
+        String query = "INSERT into  products(id, title, price, description, images, category_id) values(?,?,?,?,?,?)";
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
+        try {
+            
+            
+            
+            PreparedStatement pstmt = adapter.getConnection().prepareStatement(query);
+            adapter.getConnection().setAutoCommit(false);
+            
+            for(Product p : products){
+                
+                pstmt.setInt(1, p.id());
+                pstmt.setString(2, p.title());
+                pstmt.setDouble(3, p.price());
+                pstmt.setString(4, p.description());
+                pstmt.setString(5, ProductDAO.serializeUrl(p.images()));
+                pstmt.setInt(6,p.category_id());
+                
+                pstmt.addBatch();
+            }
+            
+            int[] r = pstmt.executeBatch();
+            adapter.getConnection().commit();
+            System.out.println(r.length + " New products has been dumped");
+
+        } catch (SQLException e) {
+            System.err.println("Error while dumping products." + e.getMessage());
+        } finally{
+            adapter.disconnect();
+        }
+    
+    }
+    
      public static ArrayList<String> unserializeUrl(String url){
         ArrayList<String> urls =  new ArrayList<>(List.of(url.split(",")));
         return urls;
     }
     
-     public static String serializeUrl(ArrayList<String> palabras) {
+     public static String serializeUrl(List<String> palabras) {
         StringBuilder sb = new StringBuilder();
         for (String palabra : palabras) {
             if (palabra.equals(palabras.getLast())) {

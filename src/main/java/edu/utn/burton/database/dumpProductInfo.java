@@ -16,26 +16,33 @@ import java.util.Set;
  *
  * @author jefte
  */
-public class dumpProductInfo {
+public class DumpProductInfo {
 
     public static void dumpData() {
         APIHandler apiHandler = new APIHandler();
+        
+        List<Product> dbProducts = ProductDAO.getDBProducts();
         List<Product> apiProducts = new ArrayList<>();
+        
         try {
             apiProducts = apiHandler.getList(Product.class, "products", null);
         } catch (Exception e) {
             System.out.println("Error while loading api products:" + e);
         }
+        
 
-        List<Product> dbProducts = ProductDAO.getDBProducts();
-
+        System.out.println("Cantidad en api:"+ apiProducts.size());
         
-        Set<Product> missingProducts = new HashSet<Product>();
+        apiProducts.removeAll(dbProducts);
+        System.out.println("Ahora sin los de la db:"+ apiProducts.size());
         
-        missingProducts.addAll(dbProducts);
-        missingProducts.addAll(apiProducts);
         
-        missingProducts.removeAll(dbProducts);
+        /*missingProducts.forEach(e -> {
+            System.out.println("Missing: " + e.toString());
+        });*/
+        
+        ProductDAO.dumpProducts(apiProducts.stream().toList());
+        
         
     }
 
