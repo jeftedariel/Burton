@@ -5,10 +5,7 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
-import edu.utn.burton.entities.UserSession;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,10 +14,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.imageio.ImageIO;
 
 /**
  * FXML Controller class
@@ -32,11 +28,13 @@ public class DashboardController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private ShowUserInfo user;
+    
     @FXML
     private MFXButton store;
 
     @FXML
-    private ImageView avatar;
+    private Circle avatar;
 
     @FXML
     private Text username;
@@ -55,6 +53,9 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        user = new ShowUserInfo(this.avatar, this.username);
+        user.loadUserInfo();
+        
         store.setOnMouseClicked(ev -> {
             MenuController.initGui((Stage) store.getScene().getWindow());
         });
@@ -67,20 +68,8 @@ public class DashboardController implements Initializable {
         });
         
 
-        loadUserInfo();
+        
 
-    }
-
-    public void loadUserInfo() {
-        username.setText(UserSession.getInstance().getName());
-        BufferedImage image;
-
-        try {
-            image = ImageIO.read(new URL(UserSession.getInstance().getAvatar()));
-            avatar.setImage(SwingFXUtils.toFXImage(image, null));
-        } catch (Exception ee) {
-            System.out.println("Hubo un error al intentar cargar la img");
-        }
     }
 
     public static void initGui(Stage stage) {

@@ -27,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -59,7 +60,7 @@ public class HistorialController implements Initializable{
     private OrderDAO orderDAO;
     
     @FXML
-    private ImageView avatar;
+    private Circle avatar;
 
     @FXML
     private Text username;

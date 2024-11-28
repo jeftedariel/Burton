@@ -20,12 +20,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.scene.image.ImageView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 /**
@@ -63,7 +63,7 @@ public class CartMenuController implements Initializable {
     private MFXButton returnBtn;
 
     @FXML
-    private ImageView avatar;
+    private Circle avatar;
 
     @FXML
     private Text username;
