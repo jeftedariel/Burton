@@ -121,7 +121,6 @@ public class OrderDAO {
 
     return orderDetailsList;
     }
-    
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
         
@@ -139,10 +138,16 @@ public class OrderDAO {
             row.put("order_id", rs.getInt("order_id"));
             row.put("product_id", rs.getInt("product_id"));
             row.put("quantity", rs.getInt("quantity"));
-            row.put("unit_price", rs.getDouble("unit_price"));
-            row.put("subtotal", rs.getDouble("subtotal"));
-            row.put("product_name", rs.getString("product_name"));
-            row.put("product_image", rs.getString("product_image"));
+            row.put("subtotal", rs.getInt("subtotal"));
+            row.put("title", rs.getString("title"));
+            
+            String images = rs.getString("images");
+            if (images != null && !images.isEmpty()) {
+                String[] imageUrls = images.split(","); // Separar las URLs por coma
+                row.put("images", imageUrls[0].trim()); // Agregar solo el primer URL
+            } else {
+                row.put("images", null); // Manejar casos en los que 'images' sea null o vacío
+            }
 
             orderItemsList.add(row);
         }
@@ -217,8 +222,6 @@ public class OrderDAO {
 
     }
     
-    
-
     public static void addProductsToCart(ObservableList<ProductCart> items) {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
@@ -259,7 +262,7 @@ public class OrderDAO {
 
     IDBAdapter adapter = DBAdapterFactory.getAdapter();
     String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";
-    String consult2 = "INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, product_name, product_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String consult2 = "INSERT INTO order_items (order_id, product_id, quantity, subtotal) VALUES (?, ?, ?, ?)";
 
     try {
         // Preparar el statement para insertar en `orders` con `RETURN_GENERATED_KEYS`
@@ -289,10 +292,7 @@ public class OrderDAO {
             stmt.setInt(1, orderId);
             stmt.setInt(2, item.getProductId());
             stmt.setLong(3, item.getQuantity());
-            stmt.setDouble(4, item.getUnitePrice());
-            stmt.setDouble(5, item.getSubtotal());
-            stmt.setString(6, item.getNameProduct());
-            stmt.setString(7, item.getImagePrincipal());
+            stmt.setDouble(4, item.getSubtotal());
             
             // Ejecutar la inserción para el producto actual
             stmt.executeUpdate();
@@ -302,7 +302,7 @@ public class OrderDAO {
         stmt.close();
 
     } catch (SQLException e) {
-        System.err.println("Error al agregar productos al carrito: " + e.getMessage());
+        System.out.println("Error al agregar productos al carrito: " + e.getMessage());
     } finally {
         adapter.disconnect();
     }

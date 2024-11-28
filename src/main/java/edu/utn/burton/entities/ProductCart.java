@@ -17,6 +17,13 @@ public class ProductCart {
     private double unitePrice, subtotal;
     private String imagePrincipal, nameProduct;
 
+    public ProductCart(int productId, long quantity, double subtotal, String nameProduct) {
+        this.productId = productId;
+        this.quantity = quantity;
+        this.subtotal = subtotal;
+        this.nameProduct = nameProduct;
+    }
+    
     public ProductCart(int productId, String nameProduct,long quantity, double unitePrice, String imagePrincipal) {
         this.productId = productId;
         this.quantity = quantity;
