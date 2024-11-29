@@ -4,7 +4,7 @@
  */
 package edu.utn.burton.controller;
 
-import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.message.Message;
 import java.util.function.Consumer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

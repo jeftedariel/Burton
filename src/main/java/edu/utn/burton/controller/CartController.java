@@ -5,9 +5,9 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.entities.Cart;
-import edu.utn.burton.entities.Message;
-import edu.utn.burton.entities.Product;
-import edu.utn.burton.entities.ProductCart;
+import edu.utn.burton.entities.message.Message;
+import edu.utn.burton.entities.products.Product;
+import edu.utn.burton.entities.products.ProductCart;
 import edu.utn.burton.entities.UserSession;
 import javafx.scene.Node;
 import edu.utn.burton.dao.OrderDAO;

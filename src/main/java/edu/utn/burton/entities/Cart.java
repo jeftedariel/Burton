@@ -4,6 +4,8 @@
  */
 package edu.utn.burton.entities;
 
+import edu.utn.burton.entities.products.ProductClient;
+import edu.utn.burton.entities.products.ProductCart;
 import edu.utn.burton.dao.OrderDAO;
 import java.time.LocalDate;
 import javafx.collections.ObservableList;

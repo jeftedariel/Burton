@@ -3,7 +3,7 @@ package edu.utn.burton.handlers;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.utn.burton.controller.Alerts;
-import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.message.Message;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.InputStreamReader;

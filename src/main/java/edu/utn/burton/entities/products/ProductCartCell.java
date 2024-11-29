@@ -1,4 +1,4 @@
-package edu.utn.burton.entities;
+package edu.utn.burton.entities.products;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.controller.CartController;

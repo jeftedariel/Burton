@@ -7,7 +7,7 @@ package edu.utn.burton.dao;
 import edu.utn.burton.database.DBAdapterFactory;
 import edu.utn.burton.database.IDBAdapter;
 import edu.utn.burton.entities.Category;
-import edu.utn.burton.entities.Product;
+import edu.utn.burton.entities.products.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

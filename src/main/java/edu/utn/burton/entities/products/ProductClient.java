@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.utn.burton.entities;
+package edu.utn.burton.entities.products;
 
+import edu.utn.burton.entities.Cart;
+import edu.utn.burton.entities.UserSession;
 import java.util.Date;
 
 /**

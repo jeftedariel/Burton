@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.utn.burton.entities;
+package edu.utn.burton.entities.order;
 
+import edu.utn.burton.entities.products.ProductClient;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

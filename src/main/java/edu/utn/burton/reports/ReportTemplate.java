@@ -12,7 +12,7 @@ import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 import edu.utn.burton.controller.Alerts;
-import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.message.Message;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

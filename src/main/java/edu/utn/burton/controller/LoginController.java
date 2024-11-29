@@ -3,7 +3,7 @@ package edu.utn.burton.controller;
 import edu.utn.burton.Burton;
 import edu.utn.burton.auth.GoogleAuthStrategy;
 import edu.utn.burton.auth.PlatziAuthStrategy;
-import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.message.Message;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;

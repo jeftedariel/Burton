@@ -7,7 +7,7 @@ package edu.utn.burton.database;
 import edu.utn.burton.dao.CategoryDAO;
 import edu.utn.burton.dao.ProductDAO;
 import edu.utn.burton.entities.Category;
-import edu.utn.burton.entities.Product;
+import edu.utn.burton.entities.products.Product;
 import edu.utn.burton.handlers.APIHandler;
 import java.util.ArrayList;
 import java.util.List;

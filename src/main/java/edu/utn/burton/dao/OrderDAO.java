@@ -6,10 +6,10 @@ package edu.utn.burton.dao;
 
 import edu.utn.burton.database.DBAdapterFactory;
 import edu.utn.burton.database.IDBAdapter;
-import edu.utn.burton.entities.Order;
-import edu.utn.burton.entities.Product;
-import edu.utn.burton.entities.ProductCart;
-import edu.utn.burton.entities.ProductClient;
+import edu.utn.burton.entities.order.Order;
+import edu.utn.burton.entities.products.Product;
+import edu.utn.burton.entities.products.ProductCart;
+import edu.utn.burton.entities.products.ProductClient;
 import edu.utn.burton.entities.UserSession;
 import java.sql.CallableStatement;
 import java.sql.Connection;

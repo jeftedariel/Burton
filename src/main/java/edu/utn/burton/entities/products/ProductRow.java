@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.utn.burton.entities;
+package edu.utn.burton.entities.products;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.controller.MasInfoController;
 import edu.utn.burton.dao.ProductDAO;
+import edu.utn.burton.entities.order.Order;
 import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.net.URL;

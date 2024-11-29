@@ -4,7 +4,7 @@
  */
 package edu.utn.burton.controller;
 
-import edu.utn.burton.entities.Product;
+import edu.utn.burton.entities.products.Product;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Record.java to edit this template
  */
-package edu.utn.burton.entities;
+package edu.utn.burton.entities.products;
 
 import edu.utn.burton.dao.CategoryDAO;
+import edu.utn.burton.entities.Category;
 import edu.utn.burton.handlers.APIHandler;
 import java.util.List;
 import java.util.Objects;

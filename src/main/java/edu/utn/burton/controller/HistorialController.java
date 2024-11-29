@@ -5,9 +5,9 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
-import edu.utn.burton.entities.OrderDetailsView;
-import edu.utn.burton.entities.OrderRow;
-import edu.utn.burton.entities.ProductClient;
+import edu.utn.burton.entities.order.OrderDetailsView;
+import edu.utn.burton.entities.order.OrderRow;
+import edu.utn.burton.entities.products.ProductClient;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.dao.OrderDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;

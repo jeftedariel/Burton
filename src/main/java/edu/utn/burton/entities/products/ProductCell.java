@@ -1,4 +1,4 @@
-package edu.utn.burton.entities;
+package edu.utn.burton.entities.products;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.controller.Alerts;
@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import edu.utn.burton.controller.CartController;
 import edu.utn.burton.controller.MasInfoController;
+import edu.utn.burton.entities.message.Message;
+import edu.utn.burton.entities.UserSession;
 import javafx.stage.Stage;
 import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;

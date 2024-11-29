@@ -5,7 +5,7 @@
 package edu.utn.burton.auth;
 
 import edu.utn.burton.controller.Alerts;
-import edu.utn.burton.entities.Message;
+import edu.utn.burton.entities.message.Message;
 import edu.utn.burton.entities.User;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.handlers.APIHandler;

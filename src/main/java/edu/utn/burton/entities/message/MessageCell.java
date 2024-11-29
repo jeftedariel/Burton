@@ -1,4 +1,4 @@
-package edu.utn.burton.entities;
+package edu.utn.burton.entities.message;
 
 import edu.utn.burton.Burton;
 import io.github.palexdev.materialfx.controls.MFXButton;

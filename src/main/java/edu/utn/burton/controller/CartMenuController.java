@@ -2,10 +2,10 @@ package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.entities.Cart;
-import edu.utn.burton.entities.Message;
-import edu.utn.burton.entities.MessageCell;
-import edu.utn.burton.entities.ProductCartCell;
-import edu.utn.burton.entities.ProductClient;
+import edu.utn.burton.entities.message.Message;
+import edu.utn.burton.entities.message.MessageCell;
+import edu.utn.burton.entities.products.ProductCartCell;
+import edu.utn.burton.entities.products.ProductClient;
 import edu.utn.burton.entities.UserSession;
 import edu.utn.burton.dao.OrderDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;

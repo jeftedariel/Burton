@@ -1,7 +1,7 @@
 package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
-import edu.utn.burton.entities.Product;
+import edu.utn.burton.entities.products.Product;
 import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import javafx.fxml.FXMLLoader;
