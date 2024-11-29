@@ -66,8 +66,7 @@ public class MasInfoController implements Initializable {
             scene.getStylesheets().add(Burton.class.getResource("/styles/masinfo.css").toExternalForm());
 
             Stage popupStage = new Stage();
-            popupStage.setScene(scene);
-            //popupStage.initStyle(StageStyle.UNDECORATED);
+            popupStage.setScene(scene);         
             popupStage.initOwner(stage);
             popupStage.setResizable(false);
             popupStage.centerOnScreen();
