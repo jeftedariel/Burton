@@ -48,7 +48,7 @@ public class OrderDAO {
             }
         } catch (SQLException e) {
 
-            System.err.println("Error al ejecutar el procedimiento: " + e.getMessage());
+            System.out.println("Error al ejecutar el procedimiento: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -57,9 +57,9 @@ public class OrderDAO {
     }
 
     public static void completeCart(int usuarioId) {
-        
+
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
-        
+
         try {
             int cartId = getActiveCartId(UserSession.getInstance().getId());
 
@@ -68,7 +68,7 @@ public class OrderDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
 
-            System.err.println("Error al ejecutar el procedimiento: " + e.getMessage());
+            System.out.println("Error al ejecutar el procedimiento: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
@@ -88,74 +88,98 @@ public class OrderDAO {
                 cartId = rs.getInt("cart_id");
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener el carrito activo: " + e.getMessage());
+            System.out.println("Error al obtener el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
 
         return cartId;
     }
-    
+
     public static ObservableList<ProductClient> getOrdersByUser(int usuarioId) {
-        
-    ObservableList<ProductClient> orderDetailsList = FXCollections.observableArrayList();
-    IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
-    try {
-        CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_user(?)}");
-        stmt.setInt(1, usuarioId);
-        ResultSet rs = stmt.executeQuery();
+        ObservableList<ProductClient> orderDetailsList = FXCollections.observableArrayList();
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
-        while (rs.next()) {
-            int orderId = rs.getInt("order_id");
-            Date orderDate = rs.getDate("order_date");
-            double totalAmount = rs.getDouble("total_amount");
+        try {
+            CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_user(?)}");
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
 
-            orderDetailsList.add(new ProductClient(orderId, orderDate, totalAmount));
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                Date orderDate = rs.getDate("order_date");
+                double totalAmount = rs.getDouble("total_amount");
+
+                orderDetailsList.add(new ProductClient(orderId, orderDate, totalAmount));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener las órdenes: " + e.getMessage());
+        } finally {
+            adapter.disconnect();
         }
-    } catch (SQLException e) {
-        System.err.println("Error al obtener las órdenes: " + e.getMessage());
-    } finally {
-        adapter.disconnect();
+
+        return orderDetailsList;
     }
 
-    return orderDetailsList;
+    public static ObservableList<ProductClient> getOrdersByAdmin() {
+
+        ObservableList<ProductClient> orderDetailsList = FXCollections.observableArrayList();
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
+
+        try {
+            CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_Admin}");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                Date orderDate = rs.getDate("order_date");
+                double totalAmount = rs.getDouble("total_amount");
+
+                orderDetailsList.add(new ProductClient(orderId, orderDate, totalAmount));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener las órdenes: " + e.getMessage());
+        } finally {
+            adapter.disconnect();
+        }
+        return orderDetailsList;
     }
+
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
-        
-    ObservableList<Map<String, Object>> orderItemsList = FXCollections.observableArrayList();
-    String procedureCall = "{CALL get_order_items_by_order_id(?)}";
 
-    try (Connection conn = DBAdapterFactory.getAdapter().getConnection();
-         CallableStatement stmt = conn.prepareCall(procedureCall)) {
-        stmt.setInt(1, orderId);
-        ResultSet rs = stmt.executeQuery();
+        ObservableList<Map<String, Object>> orderItemsList = FXCollections.observableArrayList();
+        String procedureCall = "{CALL get_order_items_by_order_id(?)}";
 
-        while (rs.next()) {
-            Map<String, Object> row = new HashMap<>();
-            row.put("order_item_id", rs.getInt("order_item_id"));
-            row.put("order_id", rs.getInt("order_id"));
-            row.put("product_id", rs.getInt("product_id"));
-            row.put("quantity", rs.getInt("quantity"));
-            row.put("subtotal", rs.getInt("subtotal"));
-            row.put("title", rs.getString("title"));
-            
-            String images = rs.getString("images");
-            if (images != null && !images.isEmpty()) {
-                String[] imageUrls = images.split(","); // Separar las URLs por coma
-                row.put("images", imageUrls[0].trim()); // Agregar solo el primer URL
-            } else {
-                row.put("images", null); // Manejar casos en los que 'images' sea null o vacío
+        try (Connection conn = DBAdapterFactory.getAdapter().getConnection(); CallableStatement stmt = conn.prepareCall(procedureCall)) {
+            stmt.setInt(1, orderId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                row.put("order_item_id", rs.getInt("order_item_id"));
+                row.put("order_id", rs.getInt("order_id"));
+                row.put("product_id", rs.getInt("product_id"));
+                row.put("quantity", rs.getInt("quantity"));
+                row.put("subtotal", rs.getInt("subtotal"));
+                row.put("title", rs.getString("title"));
+
+                String images = rs.getString("images");
+                if (images != null && !images.isEmpty()) {
+                    String[] imageUrls = images.split(","); // Separar las URLs por coma
+                    row.put("images", imageUrls[0].trim()); // Agregar solo el primer URL
+                } else {
+                    row.put("images", null); // Manejar casos en los que 'images' sea null o vacío
+                }
+
+                orderItemsList.add(row);
             }
-
-            orderItemsList.add(row);
+        } catch (SQLException e) {
+            System.out.println("Error al obtener los productos de la orden: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
-    }
 
-    return orderItemsList;
+        return orderItemsList;
     }
 
     public static int createActiveCart(int idUser) {
@@ -171,14 +195,14 @@ public class OrderDAO {
                 cartId = rs.getInt("cart_id");
             }
         } catch (SQLException e) {
-            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+            System.out.println("Error al crear el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
 
         return cartId;
     }
-    
+
     public static void removeProduct(int idItem) {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
@@ -195,14 +219,13 @@ public class OrderDAO {
             System.out.println("eliminado");
 
         } catch (SQLException e) {
-            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+            System.out.println("Error al crear el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
 
     }
-    
-    
+
     public static void cancelCart() {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
@@ -215,13 +238,13 @@ public class OrderDAO {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Error al crear el carrito activo: " + e.getMessage());
+            System.out.println("Error al crear el carrito activo: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
 
     }
-    
+
     public static void addProductsToCart(ObservableList<ProductCart> items) {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
@@ -252,61 +275,61 @@ public class OrderDAO {
             psA.execute();
 
         } catch (SQLException e) {
-            System.err.println("Error al agregar productos al carrito: " + e.getMessage());
+            System.out.println("Error al agregar productos al carrito: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
     }
-    
+
     public static void addProducItemsAndComplete(ProductClient order, ObservableList<ProductCart> order_item, int usuarioId) {
 
-    IDBAdapter adapter = DBAdapterFactory.getAdapter();
-    String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";
-    String consult2 = "INSERT INTO order_items (order_id, product_id, quantity, subtotal) VALUES (?, ?, ?, ?)";
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
+        String consult1 = "INSERT INTO orders (user_id, total_amount, status, payment_method) VALUES (?, ?, ?, ?)";
+        String consult2 = "INSERT INTO order_items (order_id, product_id, quantity, subtotal) VALUES (?, ?, ?, ?)";
 
-    try {
-        // Preparar el statement para insertar en `orders` con `RETURN_GENERATED_KEYS`
-        PreparedStatement psE = adapter.getConnection().prepareStatement(consult1, Statement.RETURN_GENERATED_KEYS);
-        psE.setInt(1, UserSession.getInstance().getId());
-        psE.setDouble(2, order.getTotalAmount());
-        psE.setString(3, order.getStatus());
-        psE.setString(4, order.getTypePay());
+        try {
+            // Preparar el statement para insertar en `orders` con `RETURN_GENERATED_KEYS`
+            PreparedStatement psE = adapter.getConnection().prepareStatement(consult1, Statement.RETURN_GENERATED_KEYS);
+            psE.setInt(1, UserSession.getInstance().getId());
+            psE.setDouble(2, order.getTotalAmount());
+            psE.setString(3, order.getStatus());
+            psE.setString(4, order.getTypePay());
 
-        // Ejecutar la inserción en `orders`
-        psE.executeUpdate();
+            // Ejecutar la inserción en `orders`
+            psE.executeUpdate();
 
-        // Obtener el `order_id` generado
-        ResultSet rs = psE.getGeneratedKeys();
-        int orderId = 0;
-        if (rs.next()) {
-            orderId = rs.getInt(1);
+            // Obtener el `order_id` generado
+            ResultSet rs = psE.getGeneratedKeys();
+            int orderId = 0;
+            if (rs.next()) {
+                orderId = rs.getInt(1);
+            }
+            rs.close();
+            psE.close();
+
+            // Preparar el statement para insertar en `order_items`
+            PreparedStatement stmt = adapter.getConnection().prepareStatement(consult2);
+
+            // Insertar cada producto en `order_items`
+            for (ProductCart item : order_item) {
+                stmt.setInt(1, orderId);
+                stmt.setInt(2, item.getProductId());
+                stmt.setLong(3, item.getQuantity());
+                stmt.setDouble(4, item.getSubtotal());
+
+                // Ejecutar la inserción para el producto actual
+                stmt.executeUpdate();
+            }
+
+            // Cerrar el statement de `order_items`
+            stmt.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error al agregar productos al carrito: " + e.getMessage());
+        } finally {
+            adapter.disconnect();
         }
-        rs.close();
-        psE.close();
-
-        // Preparar el statement para insertar en `order_items`
-        PreparedStatement stmt = adapter.getConnection().prepareStatement(consult2);
-
-        // Insertar cada producto en `order_items`
-        for (ProductCart item : order_item) {
-            stmt.setInt(1, orderId);
-            stmt.setInt(2, item.getProductId());
-            stmt.setLong(3, item.getQuantity());
-            stmt.setDouble(4, item.getSubtotal());
-            
-            // Ejecutar la inserción para el producto actual
-            stmt.executeUpdate();
-        }
-
-        // Cerrar el statement de `order_items`
-        stmt.close();
-
-    } catch (SQLException e) {
-        System.out.println("Error al agregar productos al carrito: " + e.getMessage());
-    } finally {
-        adapter.disconnect();
     }
-}
 
     public static ObservableList<ProductCart> getProductSave() {
 
@@ -315,7 +338,7 @@ public class OrderDAO {
 
         try {
 
-            int cart = getActiveCartId( UserSession.getInstance().getId());
+            int cart = getActiveCartId(UserSession.getInstance().getId());
 
             int cartId = OrderDAO.getActiveCartId(UserSession.getInstance().getId());
             if (cartId == -1) {

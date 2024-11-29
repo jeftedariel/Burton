@@ -72,7 +72,7 @@ public abstract class ReportTemplate {
         Image icon = Image.getInstance(path);
         icon.setAlignment(Element.ALIGN_CENTER);
         icon.scalePercent(30);
-        Font fontTitle = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font fontTitle = new Font(Font.BOLD, 18);
         Paragraph title = new Paragraph(titleText, fontTitle);
         title.setAlignment(Element.ALIGN_CENTER);
 

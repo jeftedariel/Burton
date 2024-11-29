@@ -55,7 +55,7 @@ public class Cart {
         products = OrderDAO.getProductSave();
     }
 
-    public void addProduct(ProductCart prUs, int cantidad) {
+    public void addProduct(ProductCart prUs, int cantidad) {           
         ProductCart existingProduct = products.stream()
                 .filter(p -> p.getProductId() == prUs.getProductId())
                 .findFirst()

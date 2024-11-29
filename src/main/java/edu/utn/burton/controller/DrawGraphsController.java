@@ -7,10 +7,13 @@ package edu.utn.burton.controller;
 import edu.utn.burton.entities.Product;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.util.List;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tooltip;
 
 /**
  *
@@ -18,51 +21,73 @@ import javafx.scene.chart.PieChart;
  */
 public class DrawGraphsController {
 
-
-    static PieChart pieReturn;
+    static BarChart barReturn;
 
     public DrawGraphsController() {
-       
+        
     }
-
-   
 
     public void drawGraph(List<Product> productos, MFXLegacyListView showGraphs) {
-        // asigana los datos que se obtienen para mostarr en el grafico
-        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+        // Asigna los datos para mostrar en el gráfico
+        ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        // Recorre la lista de productos
         for (Product p : productos) {
-            data.add(new PieChart.Data(p.title(), p.quantity()));
+            String title = p.title();
+
+            // Si el título es demasiado largo, se recorta y se agrega "..."
+            if (title.length() > 27) {
+                title = title.substring(0, 26) + "...";
+            }
+
+            // Agrega los datos a la serie
+            series.getData().add(new XYChart.Data<>(title, p.quantity()));
         }
 
-        // Crear el gráfico de pastel 
-        PieChart pie = new PieChart(data);
-        pieReturn = pie;
-        pie.setTitle("Gráfica de Pastel en JAVA FX");
-        pie.setLabelsVisible(true);
+        // Agrega la serie al conjunto de datos
+        data.add(series);
 
-        //recoore cada una de las porciones
-        for (PieChart.Data slice : pie.getData()) {
-            //se usa para dar el nombre a una propiedad y asigna la etiqueta a cada porcion del grafico 
-            slice.nameProperty().bind(
-                    //definimos el formato que le damos ahi le puse que sea el porcentage con un solo decimal 
-                    //suma todos lo datos y depues los divide enre la cantidad 
-                    //multiplico por 100 para que se vea bien el porcentahe
-                    Bindings.format("%.1f%%", slice.pieValueProperty().divide(pie.getData().stream()
-                            .mapToDouble(PieChart.Data::getPieValue)
-                            .sum())
-                            .multiply(100))
+        // Crear el gráfico de barras
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+
+        // Asigna los datos al gráfico
+        barChart.setData(data);
+        barReturn = barChart;
+
+        // Recorre cada barra en el gráfico
+        for (XYChart.Data<String, Number> bar : series.getData()) {
+            // Crea un Tooltip para cada barra, mostrando el porcentaje
+            Tooltip tooltip = new Tooltip(
+                    String.format("%.1f%%", bar.getYValue().doubleValue()
+                            / series.getData().stream()
+                                    .mapToDouble(d -> d.getYValue().doubleValue())
+                                    .sum() * 100)
             );
+            Tooltip.install(bar.getNode(), tooltip);
+
+            // Asigna un color aleatorio a cada barra
+            bar.getNode().setStyle("-fx-bar-fill: " + generateRandomColor() + ";");
         }
 
-        // Agregar el gráfico de pastel al MFXLegacyListView
+        // Asegúrate de que showGraphs es un contenedor adecuado para agregar el gráfico
         showGraphs.getItems().clear();
-        showGraphs.getItems().add(pie);
-
+        showGraphs.getItems().add(barChart);
     }
 
-    public static PieChart getPieReturn() {
-        return pieReturn;
+    private String generateRandomColor() {
+
+        double red = Math.random();
+        double green = Math.random();
+        double blue = Math.random();
+
+        return String.format("#%02X%02X%02X", (int) (red * 255), (int) (green * 255), (int) (blue * 255));
     }
- 
+
+    public static BarChart getBarReturn() {
+        return barReturn;
+    }
 
 }
