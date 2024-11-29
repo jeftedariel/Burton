@@ -31,105 +31,98 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 /**
  *
  * @author alexledezma
  */
-public class HistorialController implements Initializable{
+public class HistorialController implements Initializable {
+
     private ShowUserInfo user;
-    
+
     @FXML
     private MFXLegacyListView<HBox> Historial;
-    
+
     @FXML
     private ObservableList<HBox> observableOrderList;
-    
+
     @FXML
     private MFXButton Regresar;
-    
+
     @FXML
     private MFXButton RegresarOrdenes;
-    
-    @FXML
-    private StackPane Stack;
-    
-    @FXML
-    private ImageView View;
-    
+
     private OrderDAO orderDAO;
-    
+
     @FXML
     private Circle avatar;
 
     @FXML
     private Text username;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-                
+
         orderDAO = new OrderDAO();
-        
-        observableOrderList = FXCollections.observableArrayList(); 
-        
- 
+
+        observableOrderList = FXCollections.observableArrayList();
+
         user = new ShowUserInfo(this.avatar, this.username);
         user.loadUserInfo();
-        
+
         loadOrders();
 
         Regresar.setOnAction(ev -> {
             MenuController.initGui((Stage) Regresar.getScene().getWindow());
         });
-        
+
         RegresarOrdenes.setOnAction(ev -> {
             HistorialController.initGui((Stage) RegresarOrdenes.getScene().getWindow());
             RegresarOrdenes.setVisible(false);
         });
-        
+
         RegresarOrdenes.setVisible(false);
-        
+
     }
-    
+
     public static void initGui(Stage stage) {
         try {
-          
+
             FXMLLoader loader = new FXMLLoader(Burton.class.getResource("/fxml/Historial.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Burton.class.getResource("/styles/orders.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
-    public void loadOrders() {
-    observableOrderList.clear();
-    List<ProductClient> orderDetailsList = OrderDAO.getOrdersByUser(UserSession.getInstance().getId());
 
-    if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
-        for (ProductClient order : orderDetailsList) {
-            OrderRow orderRow = new OrderRow(order, event -> loadOrderDetails(order.getId()));
-            observableOrderList.add(orderRow.getOrderRow());
+    public void loadOrders() {
+        observableOrderList.clear();
+        List<ProductClient> orderDetailsList = OrderDAO.getOrdersByUser(UserSession.getInstance().getId());
+
+        if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
+            for (ProductClient order : orderDetailsList) {
+                OrderRow orderRow = new OrderRow(order, event -> loadOrderDetails(order.getId()));
+                observableOrderList.add(orderRow.getOrderRow());
+            }
+        } else {
+            HBox emptyOrderRow = new HBox();
+            emptyOrderRow.getStyleClass().add("empty-order-row");
+            Label emptyLabel = new Label("No hay órdenes");
+            emptyLabel.getStyleClass().add("empty-label");
+            emptyOrderRow.getChildren().add(emptyLabel);
+            observableOrderList.add(emptyOrderRow);
         }
-    } else {
-        HBox emptyOrderRow = new HBox();
-        emptyOrderRow.getStyleClass().add("empty-order-row");
-        Label emptyLabel = new Label("No hay órdenes");
-        emptyLabel.getStyleClass().add("empty-label");
-        emptyOrderRow.getChildren().add(emptyLabel);
-        observableOrderList.add(emptyOrderRow);
-    }
-    Historial.setItems(observableOrderList);
+        Historial.setItems(observableOrderList);
     }
 
     public void loadOrderDetails(int orderId) {
-       OrderDetailsView detailsView = new OrderDetailsView(orderId);
-       Historial.setItems(detailsView.getOrderDetailsList());
-       RegresarOrdenes.setVisible(true);
+        OrderDetailsView detailsView = new OrderDetailsView(orderId);
+        Historial.setItems(detailsView.getOrderDetailsList());
+        RegresarOrdenes.setVisible(true);
     }
-        
+
 }

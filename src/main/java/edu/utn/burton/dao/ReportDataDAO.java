@@ -77,7 +77,7 @@ public class ReportDataDAO {
         List<Product> products = getProductByCategories(id);
 
         final int average = getTotalSells(products) / products.size();
-        return products.stream().filter(product -> product.quantity() >= average).toList();
+        return products.stream().filter(product -> product.quantity() > average).toList();
     }
     
       public List<Product> lowSellsByCategories(int id) {
@@ -93,7 +93,7 @@ public class ReportDataDAO {
 
         final int average = getTotalSells(products) / products.size();
         //In base of total sells & items calculates the average
-        return products.stream().filter(product -> product.quantity() >= average).toList(); //Return the ones that are higher than the average or equals
+        return products.stream().filter(product -> product.quantity() > average).toList(); //Return the ones that are higher than the average or equals
     }
 
     // obtiene los productos que estan por abajo del promedio 

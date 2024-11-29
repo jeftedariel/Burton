@@ -24,7 +24,7 @@ public class DrawGraphsController {
     static BarChart barReturn;
 
     public DrawGraphsController() {
-
+        
     }
 
     public void drawGraph(List<Product> productos, MFXLegacyListView showGraphs) {
@@ -56,7 +56,6 @@ public class DrawGraphsController {
         // Asigna los datos al gráfico
         barChart.setData(data);
         barReturn = barChart;
-        barChart.setTitle("Gráfico de Barras en JavaFX");
 
         // Recorre cada barra en el gráfico
         for (XYChart.Data<String, Number> bar : series.getData()) {
