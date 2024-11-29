@@ -271,8 +271,6 @@ DELIMITER ;
 
 DELIMITER //
 
-DELIMITER //
-
 CREATE PROCEDURE get_order_items_by_order_id(IN orderId INT)
 BEGIN
     SELECT 
@@ -423,6 +421,23 @@ END //
 
 DELIMITER ;
 
+
+DELIMITER //
+
+
+CREATE PROCEDURE get_orders_by_Admin()
+BEGIN
+    SELECT 
+        order_id, 
+        order_date, 
+        total_amount 
+    FROM orders;
+END //
+
+DELIMITER ;
+
+select * from carts;
+select * from cart_items;
 SELECT * FROM products;
 SELECT * FROM orders;
 SELECT * FROM order_items;
