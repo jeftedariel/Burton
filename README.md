@@ -58,6 +58,15 @@ A simple e-commerce App using Platzi Fake Store API.
 
 </details>
 
+<details>
+  <summary>Dashboard</summary>
+  
+  ![image](https://github.com/user-attachments/assets/31df8b11-c5b4-4ea8-b2d8-454f05c84c5d)
+
+</details>
+
+
+
 ## Technologies used 🔑
 - [Java](https://adoptium.net/) (21.0.3 or latest)
 - [JavaFX](https://openjfx.io/) 23
