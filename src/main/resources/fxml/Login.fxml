@@ -62,6 +62,13 @@
          <font>
             <Font name="Poppins Bold" size="18.0" />
          </font>
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/user.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </MFXButton>
    </children>
 </AnchorPane>
