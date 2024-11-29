@@ -58,7 +58,7 @@
             <Color red="0.26969999074935913" green="0.8269328474998474" blue="0.9300000071525574" />
          </color1></MFXProgressSpinner>
       <MFXProgressSpinner fx:id="loading" layoutX="332.0" layoutY="428.0" prefHeight="70.0" prefWidth="69.0" visible="false" />
-      <MFXButton fx:id="IngresarInvitado" depthLevel="LEVEL5" layoutX="874.0" layoutY="683.0" minHeight="38.0" prefHeight="50.0" prefWidth="374.0" styleClass="mfx-button" stylesheets="@../styles/login.css" text="Seguir como Invitado" textFill="WHITE">
+      <MFXButton fx:id="IngresarInvitado" depthLevel="LEVEL5" layoutX="874.0" layoutY="683.0" minHeight="38.0" prefHeight="50.0" prefWidth="374.0" styleClass="mfx-button" stylesheets="@../styles/login.css" text="Continuar como Invitado" textFill="WHITE">
          <font>
             <Font name="Poppins Bold" size="18.0" />
          </font>

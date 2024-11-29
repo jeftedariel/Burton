@@ -144,7 +144,7 @@ CREATE TABLE `orders` (
   `order_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `total_amount` decimal(10,2) NOT NULL,
-  `order_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `status` enum('Completed','Cancelled') DEFAULT 'Completed',
   `payment_method` enum('Credit Card','PayPal','Cash') DEFAULT 'Credit Card',
   PRIMARY KEY (`order_id`)
@@ -484,90 +484,6 @@ WHERE EXISTS (
     FROM order_items oi
     WHERE oi.product_id = p.id
 );
-
-INSERT INTO categories (id,name,image) VALUES(1,'Mascotas','Productos de Mascota'); 
-INSERT INTO categories (id,name,image) VALUES(2,'Electronica','Productos Electronicos');
-INSERT INTO categories (id, name, image) VALUES (3, 'Hogar', 'Productos para el hogar');
-
-INSERT INTO products (id, title, price, description,images, category_id) values (1,'perro',1000,"nada",'perros domesticos',1);
-INSERT INTO products (id, title, price, description, images, category_id) 
-VALUES 
-(2, 'Gato', 800, 'Animal doméstico', 'imagen_gato', 1),
-(3, 'Peces', 200, 'Acuarios', 'imagen_peces', 1),
-(4, 'Laptop', 1500, 'Laptop para trabajo', 'imagen_laptop', 2),
-(5, 'Celular', 1200, 'Celular de última generación', 'imagen_celular', 2),
-(6, 'Tablet', 900, 'Tablet para lectura', 'imagen_tablet', 2),
-(7, 'Hamster', 300, 'Mascota pequeña', 'imagen_hamster', 1),
-(8, 'Cámara', 700, 'Cámara fotográfica', 'imagen_camara', 2),
-(9, 'Monitor', 600, 'Monitor HD', 'imagen_monitor', 2),
-(10, 'Auriculares', 250, 'Auriculares Bluetooth', 'imagen_auriculares', 2),
-(11, 'Perico', 150, 'Ave doméstica', 'imagen_perico', 1);
-
-INSERT INTO orders (user_id, total_amount,order_date,status,payment_method) values(1, 222 ,' 2007-04-30 13:10:02.0474381 ','Completed','Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id,quantity,subtotal) values (1,1,1,3333,3333);
--- Orden 1
-INSERT INTO orders (user_id, total_amount, order_date, status, payment_method) 
-VALUES (2, 4000, '2024-11-01 10:00:00', 'Completed', 'Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id, quantity, subtotal) 
-VALUES 
-(2, 2, 2, 2, 1600),
-(3, 2, 4, 1, 1500),
-(4, 2, 8, 3, 2100);
-
--- Orden 2
-INSERT INTO orders (user_id, total_amount, order_date, status, payment_method) 
-VALUES (3, 4500, '2024-11-02 14:30:00', 'Completed', 'Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id, quantity, subtotal) 
-VALUES 
-(5, 3, 5, 2, 2400),
-(6, 3, 10, 3, 750),
-(7, 3, 6, 1, 900);
-
--- Orden 3
-INSERT INTO orders (user_id, total_amount, order_date, status, payment_method) 
-VALUES (4, 3000, '2024-11-03 16:45:00', 'Completed', 'Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id, quantity, subtotal) 
-VALUES 
-(8, 4, 7, 3, 900),
-(9, 4, 11, 2, 300),
-(10, 4, 4, 1, 1500);
-
--- Orden 4
-INSERT INTO orders (user_id, total_amount, order_date, status, payment_method) 
-VALUES (5, 3200, '2024-11-04 09:00:00', 'Completed', 'Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id, quantity, subtotal) 
-VALUES 
-(11, 5, 9, 2, 1200),
-(12, 5, 3, 4, 800),
-(13, 5, 6, 2, 1200);
-
--- Orden 5
-INSERT INTO orders (user_id, total_amount, order_date, status, payment_method) 
-VALUES (6, 2800, '2024-11-05 11:20:00', 'Completed', 'Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id, quantity, subtotal) 
-VALUES 
-(14, 6, 2, 1, 800),
-(15, 6, 10, 4, 1000),
-(16, 6, 8, 2, 1000);
-
--- Orden 6
-INSERT INTO orders (user_id, total_amount, order_date, status, payment_method) 
-VALUES (7, 3600, '2024-11-06 13:15:00', 'Completed', 'Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id, quantity, subtotal) 
-VALUES 
-(17, 7, 11, 3, 450),
-(18, 7, 5, 2, 2400),
-(19, 7, 7, 1, 300);
-
--- Orden 7
-INSERT INTO orders (user_id, total_amount, order_date, status, payment_method) 
-VALUES (8, 3800, '2024-11-07 15:40:00', 'Completed', 'Credit Card');
-INSERT INTO order_items (order_item_id, order_id, product_id, quantity, subtotal) 
-VALUES 
-(20, 8, 1, 3, 3000),
-(21, 8, 8, 2, 1400),
-(22, 8, 9, 1, 600);
-
 
 
 -- Dump completed on 2024-10-26 16:29:14

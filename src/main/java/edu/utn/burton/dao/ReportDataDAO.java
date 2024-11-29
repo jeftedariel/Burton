@@ -23,6 +23,33 @@ import java.util.Map;
  */
 public class ReportDataDAO {
 
+    // obtener las ventas en un rango de fecha
+    public List<Product> getDateProductSells(String startDate, String endDate) {
+
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
+
+        String query = "SELECT productos.title AS Product, SUM(orders.quantity) AS Quantity FROM order_items orders INNER JOIN products productos ON orders.product_id = productos.id INNER JOIN orders o ON o.order_id = orders.order_id WHERE o.order_date BETWEEN ? AND ? GROUP BY productos.title";
+
+        List<Product> products = new ArrayList<>();
+
+        
+        try (Connection conn = DBAdapterFactory.getAdapter().getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                products.add(new Product(0, rs.getString("Product"), 0, "", null, "", rs.getInt("Quantity"), new Category(0, "", "")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener los items: " + e.getMessage());
+        }
+
+        adapter.disconnect();
+
+        return products;
+    }
     // obtener los productos totales 
     public List<Product> getProductSells() {
 
@@ -79,8 +106,8 @@ public class ReportDataDAO {
         final int average = getTotalSells(products) / products.size();
         return products.stream().filter(product -> product.quantity() > average).toList();
     }
-    
-      public List<Product> lowSellsByCategories(int id) {
+
+    public List<Product> lowSellsByCategories(int id) {
         List<Product> products = getProductByCategories(id);
 
         final int average = getTotalSells(products) / products.size();

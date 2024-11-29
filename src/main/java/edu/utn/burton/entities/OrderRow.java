@@ -34,7 +34,7 @@ public class OrderRow {
         this.orderLabel = new Label(
             "Orden #" + order.getId() + 
             " | Fecha: " + order.getDate() + 
-            " | Monto: $" + order.getTotalAmount()
+            " | Monto: $" + order.getTotalAmount() 
         );
         this.orderLabel.getStyleClass().add("order-label");
 

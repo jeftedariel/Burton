@@ -30,7 +30,7 @@ public class CartController {
 
         if (currentProduct != null && count != 0) {
             
-            ProductCart productUser = new ProductCart(currentProduct.id(), currentProduct.title(), Cart.getInstance().getCantidadd(currentProduct.id(), count), currentProduct.price(), currentProduct.images().get(0)); // igual qui lo de abajo para que agregue segun lo que el usuario quiera
+            ProductCart productUser = new ProductCart(currentProduct.id(), currentProduct.title(), Cart.getInstance().getCantidadd(currentProduct.id(), count), currentProduct.price(), currentProduct.images().get(0));
             Cart.getInstance().addProduct(productUser, count);
             odDAO.getOrCreateActiveCart(UserSession.getInstance().getId());
             odDAO.addProductsToCart(Cart.getProducts());

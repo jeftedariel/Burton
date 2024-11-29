@@ -1,6 +1,7 @@
 package edu.utn.burton.entities;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.controller.Alerts;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -13,8 +14,8 @@ import javafx.stage.Stage;
 import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import javafx.scene.control.Alert;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 public class ProductCell extends ListCell<Product> {
 
@@ -33,7 +34,7 @@ public class ProductCell extends ListCell<Product> {
 
     public ProductCell() {
         //Initialize the functionality for the shoping
- 
+
         ctrlCart = new CartController();
 
         info.setOnAction(ev -> {
@@ -44,13 +45,12 @@ public class ProductCell extends ListCell<Product> {
         addToCart.setOnAction(ev -> {
             if (UserSession.getInstance().getId() != 0) {
                 ctrlCart.getProduct(currentProduct, 1);
-               } else {
-            // Muestra una alerta al usuario
-            JOptionPane.showMessageDialog(null, 
-            "Debes iniciar sesión para agregar productos al carrito.", 
-             "Alerta", 
-            JOptionPane.WARNING_MESSAGE);
-        }});
+            } else {
+                // Muestra una alerta al usuario
+                Alerts.show(new Message("Alerta", "Debes iniciar sesión para agregar productos al carrito."), Alert.AlertType.WARNING);
+
+            }
+        });
 
         // Aply the corresponding css 
         imageView.getStyleClass().add("product-image");
@@ -75,6 +75,8 @@ public class ProductCell extends ListCell<Product> {
 
     @Override
     public void updateItem(Product product, boolean empty) {
+        currentProduct = product;
+        
         super.updateItem(product, empty);
         //It will be use to be displayed
         String title = product.title();
@@ -91,9 +93,7 @@ public class ProductCell extends ListCell<Product> {
         //Then try to add the info
         if (empty || product == null) {
             setGraphic(null);
-            currentProduct = null;
         } else {
-            currentProduct = product;
             titleLabel.setText(title);
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");

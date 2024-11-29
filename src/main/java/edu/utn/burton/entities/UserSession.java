@@ -64,10 +64,10 @@ public class UserSession {
 
     public void logout() {
         this.id=0;
-        this.name = null;
-        this.email = null;
-        this.avatar = null;
-        this.role = null;
+        this.name = "?";
+        this.email = "?";
+        this.avatar = "?";
+        this.role = "?"; 
     }
 
 }

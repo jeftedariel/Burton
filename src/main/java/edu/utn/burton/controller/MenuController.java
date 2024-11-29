@@ -376,6 +376,7 @@ public class MenuController implements Initializable {
         Historial.setVisible(false);
         avatar.setVisible(false);
         username.setVisible(false);
+        logout.setVisible(false);
     }
     
     private void guestViewTrue(){
@@ -383,6 +384,7 @@ public class MenuController implements Initializable {
         Historial.setVisible(true);
         avatar.setVisible(true);
         username.setVisible(true);
+        logout.setVisible(true);
     }
     
 }

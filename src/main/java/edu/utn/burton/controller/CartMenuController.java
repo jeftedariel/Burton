@@ -157,7 +157,7 @@ public class CartMenuController implements Initializable {
         } else {
 
             MessageCell cell = new MessageCell();
-            cell.updateItem(new Message("Aviso", "No tienes Productos en tu carrito", "/assets/carroX.png"), false);
+            cell.updateItem(new Message("Aviso", "No tienes Productos en tu carrito", Burton.class.getResource("/assets/carroX.png").toString()), false);
             HBox row = new HBox(10);
             row.setAlignment(Pos.CENTER);
             row.getChildren().add(cell.getGraphic());

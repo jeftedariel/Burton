@@ -2,6 +2,8 @@ package edu.utn.burton.controller;
 
 import edu.utn.burton.Burton;
 import edu.utn.burton.entities.Product;
+import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
+import java.awt.image.BufferedImage;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -18,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javax.imageio.ImageIO;
 
 /**
  * @author Justin Rodriguez Gonzalez
@@ -35,13 +38,16 @@ public class MasInfoController implements Initializable {
 
     @FXML
     private Label lblPrice;
-    
+
     @FXML
     private TextArea textAreaDescrip;
-    
+
     @FXML
     private Label lblDe;
     
+    @FXML
+    private Label lblCategory;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -60,12 +66,12 @@ public class MasInfoController implements Initializable {
             scene.getStylesheets().add(Burton.class.getResource("/styles/masinfo.css").toExternalForm());
 
             Stage popupStage = new Stage();
-            popupStage.setScene(scene);
-            //popupStage.initStyle(StageStyle.UNDECORATED);
+            popupStage.setScene(scene);         
             popupStage.initOwner(stage);
             popupStage.setResizable(false);
             popupStage.centerOnScreen();
             popupStage.setTitle("Más Información");
+            popupStage.getIcons().add(new Image(Burton.class.getResourceAsStream("/assets/icon.png")));
 
             stage.setOpacity(0.5);
             popupStage.show();
@@ -82,13 +88,21 @@ public class MasInfoController implements Initializable {
 
         imageLoad.setFitWidth(340);
         imageLoad.setFitHeight(300);
-        imageLoad.setImage(new Image(currentProduct.images().getFirst()));
+        try {
+            BufferedImage BuffImg = ImageIO.read(new URL(currentProduct.images().getFirst()));
+            imageLoad.setImage(SwingFXUtils.toFXImage(BuffImg, null));
+        } catch (Exception e) {
+            imageLoad.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
+        }
+        
         vboxImages.getChildren().add(imageLoad);
         lblTitle.getStyleClass().add("label-title");
+        lblCategory.getStyleClass().add("label-title");
         lblPrice.getStyleClass().add("label-price");
         lblDe.getStyleClass().add("label-des");
         lblTitle.setText(currentProduct.title());
         lblPrice.setText("$ " + currentProduct.price());
+        lblCategory.setText(currentProduct.category().name());
         textAreaDescrip.getStyleClass().add("text-area");
         textAreaDescrip.setText(currentProduct.description());
         textAreaDescrip.setWrapText(true);
@@ -105,27 +119,27 @@ public class MasInfoController implements Initializable {
             ImageView imageView = new ImageView();
             // aplicar como quiero que se vean las imagenes 
             try {
-                imageView.setImage(new Image(image));
-                imageView.setFitWidth(100);
-                imageView.setFitHeight(110);
-                imageView.getStyleClass().add("image-view");
-                HBox.setMargin(imageView, new Insets(5, 10, 5, 10));
-
-                hBoxAllImage.getChildren().add(imageView);
-                hBoxAllImage.getStyleClass().add(".hbox-container");
-                //evento para poder obtener la imagen
-                imageView.setOnMouseEntered(ev -> {
-                    imageView.getStyleClass().add(".image-view:hover");
-                    imageviewReturn.setImage(imageView.getImage());
-
-                });
-
-                imageView.setOnMouseExited(event -> imageView.setStyle(""));
-
+                BufferedImage BuffImg = ImageIO.read(new URL(image));
+                imageView.setImage(SwingFXUtils.toFXImage(BuffImg, null));
             } catch (Exception e) {
-
                 imageView.setImage(new Image(Burton.class.getResource("/assets/unknown.png").toString()));
             }
+
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(110);
+            imageView.getStyleClass().add("image-view");
+            HBox.setMargin(imageView, new Insets(5, 10, 5, 10));
+
+            hBoxAllImage.getChildren().add(imageView);
+            hBoxAllImage.getStyleClass().add(".hbox-container");
+            //evento para poder obtener la imagen
+            imageView.setOnMouseEntered(ev -> {
+                imageView.getStyleClass().add(".image-view:hover");
+                imageviewReturn.setImage(imageView.getImage());
+
+            });
+
+            imageView.setOnMouseExited(event -> imageView.setStyle(""));
 
         }
         return imageviewReturn;
