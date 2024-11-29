@@ -13,12 +13,12 @@ import java.util.Date;
 public class ProductClient {
 
     private static ProductClient instance;
-    private int id;
-    public int userId;
+
+    public int userId, id;
     private double totalAmount;
     private String typePay, status;
     private Date date;
-
+   
     public ProductClient(int id, Date date, double totalAmount) {
         this.id = id;
         this.totalAmount = totalAmount;

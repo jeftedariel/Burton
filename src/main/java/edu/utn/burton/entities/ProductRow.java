@@ -37,9 +37,10 @@ public class ProductRow {
         String product = (String) item.get("title");
         int unitPrice = (int) item.get("subtotal");
         String productImage = (String) item.get("images");
+        int quantity = (int) item.get("quantity");
 
         this.productImageView = createImageView(productImage);
-        this.productInfo = new Label(product + " | $" + unitPrice);
+        this.productInfo = new Label(product + " | $" + unitPrice + " |  Cantidad: " + quantity);
         
         this.itemRow.getChildren().addAll(productImageView, productInfo);
     }
