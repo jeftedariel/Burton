@@ -6,9 +6,11 @@ package edu.utn.burton.controller;
 
 import edu.utn.burton.reports.GraphReport;
 import edu.utn.burton.Burton;
+import edu.utn.burton.dao.OrderDAO;
 import edu.utn.burton.dao.ReportDataDAO;
-import edu.utn.burton.entities.Product;
-
+import edu.utn.burton.entities.OrderDetailsView;
+import edu.utn.burton.entities.OrderRow;
+import edu.utn.burton.entities.ProductClient;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyListView;
 import java.io.IOException;
@@ -17,16 +19,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
 /**
  * FXML Controller class
@@ -43,8 +47,8 @@ public class DashboardController implements Initializable {
 
     private ShowUserInfo user;
 
-    private static String[] pdfReportNames = {"",""};
-    
+    private static String[] pdfReportNames = {"", ""};
+
     @FXML
     private MFXButton store;
 
@@ -56,6 +60,9 @@ public class DashboardController implements Initializable {
 
     @FXML
     private MFXButton logout;
+
+    @FXML
+    private MFXButton retunOrders;
 
     @FXML
     private MFXButton trendingSellsReport;
@@ -76,8 +83,13 @@ public class DashboardController implements Initializable {
     public MFXLegacyListView showGraphs;
 
     @FXML
-
     public MFXButton cleanFilters;
+
+    @FXML
+    private MFXLegacyListView<HBox> HistorialAdmin;
+
+    @FXML
+    private ObservableList<HBox> observableOrderList;
 
     public DashboardController() {
         draw = new DrawGraphsController();
@@ -87,12 +99,25 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        observableOrderList = FXCollections.observableArrayList();
+        
+        loadOrders();
+        
         llenarCombo();
+        
+        retunOrders.setVisible(false);
+        
         user = new ShowUserInfo(this.avatar, this.username);
         user.loadUserInfo();
 
         store.setOnMouseClicked(ev -> {
             MenuController.initGui((Stage) store.getScene().getWindow());
+        });
+        
+         retunOrders.setOnAction(ev -> {
+            loadOrders();
+            retunOrders.setVisible(false);
         });
 
         cleanFilters.setOnAction(ev -> {
@@ -104,8 +129,8 @@ public class DashboardController implements Initializable {
         });
 
         trendingSellsReport.setOnAction(ev -> {
-            pdfReportNames[0]= "ReporteTopVentas";
-            pdfReportNames[1]= "Top Ventas";
+            pdfReportNames[0] = "ReporteTopVentas";
+            pdfReportNames[1] = "Top Ventas";
             if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
                 int categoryId = devolverValorCombo();
                 draw.drawGraph(rpDAO.topSellsByCategories(categoryId), showGraphs);
@@ -114,9 +139,9 @@ public class DashboardController implements Initializable {
             }
         });
 
-          turnoverReport.setOnAction(ev -> {
-            pdfReportNames[0]= "ReporteMenosVendidos";
-            pdfReportNames[1]= "Menos Vendidos";
+        turnoverReport.setOnAction(ev -> {
+            pdfReportNames[0] = "ReporteMenosVendidos";
+            pdfReportNames[1] = "Menos Vendidos";
             if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
                 int categoryId = devolverValorCombo();
                 draw.drawGraph(rpDAO.lowSellsByCategories(categoryId), showGraphs);
@@ -126,7 +151,7 @@ public class DashboardController implements Initializable {
         });
 
         generatePDF.setOnAction(ev -> {
-            GraphReport report = new GraphReport(pdfReportNames[0],pdfReportNames[1]);
+            GraphReport report = new GraphReport(pdfReportNames[0], pdfReportNames[1]);
             report.generate();
         });
     }
@@ -152,6 +177,32 @@ public class DashboardController implements Initializable {
 
     public void clearFilters() {
         cbxCategories.getSelectionModel().select(-1);
+    }
+
+    public void loadOrders() {
+        observableOrderList.clear();
+        List<ProductClient> orderDetailsList = OrderDAO.getOrdersByAdmin();
+
+        if (orderDetailsList != null && !orderDetailsList.isEmpty()) {
+            for (ProductClient order : orderDetailsList) {
+                OrderRow orderRow = new OrderRow(order, event -> loadOrderDetails(order.getId()));
+                observableOrderList.add(orderRow.getOrderRow());
+            }
+        } else {
+            HBox emptyOrderRow = new HBox();
+            emptyOrderRow.getStyleClass().add("empty-order-row");
+            Label emptyLabel = new Label("No hay órdenes");
+            emptyLabel.getStyleClass().add("empty-label");
+            emptyOrderRow.getChildren().add(emptyLabel);
+            observableOrderList.add(emptyOrderRow);
+        }
+        HistorialAdmin.setItems(observableOrderList);
+    }
+
+    public void loadOrderDetails(int orderId) {
+        retunOrders.setVisible(true);
+        OrderDetailsView detailsView = new OrderDetailsView(orderId);
+        HistorialAdmin.setItems(detailsView.getOrderDetailsList());
     }
 
     public static void initGui(Stage stage) {
