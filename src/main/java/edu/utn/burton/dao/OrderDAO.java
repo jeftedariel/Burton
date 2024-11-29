@@ -102,7 +102,7 @@ public class OrderDAO {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
         try {
-            CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_user(?)}");
+            CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_Admin}");
             stmt.setInt(1, usuarioId);
             ResultSet rs = stmt.executeQuery();
 
@@ -149,7 +149,7 @@ public class OrderDAO {
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
     public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
 
-        ObservableList<Map<String, Object>> orderItemsList = FXCollections.observableArrayList();
+        ObservableList<Map<String, Object>> orderItemsList = FXCollections.observableArrayList();        
         String procedureCall = "{CALL get_order_items_by_order_id(?)}";
 
         try (Connection conn = DBAdapterFactory.getAdapter().getConnection(); CallableStatement stmt = conn.prepareCall(procedureCall)) {
