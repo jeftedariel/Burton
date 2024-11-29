@@ -173,7 +173,7 @@ public class DashboardController implements Initializable {
         
         comparativeReport.setOnAction(ev -> {
             pdfReportNames[0] = "ReporteFechas";
-            pdfReportNames[1] = "Ventas desde" + dateOne.getValue() +" hasta"+ dateTwo.getValue();
+            pdfReportNames[1] = "Ventas desde " + dateOne.getValue() +" hasta "+ dateTwo.getValue();
             System.out.println(dateOne.getValue().toString() +  "->" + dateTwo.getValue().toString());
             draw.drawGraph(rpDAO.getDateProductSells(dateOne.getValue().toString(), dateTwo.getValue().toString()), chart);
         });

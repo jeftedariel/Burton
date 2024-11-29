@@ -25,6 +25,7 @@ public class DrawGraphsController {
     }
 
     public void drawGraph(List<Product> productos, BarChart<String, Number> barChart) {
+        barReturn = barChart;
         // Asigna los datos para mostrar en el gráfico
         ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
