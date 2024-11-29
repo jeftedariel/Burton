@@ -54,11 +54,41 @@ public class ProductDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al obtener los productos de la orden: " + e.getMessage());
+            System.err.println("Error al obtener los productos de la db: " + e.getMessage());
         } finally {
             adapter.disconnect();
         }
         return items;
+    }
+
+    //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
+    public static Product getDBProduct(int id) {
+        String query = "SELECT * FROM products WHERE id = ?"; // Consulta con parámetro
+        IDBAdapter adapter = DBAdapterFactory.getAdapter();
+
+        try (Connection conn = adapter.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) { // Usa PreparedStatement
+
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) { 
+                if (rs.next()) {
+                    return new Product(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getDouble("price"),
+                            rs.getString("description"),
+                            ProductDAO.unserializeUrl(rs.getString("images")),
+                            rs.getInt("category_id")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener el producto: " + e.getMessage());
+        } finally {
+            adapter.disconnect(); 
+        }
+
+        return null;
     }
 
     public static void dumpProducts(List<Product> products) {

@@ -6,6 +6,8 @@ package edu.utn.burton.dao;
 
 import edu.utn.burton.database.DBAdapterFactory;
 import edu.utn.burton.database.IDBAdapter;
+import edu.utn.burton.entities.Order;
+import edu.utn.burton.entities.Product;
 import edu.utn.burton.entities.ProductCart;
 import edu.utn.burton.entities.ProductClient;
 import edu.utn.burton.entities.UserSession;
@@ -19,8 +21,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.swing.JOptionPane;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -102,7 +102,7 @@ public class OrderDAO {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
         try {
-            CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_Admin}");
+            CallableStatement stmt = adapter.getConnection().prepareCall("{CALL get_orders_by_user(?)}");
             stmt.setInt(1, usuarioId);
             ResultSet rs = stmt.executeQuery();
 
@@ -147,36 +147,40 @@ public class OrderDAO {
     }
 
     //Se utiliza como clave del map un String, ya que representa el nombre de las columnas, y un objeto para obtener cualquier tipo de dato
-    public static ObservableList<Map<String, Object>> loadOrderItemsByOrderId(int orderId) {
+    public static ObservableList<Order> loadOrderItemsByOrderId(int orderId) {
 
-        ObservableList<Map<String, Object>> orderItemsList = FXCollections.observableArrayList();        
+        ObservableList<Order> orderItemsList = FXCollections.observableArrayList();
         String procedureCall = "{CALL get_order_items_by_order_id(?)}";
 
         try (Connection conn = DBAdapterFactory.getAdapter().getConnection(); CallableStatement stmt = conn.prepareCall(procedureCall)) {
             stmt.setInt(1, orderId);
+
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                Map<String, Object> row = new HashMap<>();
-                row.put("order_item_id", rs.getInt("order_item_id"));
-                row.put("order_id", rs.getInt("order_id"));
-                row.put("product_id", rs.getInt("product_id"));
-                row.put("quantity", rs.getInt("quantity"));
-                row.put("subtotal", rs.getInt("subtotal"));
-                row.put("title", rs.getString("title"));
-
+            
+            String mainImage = "";
+            if (rs.next()) {
                 String images = rs.getString("images");
                 if (images != null && !images.isEmpty()) {
                     String[] imageUrls = images.split(","); // Separar las URLs por coma
-                    row.put("images", imageUrls[0].trim()); // Agregar solo el primer URL
+                    mainImage = imageUrls[0];
                 } else {
-                    row.put("images", null); // Manejar casos en los que 'images' sea null o vacío
+                    mainImage = "";
                 }
 
-                orderItemsList.add(row);
+                Order order = new Order(rs.getInt("order_item_id"),
+                        rs.getInt("order_id"),
+                        rs.getInt("product_id"),
+                        rs.getInt("quantity"),
+                        rs.getInt("subtotal"),
+                        rs.getString("title"),
+                        mainImage
+                );
+
+                orderItemsList.add(order);
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener los productos de la orden: " + e.getMessage());
+            System.out.println("Error al obtener los productos de la orden por id: " + e.getMessage());
         }
 
         return orderItemsList;

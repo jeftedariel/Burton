@@ -26,11 +26,11 @@ public class OrderDetailsView {
     }
 
     private void loadOrderDetails(int orderId) {
-        ObservableList<Map<String, Object>> orderItems = OrderDAO.loadOrderItemsByOrderId(orderId);
+        ObservableList<Order> orderItems = OrderDAO.loadOrderItemsByOrderId(orderId);
 
         if (orderItems != null && !orderItems.isEmpty()) {
-            for (Map<String, Object> item : orderItems) {
-                ProductRow productRow = new ProductRow(item);
+            for (Order order : orderItems) {
+                ProductRow productRow = new ProductRow(order);
                 orderDetailsList.add(productRow.getItemRow());
             }
         } else {
