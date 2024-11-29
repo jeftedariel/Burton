@@ -81,6 +81,9 @@ public class MenuController implements Initializable {
 
     @FXML
     private MFXButton Historial;
+    
+    @FXML
+    private MFXButton Login;
 
     @FXML
     private Circle avatar;
@@ -93,7 +96,7 @@ public class MenuController implements Initializable {
 
     @FXML
     private MFXButton logout;
-
+    
     @FXML
     private StackPane rootPane;
     
@@ -104,10 +107,8 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        //Displays on header the user's data
-        showUserInfo = new ShowUserInfo(avatar, username);
-        showUserInfo.loadUserInfo();
+        
+        guestView();
 
         dashboard.setVisible(UserSession.getInstance().getRole().equals("admin"));
 
@@ -163,6 +164,12 @@ public class MenuController implements Initializable {
             Stage stage = (Stage) Historial.getScene().getWindow();
             HistorialController.initGui(stage);
         });
+        
+        Login.setOnMouseClicked(ev -> {
+           LoginController.initGui();
+           Stage currentStage = (Stage) Login.getScene().getWindow();
+           currentStage.close();
+        });
 
         logout.setOnMouseClicked(ev -> {
             LoginController.logout(logout);
@@ -178,6 +185,23 @@ public class MenuController implements Initializable {
             setTotalProducts();
         });
 
+    }
+    
+    public void guestView() {
+        UserSession session = UserSession.getInstance();
+        
+        if (session.getId() == 0) {
+            guestViewFalse();
+        } else {
+            
+            guestViewTrue();
+            
+            Login.setVisible(false);
+            
+            showUserInfo = new ShowUserInfo(avatar, username);
+            showUserInfo.loadUserInfo();
+        }
+        
     }
 
     public void setTotalProducts() {
@@ -347,4 +371,18 @@ public class MenuController implements Initializable {
         }
     }
 
+    private void guestViewFalse(){
+        openCart.setVisible(false);
+        Historial.setVisible(false);
+        avatar.setVisible(false);
+        username.setVisible(false);
+    }
+    
+    private void guestViewTrue(){
+        openCart.setVisible(true);
+        Historial.setVisible(true);
+        avatar.setVisible(true);
+        username.setVisible(true);
+    }
+    
 }

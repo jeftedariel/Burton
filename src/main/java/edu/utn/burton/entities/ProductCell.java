@@ -14,6 +14,7 @@ import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 public class ProductCell extends ListCell<Product> {
 
@@ -32,7 +33,7 @@ public class ProductCell extends ListCell<Product> {
 
     public ProductCell() {
         //Initialize the functionality for the shoping
-      
+ 
         ctrlCart = new CartController();
 
         info.setOnAction(ev -> {
@@ -41,9 +42,15 @@ public class ProductCell extends ListCell<Product> {
         });
 
         addToCart.setOnAction(ev -> {
-            ctrlCart.getProduct(currentProduct, 1);
-
-        });
+            if (UserSession.getInstance().getId() != 0) {
+                ctrlCart.getProduct(currentProduct, 1);
+               } else {
+            // Muestra una alerta al usuario
+            JOptionPane.showMessageDialog(null, 
+            "Debes iniciar sesión para agregar productos al carrito.", 
+             "Alerta", 
+            JOptionPane.WARNING_MESSAGE);
+        }});
 
         // Aply the corresponding css 
         imageView.getStyleClass().add("product-image");

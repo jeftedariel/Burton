@@ -71,7 +71,7 @@
                   </ImageView>
                </graphic>
             </MFXButton>
-            <MFXButton fx:id="dashboard" layoutX="613.0" layoutY="10.0" text="Dashboard">
+            <MFXButton fx:id="dashboard" layoutX="851.0" layoutY="10.0" text="Dashboard">
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -81,6 +81,14 @@
                </graphic>
             </MFXButton>
             <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="31.0" layoutY="27.0" radius="23.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <MFXButton fx:id="Login" layoutX="624.0" layoutY="-3.0" prefHeight="57.0" prefWidth="39.0" style="-fx-background-color: transparent;" text="">
+               <graphic>
+                  <ImageView fitHeight="49.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@../assets/user.png" />
+                     </image>
+                  </ImageView>
+               </graphic></MFXButton>
          </children></Pane>
       <MFXLegacyListView fx:id="productListView" depthLevel="LEVEL0" focusTraversable="false" layoutY="100.0" prefHeight="562.0" prefWidth="1282.0" style="-fx-border-color: #FAFAFA; -fx-background-color: #FAFAFA;" />
       <Pagination fx:id="pagination" layoutX="520.0" layoutY="652.0" maxPageIndicatorCount="5" pageCount="5" prefHeight="53.0" prefWidth="315.0" />
