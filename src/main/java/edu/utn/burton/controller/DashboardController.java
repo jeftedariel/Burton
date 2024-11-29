@@ -67,10 +67,14 @@ public class DashboardController implements Initializable {
     private ComboBox cbxCategories;
 
     @FXML
-    private MFXButton prueba;
+    private MFXButton generatePDF;
 
     @FXML
     public MFXLegacyListView showGraphs;
+
+    @FXML
+
+    public MFXButton cleanFilters;
 
     public DashboardController() {
         draw = new DrawGraphsController();
@@ -80,9 +84,7 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         llenarCombo();
-
         user = new ShowUserInfo(this.avatar, this.username);
         user.loadUserInfo();
 
@@ -90,23 +92,35 @@ public class DashboardController implements Initializable {
             MenuController.initGui((Stage) store.getScene().getWindow());
         });
 
+        cleanFilters.setOnAction(ev -> {
+            clearFilters();
+        });
+
         logout.setOnMouseClicked(ev -> {
             LoginController.logout(store);
         });
 
-        trendingSellsReport.setOnMouseClicked(ev -> {
-        });
-
         trendingSellsReport.setOnAction(ev -> {
-            draw.drawGraph(rpDAO.topSells(), showGraphs);
+
+            if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
+                int categoryId = devolverValorCombo();
+                draw.drawGraph(rpDAO.topSellsByCategories(categoryId), showGraphs);
+            } else {
+                draw.drawGraph(rpDAO.topSells(), showGraphs);
+            }
         });
 
-        turnoverReport.setOnAction(ev -> {
-            draw.drawGraph(rpDAO.lowSells(), showGraphs);
-
+          turnoverReport.setOnAction(ev -> {
+               
+            if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
+                int categoryId = devolverValorCombo();
+                draw.drawGraph(rpDAO.lowSellsByCategories(categoryId), showGraphs);
+            } else {
+                draw.drawGraph(rpDAO.lowSells(), showGraphs);
+            }
         });
 
-        prueba.setOnAction(ev -> {
+        generatePDF.setOnAction(ev -> {
             ShowGraphPDFController report = new ShowGraphPDFController();
             report.generate();
         });
@@ -115,10 +129,6 @@ public class DashboardController implements Initializable {
     public void llenarCombo() {
         if (cbxCategories != null) {
             cbxCategories.setItems(FXCollections.observableArrayList(rpDAO.getCategories().values()));
-            cbxCategories.setOnAction(event -> {
-                int categoryId = devolverValorCombo();
-                draw.drawGraph(rpDAO.topSellsByCategories(categoryId), showGraphs);
-            });
         }
     }
 
@@ -133,6 +143,10 @@ public class DashboardController implements Initializable {
             }
         }
         return -1;
+    }
+
+    public void clearFilters() {
+        cbxCategories.getSelectionModel().select(-1);
     }
 
     public static void initGui(Stage stage) {

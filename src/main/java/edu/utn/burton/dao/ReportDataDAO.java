@@ -22,8 +22,8 @@ import java.util.Map;
  * @author jefte
  */
 public class ReportDataDAO {
-    // obtener los productos totales 
 
+    // obtener los productos totales 
     public List<Product> getProductSells() {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
@@ -47,6 +47,7 @@ public class ReportDataDAO {
 
         return products;
     }
+
     // obtiene  lo productos por categoria 
     public List<Product> getProductByCategories(int id) {
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
@@ -70,16 +71,23 @@ public class ReportDataDAO {
         adapter.disconnect();
         return products;
     }
-    
+
     // obtiene los productos que estan por arriba del promedio por medio de categoria 
     public List<Product> topSellsByCategories(int id) {
         List<Product> products = getProductByCategories(id);
 
         final int average = getTotalSells(products) / products.size();
-        System.out.println("la lista " + products.stream().filter(product -> product.quantity() <= average).toList().toString());
         return products.stream().filter(product -> product.quantity() >= average).toList();
     }
- // obtiene los productos que estan por encima del promedio 
+    
+      public List<Product> lowSellsByCategories(int id) {
+        List<Product> products = getProductByCategories(id);
+
+        final int average = getTotalSells(products) / products.size();
+        return products.stream().filter(product -> product.quantity() <= average).toList();
+    }
+
+    // obtiene los productos que estan por encima del promedio 
     public List<Product> topSells() {
         List<Product> products = getProductSells();
 
@@ -87,6 +95,7 @@ public class ReportDataDAO {
         //In base of total sells & items calculates the average
         return products.stream().filter(product -> product.quantity() >= average).toList(); //Return the ones that are higher than the average or equals
     }
+
     // obtiene los productos que estan por abajo del promedio 
     public List<Product> lowSells() {
         List<Product> products = getProductSells();
@@ -95,6 +104,7 @@ public class ReportDataDAO {
         // The same that topSells() but just the ones that are lower than the average      
         return products.stream().filter(product -> product.quantity() <= average).toList();
     }
+
     //obtiene el total de la cantidad de cada uno
     public int getTotalSells(List<Product> productos) {
         int totalSells = 0;
@@ -110,7 +120,7 @@ public class ReportDataDAO {
 
         IDBAdapter adapter = DBAdapterFactory.getAdapter();
 
-        String query = "SELECT id, name FROM categories;";
+        String query = "SELECT DISTINCT c.id, c.name FROM categories c INNER JOIN products p ON c.id = p.category_id WHERE EXISTS (SELECT 1 FROM order_items oi WHERE oi.product_id = p.id);";
 
         Map<Integer, String> categories = new HashMap<>();
 

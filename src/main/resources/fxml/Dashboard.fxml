@@ -33,18 +33,6 @@
                 </Text>
                 <ButtonBar layoutX="279.0" layoutY="589.0" prefHeight="60.0" prefWidth="696.0">
                     <buttons>
-                        <MFXButton fx:id="trendingSellsReport" depthLevel="LEVEL5" text="Tendencias de Ventas">
-                            <font>
-                                <Font name="Poppins Regular" size="14.0" />
-                            </font>
-                            <graphic>
-                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../assets/trending_up.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </MFXButton>
                         <MFXButton fx:id="comparativeReport" depthLevel="LEVEL5" prefHeight="40.0" prefWidth="195.0" text="Comparativa Ventas">
                             <font>
                                 <Font name="Poppins Regular" size="14.0" />
@@ -69,10 +57,23 @@
                                 </ImageView>
                             </graphic>
                         </MFXButton>
+                        <MFXButton fx:id="trendingSellsReport" depthLevel="LEVEL5" text="Tendencias de Ventas">
+                            <font>
+                                <Font name="Poppins Regular" size="14.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../assets/trending_up.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </MFXButton>
                     </buttons>
                 </ButtonBar>
-                <MFXButton fx:id="prueba" layoutX="7.0" layoutY="594.0" text="Generar PDF" />
-                <ComboBox fx:id="cbxCategories" layoutX="123.0" layoutY="594.0" prefHeight="25.0" prefWidth="181.0" promptText="Seleccione Categoria" />
+                <MFXButton fx:id="generatePDF" layoutX="7.0" layoutY="594.0" text="Generar PDF" />
+                <ComboBox fx:id="cbxCategories" layoutX="182.0" layoutY="556.0" prefHeight="25.0" prefWidth="181.0" promptText="Seleccione Categoria" />
+            <MFXButton fx:id="cleanFilters" layoutX="224.0" layoutY="619.0" text="Limpiar filtros" />
             </children>
         </Pane>
         <Pane fx:id="header" prefHeight="53.0" prefWidth="1282.0" style="-fx-background-color: #6f71de;">
