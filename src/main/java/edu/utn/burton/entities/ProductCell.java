@@ -75,6 +75,8 @@ public class ProductCell extends ListCell<Product> {
 
     @Override
     public void updateItem(Product product, boolean empty) {
+        currentProduct = product;
+        
         super.updateItem(product, empty);
         //It will be use to be displayed
         String title = product.title();
@@ -91,9 +93,7 @@ public class ProductCell extends ListCell<Product> {
         //Then try to add the info
         if (empty || product == null) {
             setGraphic(null);
-            currentProduct = null;
         } else {
-            currentProduct = product;
             titleLabel.setText(title);
             priceLabel.setText("$" + product.price());
             addToCart.setText("Agregar al Carrito");
