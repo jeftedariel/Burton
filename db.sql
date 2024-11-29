@@ -3,7 +3,9 @@
 -- Host: localhost    Database: burton
 -- ------------------------------------------------------
 -- Server version	8.0.40
-
+-- drop database burton;
+create database burton;
+use burton;
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
