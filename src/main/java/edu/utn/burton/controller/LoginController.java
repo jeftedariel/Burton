@@ -49,7 +49,6 @@ public class LoginController implements Initializable {
 
     APIHandler api = new APIHandler();
 
-    //666
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -136,6 +135,7 @@ public class LoginController implements Initializable {
         if (onResponse == ButtonType.APPLY) {
             currentStage.close();
             UserSession.getInstance().logout();
+            initGui();
         }
     });
     }
