@@ -144,7 +144,7 @@ CREATE TABLE `orders` (
   `order_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `total_amount` decimal(10,2) NOT NULL,
-  `order_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `status` enum('Completed','Cancelled') DEFAULT 'Completed',
   `payment_method` enum('Credit Card','PayPal','Cash') DEFAULT 'Credit Card',
   PRIMARY KEY (`order_id`)

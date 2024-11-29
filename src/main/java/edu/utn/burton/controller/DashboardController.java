@@ -25,7 +25,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
@@ -80,7 +82,7 @@ public class DashboardController implements Initializable {
     private MFXButton generatePDF;
 
     @FXML
-    public MFXLegacyListView showGraphs;
+    public BarChart chart;
 
     @FXML
     public MFXButton cleanFilters;
@@ -90,7 +92,15 @@ public class DashboardController implements Initializable {
 
     @FXML
     private ObservableList<HBox> observableOrderList;
+    
+    @FXML
+    private DatePicker dateOne;
 
+    @FXML
+    private DatePicker dateTwo;
+    
+
+    
     public DashboardController() {
         draw = new DrawGraphsController();
         rpDAO = new ReportDataDAO();
@@ -105,6 +115,8 @@ public class DashboardController implements Initializable {
         loadOrders();
         
         llenarCombo();
+        
+        comparativeReport.setDisable(true);
         
         retunOrders.setVisible(false);
         
@@ -127,15 +139,24 @@ public class DashboardController implements Initializable {
         logout.setOnMouseClicked(ev -> {
             LoginController.logout(store);
         });
+        
+        dateOne.setOnAction(ev -> {
+            comparativeReport.setDisable(!checkDatePickers());
+        });
+        
+        dateTwo.setOnAction(ev -> {
+            comparativeReport.setDisable(!checkDatePickers());
+        });
+        
 
         trendingSellsReport.setOnAction(ev -> {
             pdfReportNames[0] = "ReporteTopVentas";
             pdfReportNames[1] = "Top Ventas";
             if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
                 int categoryId = devolverValorCombo();
-                draw.drawGraph(rpDAO.topSellsByCategories(categoryId), showGraphs);
+                draw.drawGraph(rpDAO.topSellsByCategories(categoryId), chart);
             } else {
-                draw.drawGraph(rpDAO.topSells(), showGraphs);
+                draw.drawGraph(rpDAO.topSells(), chart);
             }
         });
 
@@ -144,16 +165,39 @@ public class DashboardController implements Initializable {
             pdfReportNames[1] = "Menos Vendidos";
             if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
                 int categoryId = devolverValorCombo();
-                draw.drawGraph(rpDAO.lowSellsByCategories(categoryId), showGraphs);
+                draw.drawGraph(rpDAO.lowSellsByCategories(categoryId), chart);
             } else {
-                draw.drawGraph(rpDAO.lowSells(), showGraphs);
+                draw.drawGraph(rpDAO.lowSells(), chart);
             }
+        });
+        
+        comparativeReport.setOnAction(ev -> {
+            pdfReportNames[0] = "ReporteFechas";
+            pdfReportNames[1] = "Ventas desde" + dateOne.getValue() +" hasta"+ dateTwo.getValue();
+            System.out.println(dateOne.getValue().toString() +  "->" + dateTwo.getValue().toString());
+            draw.drawGraph(rpDAO.getDateProductSells(dateOne.getValue().toString(), dateTwo.getValue().toString()), chart);
         });
 
         generatePDF.setOnAction(ev -> {
             GraphReport report = new GraphReport(pdfReportNames[0], pdfReportNames[1]);
             report.generate();
         });
+    }
+    
+    public boolean checkDatePickers(){
+        if(dateOne.getValue() == null || dateTwo.getValue() == null ){
+            return false;
+        }
+        
+        if(dateOne.getValue().isAfter(dateTwo.getValue())){
+            return false;
+        }
+        
+        if(dateTwo.getValue().isBefore(dateOne.getValue())){
+            return false;
+        }
+        
+        return true;
     }
 
     public void llenarCombo() {
