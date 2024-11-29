@@ -4,6 +4,7 @@
  */
 package edu.utn.burton.controller;
 
+import edu.utn.burton.reports.GraphReport;
 import edu.utn.burton.Burton;
 import edu.utn.burton.dao.ReportDataDAO;
 import edu.utn.burton.entities.Product;
@@ -42,6 +43,8 @@ public class DashboardController implements Initializable {
 
     private ShowUserInfo user;
 
+    private static String[] pdfReportNames = {"",""};
+    
     @FXML
     private MFXButton store;
 
@@ -101,7 +104,8 @@ public class DashboardController implements Initializable {
         });
 
         trendingSellsReport.setOnAction(ev -> {
-
+            pdfReportNames[0]= "ReporteTopVentas";
+            pdfReportNames[1]= "Top Ventas";
             if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
                 int categoryId = devolverValorCombo();
                 draw.drawGraph(rpDAO.topSellsByCategories(categoryId), showGraphs);
@@ -111,7 +115,8 @@ public class DashboardController implements Initializable {
         });
 
           turnoverReport.setOnAction(ev -> {
-               
+            pdfReportNames[0]= "ReporteMenosVendidos";
+            pdfReportNames[1]= "Menos Vendidos";
             if (cbxCategories.getSelectionModel().getSelectedIndex() != -1) {
                 int categoryId = devolverValorCombo();
                 draw.drawGraph(rpDAO.lowSellsByCategories(categoryId), showGraphs);
@@ -121,7 +126,7 @@ public class DashboardController implements Initializable {
         });
 
         generatePDF.setOnAction(ev -> {
-            ShowGraphPDFController report = new ShowGraphPDFController();
+            GraphReport report = new GraphReport(pdfReportNames[0],pdfReportNames[1]);
             report.generate();
         });
     }
@@ -157,7 +162,7 @@ public class DashboardController implements Initializable {
             DashboardController controller = loader.getController();
             controller.llenarCombo();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(Burton.class.getResource("/styles/dashboard.css").toExternalForm());
+            scene.getStylesheets().add(Burton.class.getResource("/styles/menu.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
 
