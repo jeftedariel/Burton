@@ -5,15 +5,18 @@
 package edu.utn.burton.entities;
 
 import edu.utn.burton.Burton;
+import edu.utn.burton.controller.MasInfoController;
+import edu.utn.burton.dao.ProductDAO;
 import io.github.palexdev.mfxcore.utils.fx.SwingFXUtils;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.Map;
+import java.util.Collection;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
 /**
@@ -29,20 +32,24 @@ public class ProductRow {
     private ImageView productImageView;
     
 
-    public ProductRow(Map<String, Object> item) {
+    public ProductRow(Order order) {
         this.itemRow = new HBox(20);
         this.itemRow.setAlignment(Pos.CENTER_LEFT);
 
 
-        String product = (String) item.get("title");
-        int unitPrice = (int) item.get("subtotal");
-        String productImage = (String) item.get("images");
-        int quantity = (int) item.get("quantity");
+        String product = order.title();
+        int unitPrice = order.subtotal();
+        String productImage = order.image();
+        int quantity = order.quantity();
 
         this.productImageView = createImageView(productImage);
         this.productInfo = new Label(product + " | $" + unitPrice + " |  Cantidad: " + quantity);
         
         this.itemRow.getChildren().addAll(productImageView, productInfo);
+        
+        
+        this.itemRow.setOnMouseClicked(ev -> MasInfoController.showPopup((Stage) itemRow.getScene().getWindow(), ProductDAO.getDBProduct(order.product_id())));
+        
     }
 
     public HBox getItemRow() {
