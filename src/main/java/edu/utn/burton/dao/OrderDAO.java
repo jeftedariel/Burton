@@ -159,7 +159,7 @@ public class OrderDAO {
 
             
             String mainImage = "";
-            if (rs.next()) {
+            while (rs.next()) {
                 String images = rs.getString("images");
                 if (images != null && !images.isEmpty()) {
                     String[] imageUrls = images.split(","); // Separar las URLs por coma
@@ -195,7 +195,7 @@ public class OrderDAO {
             stmt.setInt(1, idUser);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 cartId = rs.getInt("cart_id");
             }
         } catch (SQLException e) {
@@ -305,7 +305,7 @@ public class OrderDAO {
             // Obtener el `order_id` generado
             ResultSet rs = psE.getGeneratedKeys();
             int orderId = 0;
-            if (rs.next()) {
+            while (rs.next()) {
                 orderId = rs.getInt(1);
             }
             rs.close();
